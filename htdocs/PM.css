@@ -1,4 +1,45 @@
-body{background-color: #FFCCFF;}
-.hex{
-      color: #000000;
-<h1> style="text-align:center;"></h1>
+body{background-color:#FFCCFF;}
+.hex{color:#000000}
+h1 {text-align:center;}
+h2 {text-align:center;}
+h2 {font-size:250%;}
+h3 {text-align:left;}
+h3{font-size:200%;}
+h4{text-align:left;}
+h4{font-size:200%;}
+h5{
+      position:relative;left:500px;bottom:350px;
+}   
+h6{text-align:left;}
+h6{font-size:200%;}
+img{
+      width:500px;
+      height:500px;
+      position:relative;left:500px;bottom:400px;
+} 
+p{font-size:150%;}
+img{  width:500px;
+     height:500px;
+      position:relative;left:500px;bottom:300px;
+}
+h7{position:relative;right:500px}
+h7{font-size:200%;}
+h8{
+      position:relative;left:500px;bottom:300px;
+}
+h9{text-align:left;}
+h9{font-size:200%;}
+img{width:500px;
+      height:500px;
+       position:relative;left:500px;bottom:100px;}
+h10{position:relative;right:500px}   
+h10{font-size:200%;}  
+h11{position:relative;left:500px;bottom:300px;}
+h12{text-align:left;}
+h12{font-size:200%;}
+img{width:500px;
+      height:500px;
+       position:relative;left:500px;bottom:280px;}
+h13{position:relative;right:500px}   
+h13{font-size:200%;}  
+h14{ position:relative;left:500px;bottom:300px;}
