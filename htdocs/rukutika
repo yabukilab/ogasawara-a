@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="PM.css">
+<title>ホームページ課題</title>
+</head>
+<body>
+
+
+ <h1>イチャ沼</h1>
+ <h2 style="text-align:center">~津田沼のデートスポット4選~</h2>
+   <ul>
+     <li>飲食「リクチカ」
+        <div>
+        <p>多くのワインがあり多くのイタリア料理があり</p>
+        <p>本当にイタリアに行った気分になります。</p>    <p><img src="S__53436421_0.jpg" alt="リクチカの写真"></p>
+        <p>駅から近いので、とても行きやすくなっています。</p>
+        <p>店の中はとても綺麗で、雰囲気がとても良いです。</p>
+        <p><a href="https://r.gnavi.co.jp/e641500/">店の詳細のリンク</a></p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.5357684622445!2d140.01665247281449!3d35.68843117090652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60187f89d022d673%3A0x52e72efee8a3dd66!2sRiku%20Chika!5e0!3m2!1sja!2sjp!4v1607044269558!5m2!1sja!2sjp"></iframe>
+        </div>
+     </li>
+     <li>飲食「湘南パンケーキ　Loharu津田沼店」
+         <div>
+          <p>見た目は大きいパンケーキですが、それほど重くないので女性の方でも１つ食べれます。</p><p><img src="S__53436418.jpg" alt="湘南パンケーキ　Loharu津田沼店の写真"></p>
+          <p>カップルでシェアしてもいいと思います。</p>
+          <p>オリジナルのシロップも甘くておいしいです。</p>
+          <p><a href="https://shounan-pancake.jp/tsudanuma/">店の詳細のリンク</a></p><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.4489505767165!2d140.0160693147464!3d35.690568237068334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60187f8a1d6072cb%3A0x46ebbb3ca875b9f7!2z5rmY5Y2X44OR44Oz44Kx44O844KtIExvaGFydea0peeUsOayvOW6lw!5e0!3m2!1sja!2sjp!4v1607140521310!5m2!1sja!2sjp"></iframe>
+         </div>
+     </li>      
+ </ul>
+</body>
