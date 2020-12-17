@@ -12,7 +12,8 @@ div{ display:":absolute;top:200px;left:300px";
         
 
         img{ src:"S__53436421_0.jpg";
-        width:"160px" height="100px"border"=4px" alt="リクチカの写真";
+        width:"200px"
+        height="auto" ;
         }
      
 
@@ -20,6 +21,6 @@ div{ display:"absolute;top:500px;left:300px";
 }
       
        img{ src:"S__53436418.jpg";
-            width:"160px"height="100px"border="4px"alt="湘南パンケーキの写真";
+            width:"160px"height="100px"border="4px";
        }
   
