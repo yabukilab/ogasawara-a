@@ -16,7 +16,7 @@ div{ display:":absolute;top:200px;left:300px";
         }
      
 
-div{ position:"absolute;top:500px;left:300px";
+div{ display:"absolute;top:500px;left:300px";
 }
       
        img{ src:"S__53436418.jpg";
