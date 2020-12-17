@@ -7,7 +7,7 @@ body{
     background-color: #ffccff;
 }
 
-div{ position:":absolute;top:200px;left:300px";
+div{ display:":absolute;top:200px;left:300px";
 }
         
 
