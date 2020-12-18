@@ -7,21 +7,22 @@ body{
     background-color: #ffccff;
 }
 
-div{ position:":absolute;top:200px;left:300px";
-}
+
         
   
-img{ src:"S__53608626.jpg";
-        width:"160px"; 
-        height:auto;
-        }
 
+        p.sample img{ src:"S__53608626.jpg";
+            position:center;
+          
+                width: 1000px;
+                height: 700px;
+           }
      
 
-div{ position:"absolute;top:500px;left:300px";
-}
+
+       p.sample img{ src:"S__53436433.jpg";
+        position:center;
       
-       img{ src:"S__53436433.jpg";
-            width:"160px";
-            height:auto;
+            width: 1000px;
+            height: 700px;
        }
