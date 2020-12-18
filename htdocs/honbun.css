@@ -7,22 +7,22 @@ body{
     background-color: #ffccff;
 }
 
-div{ display:":absolute;top:200px;left:300px";
-}
+
         
 
-.image{scroll-behavior: url(S__53436421_0.jpg);
-        width:"200px";
-        height: auto;
-        
-}
-       
 
-div{ display:"absolute;top:500px;left:300px";
-}
-      
-       .image{ scroll-behavior:"S__53436418.jpg";
-            width:"160px";
-            height:"auto";
-       }
+p.sample img{ src:"S__53436421_0.jpg";
+    position:center;
   
+        width: 1000px;
+        height: 700px;
+   }
+
+      
+       
+       p.sample img{ src:"S__53436418.jpg";
+        position:center;
+      
+            width: 1000px;
+            height: 700px;
+       }
