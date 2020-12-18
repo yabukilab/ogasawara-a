@@ -10,16 +10,18 @@ body{
 div{ position:":absolute;top:200px;left:300px";
 }
         
-
-        img{ src:"S__53608626.jpg";
-        width:"160px" height="100px"border"=4px" alt="バラ園の写真";
+  
+img{ src:"S__53608626.jpg";
+        width:"160px"; 
+        height:auto;
         }
+
      
 
 div{ position:"absolute;top:500px;left:300px";
 }
       
        img{ src:"S__53436433.jpg";
-            width:"160px"height="100px"border="4px"alt="香澄公園の写真";
+            width:"160px";
+            height:auto;
        }
-  
