@@ -1,14 +1,28 @@
 body{background-color:#FFCCFF;}
-.hex{color:#fdfafa}
-h1 {text-align:center;}
-h2 {text-align:center;}
-h2 {font-size:250%;}
-h3{font-size: small;}
-div{
-text-align:center;
-    font-size:250%;
-}
 
-body{
-    background-image: url("S__5873666.jpg");
-}
+
+         h1 {text-align:center;}
+       h2 {text-align:center;}
+       h2 {font-size:250%;}
+       div{ position:":absolute;top:200px;left:300px";
+       }
+               
+       
+       p.sample img{ src:"S__5873666.jpg";
+                position:center;
+              
+                    width: 1200px;
+                    height: 700px;
+               }
+            
+      
+h3{font-size: small;}
+
+
+
+
+
+
+
+
+
