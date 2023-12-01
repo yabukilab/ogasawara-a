@@ -50,15 +50,11 @@ title1{font-size: 12px}
     style="border:0"
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.510715120365!2d<経度>!3d<緯度>!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDU4JzA0LjMiTiAwwrAwNOCc0My4zIlc!5e0!3m2!1sen!2sus!4v1637780924469!5m2!1sen!2sus"
     allowfullscreen=""
-    loading="lazy">
-    </iframe>
-
-    <div class="map"
-    width:300 ;
-    height:300 ;
-    frameborder:0;
-     style:border 0;
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.510715120365!2d<経度>!3d<緯度>!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDU4JzA0LjMiTiAwwrAwNOCc0My4zIlc!5e0!3m2!1sen!2sus!4v1637780924469!5m2!1sen!2sus"
-    allowfullscreen=""
-    loading="lazy">
+    loadi
 </div>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.465451274654!2d140.01534837565634!3d35.69016207258428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60187f124e791691%3A0x91984a04f4ff22ad!2z5qW95qW95bGLIOa0peeUsOayvOW6lw!5e0!3m2!1sja!2sjp!4v1701422766522!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div>
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.465451274654!2d140.01534837565634!3d35.69016207258428!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60187f124e791691%3A0x91984a04f4ff22ad!2z5qW95qW95bGLIOa0peeUsOayvOW6lw!5e0!3m2!1sja!2sjp!4v1701422766522!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    width="300"  height="300" frameborder="0" style="border:0">
+  </iframe>
+  </div>
