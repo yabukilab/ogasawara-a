@@ -1,3 +1,4 @@
+
 title1{font-size: 12px}
 
     body {
@@ -40,16 +41,14 @@ title1{font-size: 12px}
       font-size: 18px
     }
     .map{
-      width:300 ;
-      height:300 ;
-      frameborder:0;
-      style:border 0;
+      width: 300px ;
+      height:300px ;
     }
    
   
 
 
-    <style>
+ 
   h1{
     font-size: 16px;
     margin-bottom: 10px;
@@ -58,4 +57,3 @@ title1{font-size: 12px}
     padding: 5px 10px;
     border-left: 5px solid red; 
   }
-</style>

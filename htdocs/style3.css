@@ -5,4 +5,8 @@ img{width:100%;
     h1 {
         text-align: center;
     }
-    
+  .border{
+    border:1px solid black; 
+    font-size: 100%;
+     padding: 20px;
+  }
