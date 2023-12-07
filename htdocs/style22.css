@@ -4,6 +4,8 @@ title1{font-size: 12px}
     body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    background-color: lightseagreen;
+    color: white;
   }
 
   img, iframe {
@@ -31,19 +33,41 @@ title1{font-size: 12px}
     background-color: #ffff00; 
       color: #008000; 
       padding: 5px 10px;
-      border-left: 5px #008000; 
+      border-left: 15px #008000; 
     }
     img {
-      max-width: 40%; 
+      max-width: 60%; 
       height: auto; 
     }
     h2{
-      font-size: 18px
+      color: yellow;
+      font-size: 23px
     }
     .map{
       width: 300px ;
       height:300px ;
     }
+    .flex{
+      display: flex;
+      margin-left: 20px;
+    
+  }
+  .flex>p{
+    width: 90%;
+}
+p{
+  font-size: 25px;
+}
+p2{
+  color: green;
+  font-size: 25px;
+}
+
+p4{
+  font-size: 20px;
+
+}
+
    
   
 
