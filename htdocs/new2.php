@@ -21,6 +21,7 @@
             <p class="pass">パスワード<br>
                 <input type="password" name="pass">
             </p>
+           
             <nav>
                 <div class="link-container"><a href="new.php">確認する</a></div>
             </nav>
