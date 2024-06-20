@@ -8,8 +8,9 @@
 
         <style>
           table {
-            width: 50%;
+            width: 20%;
             border-collapse: collapse;
+            font-size:12px;;
           }
           th, td {
             border: 1px solid #ddd;
