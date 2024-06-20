@@ -26,9 +26,9 @@
         <div class="B">
             <p class="CIT">CIT sports</p>
 
-            <p class="sport">競技</p>
+            <p class="goS">空き状況</p>
 
-            <p class="time">時間</p>
+            <p class="date">〇月×日(△曜日)</p>
 
             <table>
     <thead>
