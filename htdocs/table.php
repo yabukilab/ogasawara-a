@@ -10,7 +10,8 @@
           table {
             width: 20%;
             border-collapse: collapse;
-            font-size:12px;;
+            font-size:12px;
+            writing-mode:transform;
           }
           th, td {
             border: 1px solid #ddd;
