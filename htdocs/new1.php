@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>新規会員登録ページ</title>
-    <link rel="stylesheet"  href="style1.css">
+    <link rel="stylesheet"  href="style2.css">
 </head>
 
 <body>
@@ -15,8 +15,7 @@
             <p class="a">以下の内容で登録が完了しました</p>
 
             <p class="number">学籍番号<br>
-            
-            <?php print($_POST['number']."");?>
+            <?php print($_POST['number'].""); ?><br>
 
             <p class="pass">パスワード<br>
                 <input type="password" name="pass">
