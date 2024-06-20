@@ -27,9 +27,7 @@
       <div class="b">
         <p class="CIT"> CIT sports</p>
         <p class="go">空き状況</p>
-        <p class="date">〇月×日(△曜日)
-      </div>
-     </div>
+        < class="date">〇月×日(△曜日)
     
      <table>
     <thead>
@@ -41,5 +39,7 @@
     </thead>
 
     </table>
+        </div>
+        </div>
   </body>
 </html>
