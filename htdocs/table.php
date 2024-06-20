@@ -34,9 +34,9 @@
      <table>
     <thead>
         <tr>
-            <th>名前</th>
-            <th>年齢</th>
-            <th>職業</th>
+            <th>バスケ</th>
+            <th>スカッシュ</th>
+            <th>卓球</th>
         </tr>
     </thead>
 
