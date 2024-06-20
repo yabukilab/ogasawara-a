@@ -17,7 +17,7 @@
             text-align: left;
           }
           th {
-            background-color:blue;
+            background-color:grey;
           }
         </style>
      </head>
@@ -30,5 +30,16 @@
         <p class="date">〇月×日(△曜日)
       </div>
      </div>
+    
+     <table>
+    <thead>
+        <tr>
+            <th>名前</th>
+            <th>年齢</th>
+            <th>職業</th>
+        </tr>
+    </thead>
+
+    </table>
   </body>
 </html>
