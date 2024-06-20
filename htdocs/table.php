@@ -21,7 +21,7 @@
         </style>
      </head>
 
-     <body>
+   <body>
      <div class="A">
         <div class="B">
             <p class="CIT">CIT sports</p>
@@ -29,7 +29,5 @@
             <p class="goS">空き状況</p>
 
             <p class="date">〇月×日(△曜日)</p>
-        </div>
-    </div>
-    </body>
+  </body>
 </html>
