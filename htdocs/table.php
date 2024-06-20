@@ -29,16 +29,7 @@
             <p class="goS">空き状況</p>
 
             <p class="date">〇月×日(△曜日)</p>
-
-            <table>
-    <thead>
-        <tr>
-            <th>名前</th>
-            <th>年齢</th>
-            <th>職業</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-
-     </body>
+        </div>
+    </div>
+    </body>
 </html>
