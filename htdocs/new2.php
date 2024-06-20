@@ -16,14 +16,13 @@
 
             <form action="new.php"method="post">
             <input type="text" name="number" size="20">
-
             </b>
             <p class="pass">パスワード<br>
-                <input type="password" name="pass">
-            </p>
+            <input type="text" name="pass" size="20">
+            
            <nav>
-                <div class="link-container"><a href="new.php">確認する</a></div>
-            </nav>
+                <input type="submit" value="確認する">
+           </nav>
             <p class="s">ログインは<a href="login.php"class="login">こちら</a></p>
             </form>
         </div>
