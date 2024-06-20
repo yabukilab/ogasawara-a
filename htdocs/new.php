@@ -7,22 +7,25 @@
     <link rel="stylesheet"  href="style1.css">
 </head>
 
-<body>
     <div class="A">
         <div class="B">
             <p class="CIT">CIT sports</p>
             <p class="signup">新規会員登録</p>
             <p class="a">以下の内容でよろしければ登録ボタンを押してください</p>
-
-            <p class="number">学籍番号<br>
             
-            <?php print($_POST['number']."");?>
-
-            <p class="pass">パスワード<br>
-                <input type="password" name="pass">
+            学籍番号<br>
+            <?php print($_POST['number'].""); ?><br>
+            
+            パスワード<br>
+            <?php print($_POST['pass'].""); ?>
+            
+            <nav>
+                <input type="submit" value="登録する">
+           </nav>
+            <nav>
+                <div class="link-container"><a href="new1.php">書き直す</a></div>
+            </nav>
             </p>
-            <a input type="new1.php" class="btn btn--a btn--radius">書き直す</a><br><br>
-            <a href="" class="btn btn--blue btn--radius">登録</a>
             
         </div>
     </div>
