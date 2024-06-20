@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>空き状況確認ページ</title>
+        <link rel="stylesheet" href="table.css">
 
         <style>
           table {
@@ -22,12 +23,12 @@
      </head>
 
    <body>
-     <div class="A">
-        <div class="B">
-            <p class="CIT">CIT sports</p>
-
-            <p class="goS">空き状況</p>
-
-            <p class="date">〇月×日(△曜日)</p>
+     <div class="a">
+      <div class="b">
+        <p class="CIT"> CIT sports</p>
+        <p class="go">空き状況</p>
+        <p class="date">〇月×日(△曜日)
+      </div>
+     </div>
   </body>
 </html>
