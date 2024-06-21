@@ -30,7 +30,7 @@ div.a{
     height: 100vh;
 }
 
-div.scrol{overflow-y: auto;
+div.scrol{overflow-x: auto;
 max-height: 50px;}
 
 table {
