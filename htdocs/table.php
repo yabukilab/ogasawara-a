@@ -15,6 +15,7 @@
             padding: 15px;
             text-align:center;
             font-size: 12px;
+            transform:rotate(180deg);
         }
         th {
             background-color: #f2f2f2;
