@@ -35,6 +35,7 @@
             <th>空き状況</th>
             <th>バスケ</th>
             <th>スカッシュ</th>
+            <th>卓球</th>
         </tr>
     </thead>
     <tbody>
