@@ -2,26 +2,9 @@
 <html>
 <head>
     <title>空き状況</title>
-    <link rel="stylesheet" href="table.css">
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 15px;
-            text-align:center;
-            font-size: 12px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <form action="05authenticate.php" method="POST">
     <div class="a">
@@ -58,6 +41,6 @@
     </table>
     </div>
     </div>
-    /form>
+</form>
 </body>
 </html>
