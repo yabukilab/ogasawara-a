@@ -11,7 +11,6 @@
             width: 20%;
             border-collapse: collapse;
             font-size:12px;
-            transform: rotate(90deg);
           }
           th, td {
             border: 1px solid #ddd;
