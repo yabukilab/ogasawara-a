@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>予約完了</title>
-    <link rel="stylesheet" href="07.css">
+    <link rel="stylesheet" href="global.css">
 </head>
 
 <body>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>ログインページ</title>
-    <link rel="stylesheet" href="06.css">
+    <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
