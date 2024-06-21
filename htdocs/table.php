@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>空き状況</title>
-    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
