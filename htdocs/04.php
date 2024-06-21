@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>新規会員登録ページ</title>
-    <link rel="stylesheet"  href="style1.css">
+    <link rel="stylesheet"  href="global.css">
 </head>
 
 <body>

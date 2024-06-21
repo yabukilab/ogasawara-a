@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <title>ログインページ</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="global.css">
 </head>
 
 <body>
-    <form action="05authenticate.php" method="POST">
+    <form action="" method="POST">
         <div class="a">
             <div class="b">
                 <p class="CIT">CIT sports</p>
