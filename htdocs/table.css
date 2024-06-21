@@ -31,7 +31,7 @@ div.a{
 }
 
 div.scrol{overflow-y: auto;
-max-height: 300px;}
+max-height: 50px;}
 
 table {
     width: 100%;
