@@ -30,7 +30,7 @@ div.a{
     height: 100vh;
 }
 
-div.scrol{width: 200px;
+div.scrol{width: 150px;
     overflow-x: auto;
 margin:0 auto;}
 
