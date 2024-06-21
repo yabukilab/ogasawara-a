@@ -11,7 +11,7 @@
             width: 20%;
             border-collapse: collapse;
             font-size:12px;
-            writing-mode:transform;
+            transform: rotate(180deg);
           }
           th, td {
             border: 1px solid #ddd;
