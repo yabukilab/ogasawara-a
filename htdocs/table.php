@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>表の例</title>
+    <title>空き状況確認</title>
     <style>
         table {
             width: 50%;
@@ -21,14 +21,18 @@
 </head>
 <body>
 
-<h2>表の例</h2>
-
+<form action="05authenticate.php" method="POST">
+    <div class="A">
+        <div class="B">
+            <p class="CIT">CIT sports</p>
+            
+            <p class="go">空き状況</p>
 <table>
     <thead>
         <tr>
-            <th>名前</th>
-            <th>年齢</th>
-            <th>職業</th>
+            <th>空き状況</th>
+            <th>バスケ</th>
+            <th>スカッシュ</th>
         </tr>
     </thead>
     <tbody>
@@ -49,6 +53,9 @@
         </tr>
     </tbody>
 </table>
+      </div>
+      </div>
+</form>
 
 </body>
 </html>
