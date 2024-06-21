@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>空き状況確認</title>
+    <title>タイムスロットの表</title>
     <link rel="stylesheet" href="table.css">
     <style>
         table {
-            width: 50%;
+            width: 100%;
             border-collapse: collapse;
         }
+        table, th, td {
+            border: 1px solid black;
+        }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-            font-size: 12px
+            padding: 15px;
+            text-align:center;
+            font-size: 12px;
         }
         th {
             background-color: #f2f2f2;
@@ -22,43 +22,35 @@
     </style>
 </head>
 <body>
-
 <form action="05authenticate.php" method="POST">
-    <div class="a">
-        <div class="b">
+    <div class="A">
+        <div class="B">
             <p class="CIT">CIT sports</p>
             
-            <p class="go">空き状況</p>
-<table>
-    <thead>
+            <p class="logina">ログイン</p>
+    <h2>タイムスロットの表</h2>
+    <table>
         <tr>
-            <th>空き状況</th>
+            <th></th>
             <th>バスケ</th>
-            <th>スカッシュ</th>
             <th>卓球</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>山田太郎</td>
-            <td>30</td>
-            <td>エンジニア</td>
+            <th>スカッシュ</th>
         </tr>
         <tr>
-            <td>鈴木花子</td>
-            <td>25</td>
-            <td>デザイナー</td>
+            <td>10:00〜10:30</td>
+            <td>データ1</td>
+            <td>データ2</td>
+            <td>データ3</td>
         </tr>
         <tr>
-            <td>田中一郎</td>
-            <td>40</td>
-            <td>マネージャー</td>
+            <td>10:30〜11:00</td>
+            <td>データ4</td>
+            <td>データ5</td>
+            <td>データ6</td>
         </tr>
-    </tbody>
-</table>
-      </div>
-      </div>
-</form>
-
+    </table>
+    </div>
+    </div>
+    </form>
 </body>
 </html>
