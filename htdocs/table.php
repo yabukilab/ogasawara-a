@@ -28,7 +28,6 @@
             <p class="CIT">CIT sports</p>
             
             <p class="go">空き状況</p>
-    <h2>タイムスロットの表</h2>
     <table>
         <tr>
             <th></th>
