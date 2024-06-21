@@ -14,6 +14,7 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            font-size: 12px
         }
         th {
             background-color: #f2f2f2;
