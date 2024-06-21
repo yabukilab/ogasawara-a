@@ -20,9 +20,6 @@
         th {
             background-color: #f2f2f2;
         }
-
-        scrol{max-height: 200px; 
-          overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -61,7 +58,6 @@
     </table>
     </div>
     </div>
-    </div>
-    </form>
+    /form>
 </body>
 </html>
