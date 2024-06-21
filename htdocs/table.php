@@ -1,46 +1,64 @@
 <!DOCTYPE html>
-<html>
-     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>空き状況確認ページ</title>
-        <link rel="stylesheet" href="table.css">
-
-        <style>
-          table {
-            width: 20%;
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空き状況確認</title>
+    <link rel="stylesheet" href="table.css">
+    <style>
+        table {
+            width: 50%;
             border-collapse: collapse;
-            font-size:12px;;
-          }
-          th, td {
+        }
+        th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
-          }
-          th {
-            background-color:grey;
-          }
-        </style>
-     </head>
+            font-size: 12px
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
 
-   <body>
-     <div class="a">
-      <div class="b">
-        <p class="CIT"> CIT sports</p>
-        <p class="go">空き状況</p>
-        <p class="date">〇月×日(△曜日)
-    
-     <table>
+<form action="05authenticate.php" method="POST">
+    <div class="a">
+        <div class="b">
+            <p class="CIT">CIT sports</p>
+            
+            <p class="go">空き状況</p>
+<table>
     <thead>
         <tr>
+            <th>空き状況</th>
             <th>バスケ</th>
             <th>スカッシュ</th>
             <th>卓球</th>
         </tr>
     </thead>
+    <tbody>
+        <tr>
+            <td>山田太郎</td>
+            <td>30</td>
+            <td>エンジニア</td>
+        </tr>
+        <tr>
+            <td>鈴木花子</td>
+            <td>25</td>
+            <td>デザイナー</td>
+        </tr>
+        <tr>
+            <td>田中一郎</td>
+            <td>40</td>
+            <td>マネージャー</td>
+        </tr>
+    </tbody>
+</table>
+      </div>
+      </div>
+</form>
 
-    </table>
-        </div>
-        </div>
-  </body>
+</body>
 </html>
