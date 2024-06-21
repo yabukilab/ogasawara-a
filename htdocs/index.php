@@ -9,8 +9,8 @@
 
 <body>
 <form action="05authenticate.php" method="POST">
-    <div class="A">
-        <div class="B">
+    <div class="a">
+        <div class="b">
             <p class="CIT">CIT sports</p>
             
             <class="logina">ログイン</p>

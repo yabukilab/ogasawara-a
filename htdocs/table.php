@@ -27,7 +27,7 @@
         <div class="B">
             <p class="CIT">CIT sports</p>
             
-            <p class="logina">ログイン</p>
+            <p class="go">空き状況</p>
     <h2>タイムスロットの表</h2>
     <table>
         <tr>
