@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>タイムスロットの表</title>
+    <title>空き状況</title>
     <link rel="stylesheet" href="table.css">
     <style>
         table {
@@ -23,11 +23,11 @@
 </head>
 <body>
 <form action="05authenticate.php" method="POST">
-    <div class="A">
-        <div class="B">
+    <div class="a">
+        <div class="b">
             <p class="CIT">CIT sports</p>
             
-            <p class="logina">ログイン</p>
+            <p class="go">空き状況</p>
     <h2>タイムスロットの表</h2>
     <table>
         <tr>
