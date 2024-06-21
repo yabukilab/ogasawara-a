@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>新規会員登録ページ</title>
+    <title>入力内容確認ページ</title>
     <link rel="stylesheet"  href="global.css">
 </head>
 

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>ログインページ</title>
+    <title>予約確認ページ</title>
     <link rel="stylesheet" href="global.css">
 </head>
 

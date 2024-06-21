@@ -1,4 +1,4 @@
-/* Global styles */
+/*全体*/
 html,
 body {
     display: flex;
@@ -8,19 +8,19 @@ body {
     margin: 0;
 }
 
-/* Paragraph styles */
+/*citの文字の装飾*/
 p.CIT {
     font-size: 40px;
     color: rgb(70, 70, 200);
 }
-
+/*ログインの文字の装飾*/
 p.logina,
 p.date,
 p.go {
     height: 15vh;
     color: rgb(60, 60, 210);
 }
-
+/*サインアップの装飾*/
 p.signup {
     font-size: 30px;
     color: rgb(81, 112, 197);
@@ -39,7 +39,7 @@ p.login {
     color: blue;
 }
 
-/* Button styles */
+
 .btn--a,
 a.btn--a,
 .btn--blue,
@@ -61,7 +61,7 @@ a.btn--radius {
     border-radius: 200vh;
 }
 
-/* Div styles */
+
 div.B,
 div.b {
     background-color: beige;
@@ -81,7 +81,7 @@ div.a {
     height: 100vh;
 }
 
-/* Link styles */
+
 nav a {
     text-decoration: none;
     color: blue;
