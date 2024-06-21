@@ -20,6 +20,9 @@
         th {
             background-color: #f2f2f2;
         }
+
+        scrol{max-height: 200px; 
+          overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -30,7 +33,8 @@
             
             <p class="go">空き状況</p>
     <table>
-        <tr>
+       <div class="scrol"> 
+    <tr>
             <th></th>
             <th>バスケ</th>
             <th>卓球</th>
@@ -40,12 +44,14 @@
             <th>テニス</th>
             <th>フットサル</th>
         </tr>
+        
         <tr>
             <td>10:15〜10:45</td>
             <td>データ1</td>
             <td>データ2</td>
             <td>データ3</td>
         </tr>
+        
         <tr>
             <td>10:45〜11:15</td>
             <td>データ4</td>
@@ -53,6 +59,7 @@
             <td>データ6</td>
         </tr>
     </table>
+    </div>
     </div>
     </div>
     </form>
