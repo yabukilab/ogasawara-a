@@ -66,8 +66,8 @@ a.btn--radius {
 }
 
 /*同じものはそろえる*/
-/*div.B,*/
-div.b {
+/*div.b,*/
+div.B {
     background-color: beige;
     font-size: 30px;
     font-family: Arial, Helvetica, sans-serif;
@@ -76,8 +76,8 @@ div.b {
     padding: 20px;
 }
 
-/*div.A,*/
-div.a {
+/*div.a,*/
+div.A {
     display: flex;
     justify-content: center;
     align-items: center;
