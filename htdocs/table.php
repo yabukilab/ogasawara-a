@@ -7,8 +7,8 @@
 
 <body>
 <form action="05authenticate.php" method="POST">
-    <div class="a">
-        <div class="b">
+    <div class="A">
+        <div class="B">
             <p class="CIT">CIT sports</p>
             
             <p class="go">空き状況</p>

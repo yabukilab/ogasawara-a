@@ -22,7 +22,9 @@
                 パスワード<br>
                 <input type="password" name="pass">
             </p>
-            <p class="s">
+            
+            <p>
+            <!--class="s"-->
             <!--aの変更前のクラスはlogin-->
                 ログインは<a href=""class="kotira">こちら</a>
             </p>

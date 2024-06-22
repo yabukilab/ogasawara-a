@@ -30,7 +30,9 @@
                     <!--</a>-->
                 </p>
                 <!--</nav>-->
-                <p class="s">
+
+                <p>
+                <!--class="s"-->
                     <!--aの変更前のクラスはlogin-->
                     ログインは<a href="index.php"class="kotira">こちら</a>
                 </p>

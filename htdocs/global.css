@@ -26,18 +26,22 @@ p.signup {
     color: rgb(81, 112, 197);
 }
 
-p.s,
+/*p.s,*/
 p.kotira {
     font-size: 17px;
 }
 
+/*p.sは多分いらない*/
+/*
 p.s {
     color: black;
 }
+*/
 
-p.login {
+/*色はそろえる（なんでか上にも色の指定がある）*/
+/*p.login {
     color: blue;
-}
+}*/
 
 
 .btn--a,
@@ -61,8 +65,8 @@ a.btn--radius {
     border-radius: 200vh;
 }
 
-
-div.B,
+/*同じものはそろえる*/
+/*div.B,*/
 div.b {
     background-color: beige;
     font-size: 30px;
@@ -72,7 +76,7 @@ div.b {
     padding: 20px;
 }
 
-div.A,
+/*div.A,*/
 div.a {
     display: flex;
     justify-content: center;
@@ -82,7 +86,8 @@ div.a {
 }
 
 
-nav a {
+/*nav a*/
+p.link-container {
     text-decoration: none;
     color: blue;
     font-size: 20px;

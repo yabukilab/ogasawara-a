@@ -9,8 +9,8 @@
 
 <body>
     <form action="" method="POST">
-        <div class="a">
-            <div class="b">
+        <div class="A">
+            <div class="B">
                 <p class="CIT">CIT sports</p>
                 
                 <p class="login">ログイン</p>
@@ -27,14 +27,15 @@
                 <p style="color: red;">パスワードが正しくありません</p>
                 <?php endif; ?>
 
-                <nav>
+                <!--<nav>-->
                     <div class="link-container">
                         <!--<a href="decide.php">-->
                             <input type="submit" value="ログイン">
                             <!--ログイン-->
                         <!--</a>-->
                     </div>
-                </nav>
+                <!--</nav>-->
+                
                 <!--pの変更前のクラスはsignup-->
                 <!--aの変更前のクラスはlogin-->
                 <p class="s">
