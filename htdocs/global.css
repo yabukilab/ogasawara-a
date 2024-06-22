@@ -8,6 +8,27 @@ body {
     margin: 0;
 }
 
+/*div.a,*/
+div.A {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    height: 50vh;
+}
+
+/*同じものはそろえる*/
+/*div.b,*/
+div.B {
+    background-color: beige;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    width: 325px;
+    padding: 20px;
+}
+
+
 /*citの文字の装飾*/
 p.CIT {
     font-size: 40px;
@@ -65,25 +86,7 @@ a.btn--radius {
     border-radius: 200vh;
 }
 
-/*同じものはそろえる*/
-/*div.b,*/
-div.B {
-    background-color: beige;
-    font-size: 30px;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    width: 325px;
-    padding: 20px;
-}
 
-/*div.a,*/
-div.A {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    height: 100vh;
-}
 
 
 /*nav a*/
