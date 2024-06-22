@@ -31,13 +31,13 @@
                 
                 <p class="signup">新規会員登録は<a href="" class="login">こちら</a></p>
                 <!--下記はあと消す-->
-                <a href="02sinup.php">会員登録</a>
-                <a href="03kakunin.php">登録確認</a>
-                <a href="04.php">登録完了</a>
-                <a href="06.php">予約確認</a>
-                <a href="07.php">予約完了</a>
-                <a href="table.php">表</a>
-                <a href=""></a>
+                <a href="02sinup.php">会員登録</a><br>
+                <a href="03kakunin.php">登録確認</a><br>
+                <a href="04.php">登録完了</a><br>
+                <a href="06.php">予約確認</a><br>
+                <a href="07.php">予約完了</a><br>
+                <a href="table.php">表</a><br>
+                <a href=""></a><br>
 
             </div>
         </div>
