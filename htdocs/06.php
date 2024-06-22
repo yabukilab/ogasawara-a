@@ -15,10 +15,10 @@
             <p class="date">○月×日（△）</p>
             <p class="sentence">以下の内容で<br>予約しますか？
             <p class="date">⚪︎⚪︎⚪︎<br>⚪︎⚪︎：××〜⚪︎⚪︎：××</p>
-            <nav>
+            <!--<nav>-->
                 <input type="submit" value="予約する" class="ellipse">
                 <a href="" class="back-link">戻る</a>
-            </nav>
+            <!--</nav>-->
         </div>
     </div>
 </form>
