@@ -105,5 +105,29 @@ p.link-container {
     background-color: blue;
 }
 
+.ellipse {
+    display: flex;
+    font-size: 100px;
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+    width: 200px;      /* 楕円の幅 */
+    height: 75px;     /* 楕円の高さ */
+    background-color: lightblue;  /* 背景色 */
+    border-radius: 50%;  /* 楕円形を作るためのborder-radius */
+    transform: translateX(63px); /* X軸に100px移動 */
+}
+
+.back-link {
+    padding: 8px 15px;
+    font-size: 15px;
+    background-color:none;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;  
+    display: inline-block;
+    text-align: center;
+}
+
 div.scrol{overflow: auto;
     width: 300px;}
