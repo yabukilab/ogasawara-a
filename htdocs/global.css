@@ -89,7 +89,7 @@ div.a {
 /*nav a*/
 p.link-container {
     text-decoration: none;
-    color: skyblue;
+    color: blue;
     font-size: 20px;
 }
 
@@ -97,8 +97,8 @@ p.link-container {
     display: inline-block;
     margin: 10px;
     padding: 10px;
-    border: 2px solid blue; 
-    border-radius: 5px; 
+    border: 2px solid blue; /* Border color and thickness */
+    border-radius: 5px; /* Rounded corners */
     background-color: blue;
 }
 
