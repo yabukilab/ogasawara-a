@@ -13,7 +13,7 @@
             <div class="b">
                 <p class="CIT">CIT sports</p>
                 
-                <class="logina">ログイン</p>
+                <p class="login">ログイン</p>
             
                 <p class="number">学籍番号<br><input type="text" name="number">
                 <?php if (isset($_GET['error']) && $_GET['error'] == 'student_number'): ?>
@@ -30,6 +30,15 @@
                 </nav>
                 
                 <p class="signup">新規会員登録は<a href="" class="login">こちら</a></p>
+                <!--下記はあと消す-->
+                <a href="02sinup.php">会員登録</a>
+                <a href="03kakunin.php">登録確認</a>
+                <a href="04.php">登録完了</a>
+                <a href="06.php">予約確認</a>
+                <a href="07.php">予約完了</a>
+                <a href="table.php">表</a>
+                <a href=""></a>
+
             </div>
         </div>
     </form>

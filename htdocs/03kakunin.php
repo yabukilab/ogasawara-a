@@ -21,7 +21,7 @@
             <p class="pass">パスワード<br>
                 <input type="password" name="pass">
             </p>
-            <a input type="new1.php" class="btn btn--a btn--radius">書き直す</a><br><br>
+            <a input type="" class="btn btn--a btn--radius">書き直す</a><br><br>
             <a href="" class="btn btn--blue btn--radius">登録</a>
             
         </div>

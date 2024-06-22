@@ -18,10 +18,14 @@
             
             <?php print($_POST['number']."");?>
 
-            <p class="pass">パスワード<br>
+            <p class="pass">
+                パスワード<br>
                 <input type="password" name="pass">
             </p>
-            <p class="s">ログインは<a href=""class="login">こちら</a></p>
+            <p class="s">
+            <!--aの変更前のクラスはlogin-->
+                ログインは<a href=""class="kotira">こちら</a>
+            </p>
             
         </div>
     </div>

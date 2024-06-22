@@ -14,7 +14,7 @@ p.CIT {
     color: rgb(70, 70, 200);
 }
 /*ログインの文字の装飾*/
-p.logina,
+p.login,
 p.date,
 p.go {
     height: 15vh;
@@ -27,7 +27,7 @@ p.signup {
 }
 
 p.s,
-p.login {
+p.kotira {
     font-size: 17px;
 }
 

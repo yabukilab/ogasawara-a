@@ -12,19 +12,28 @@
         <div class="B">
             <p class="CIT">CIT sports</p>
             <p class="signup">新規会員登録</p>
-            <p class="number">学籍番号<br>
+            
+            <form action=""method="post">
+                <p class="number">学籍番号</p>
+                <br>
+                <input type="text" name="number" size="7">
 
-            <form action="new.php"method="post">
-            <input type="text" name="number" size="20">
-
-            </b>
-            <p class="pass">パスワード<br>
+                <!--</b>-->
+                <p class="pass">パスワード</p>
+                <br>
                 <input type="password" name="pass">
-            </p>
-           <nav>
-                <div class="link-container"><a href="new.php">確認する</a></div>
-            </nav>
-            <p class="s">ログインは<a href="login.php"class="login">こちら</a></p>
+                <!--<nav>-->
+                <p class="link-container">
+                    <!--<a href="new.php">-->
+                        <input type="submit" value="確認する">
+                        <!--確認する-->
+                    <!--</a>-->
+                </p>
+                <!--</nav>-->
+                <p class="s">
+                    <!--aの変更前のクラスはlogin-->
+                    ログインは<a href="index.php"class="kotira">こちら</a>
+                </p>
             </form>
         </div>
     </div>
