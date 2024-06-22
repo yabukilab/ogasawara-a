@@ -15,22 +15,33 @@
                 
                 <p class="login">ログイン</p>
             
-                <p class="number">学籍番号<br><input type="text" name="number">
+                <p class="number">学籍番号<br>
+                <input type="text" name="number">
                 <?php if (isset($_GET['error']) && $_GET['error'] == 'student_number'): ?>
                 <p style="color: red;">学籍番号が存在しません</p>
                 <?php endif; ?>
                 
-                <p class="pass">パスワード<br><input type="password" name="pass"><br>
+                <p class="pass">パスワード<br>
+                <input type="password" name="pass"><br>
                 <?php if (isset($_GET['error']) && $_GET['error'] == 'password'): ?>
                 <p style="color: red;">パスワードが正しくありません</p>
                 <?php endif; ?>
 
                 <nav>
-                    <div class="link-container"><a href="decide.php">ログイン</a></div>
+                    <div class="link-container">
+                        <!--<a href="decide.php">-->
+                            <input type="submit" value="ログイン">
+                            <!--ログイン-->
+                        <!--</a>-->
+                    </div>
                 </nav>
+                <!--pの変更前のクラスはsignup-->
+                <!--aの変更前のクラスはlogin-->
+                <p class="s">
+                    新規会員登録は<a href="" class="kotira">こちら</a>
+                </p>
                 
-                <p class="signup">新規会員登録は<a href="" class="login">こちら</a></p>
-                <!--下記はあと消す-->
+                下記はあと消す
                 <a href="02sinup.php">会員登録</a><br>
                 <a href="03kakunin.php">登録確認</a><br>
                 <a href="04.php">登録完了</a><br>
