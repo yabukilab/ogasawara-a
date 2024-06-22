@@ -30,12 +30,12 @@
                 <!--<nav>-->
                     <div class="link-container">
                         <!--<a href="decide.php">-->
-                            <input type="submit" value="ログイン">
+                            <input type="submit" value="ログイン" class="link-container">
                             <!--ログイン-->
                         <!--</a>-->
                     </div>
                 <!--</nav>-->
-                
+
                 <!--pの変更前のクラスはsignup-->
                 <!--aの変更前のクラスはlogin-->
                 <p class="s">
