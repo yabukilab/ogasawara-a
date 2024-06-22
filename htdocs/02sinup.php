@@ -13,7 +13,7 @@
             <p class="CIT">CIT sports</p>
             <p class="signup">新規会員登録</p>
             
-            <form action=""method="post">
+            <form action="" method="post">
                 <p class="number">学籍番号</p>
                 <br>
                 <input type="text" name="number" size="7">

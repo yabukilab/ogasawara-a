@@ -8,19 +8,22 @@
 </head>
 
 <body>
-<form action="05authenticate.php" method="POST">
+<form action="" method="POST">
     <div class="A">
         <div class="B">
             <p class="CIT">CIT sports</p>
             <p class="date">○月×日（△）</p>
-            <p class="sentence">以下の内容で予約しました
+            <p class="sentence">以下の内容で予約しました</p>
             <p class="date">⚪︎⚪︎⚪︎<br>⚪︎⚪︎：××〜⚪︎⚪︎：××</p>
-            <p class="note">※この画面は窓口で必要になります。
-                <br>この画面のままにするか、<br>この画面をスクリーンショットで<br>保存してください。
-            <nav>
-               
-            </nav>
-            <p><a href="" class="home">ホームへ戻る</a></p>
+            <p class="note">
+                ※この画面は窓口で必要になります。<br>
+                この画面のままにするか、<br>
+                この画面をスクリーンショットで<br>
+                保存してください。
+            </p>
+            <p>
+                <a href="" class="home">ホームへ戻る</a>
+            </p>
         </div>
     </div>
 </form>
