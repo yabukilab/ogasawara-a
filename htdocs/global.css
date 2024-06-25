@@ -14,8 +14,8 @@ div.A {
     justify-content: center; /* 中央揃え */
     align-items: center; /* 中央揃え */
     background-color: white; /* 背景色を白に設定 */
-    /*height: 50vh;*/
-     /* 高さをビューポートの50%に設定 */
+    height: 100vh;
+     /* 高さをビューポートの100%に設定 */
 }
 
 /* クラスBのスタイル */
