@@ -1,36 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>確認ページ</title>
+        <link rel="stylesheet" type="text/css" href="./test.css">
+    </head>
+    <body>
+        <div class="center">
+            <h1 class="cit">CIT Sports</h1>
+            <h2>新規会員登録</h2>
 
-<head>
-    <meta charset="utf-8" />
-    <title>新規会員登録完了ページ</title>
-    <link rel="stylesheet"  href="global.css">
-</head>
-
-<body>
-    <div class="A">
-        <div class="B">
-            <p class="CIT">CIT sports</p>
-            <p class="signup">新規会員登録</p>
-            <p class="a">以下の内容で登録が完了しました</p>
-
-            <p class="number">学籍番号<br>
-            
-            <?php print($_POST['number']."");?>
-
-            <p class="pass">
-                パスワード<br>
-                <input type="password" name="pass">
-            </p>
-            
-            <p>
-            <!--class="s"-->
-            <!--aの変更前のクラスはlogin-->
-                ログインは<a href=""class="kotira">こちら</a>
-            </p>
+            <form action="" method="post">
+                <div>以下の内容で登録が完了しました</div>
+                <div class="number">学籍番号</div>
+                前の情報をpost
+                <div class="pass">パスワード</div>
+                前の情報をpost
+                <br>
+                <br>
+                <div>書き直す</div>
+                <input type="submit" value="登録" class="button">
+            </form>
+            <h4 class="new">ログインは<a  href="">こちら</a></h4>
             
         </div>
-    </div>
-</body>
-
+    </body>
+</html>
 </html>
