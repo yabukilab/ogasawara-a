@@ -34,7 +34,7 @@ div.center{
         font-size: 2em;
     }
 
-    input.button {
+    .button {
         width: 50%;
         height: 60px;
         background-color: snow;
