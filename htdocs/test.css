@@ -22,7 +22,7 @@ div.center{
 
     div.center {
         width: 100%;
-        height: auto;
+        height: 100hv;
         padding: 20px;
         box-sizing: border-box;
     }
