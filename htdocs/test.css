@@ -21,10 +21,18 @@ div.center{
     }
 
     div.center {
-        width: 100hv;
+        width: 100%;
         height: 100hv;
         padding: 20px;
         box-sizing: border-box;
+    }
+
+    h1.cit, h2.login, h3, h4, input {
+        font-size: 2em; /* 文字サイズを2倍に設定 */
+    }
+
+    .button {
+        font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
     }
 }
 
