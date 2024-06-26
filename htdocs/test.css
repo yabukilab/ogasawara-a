@@ -28,11 +28,11 @@ div.center{
     }
 
     h1.cit, h2.login, h3, h4, input {
-        font-size: 2em; /* 文字サイズを2倍に設定 */
+        font-size: 5em; /* 文字サイズを2倍に設定 */
     }
 
     .button {
-        font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
+        font-size: 5em; /* ボタンの文字サイズも2倍に設定 */
     }
 }
 
