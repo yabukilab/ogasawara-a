@@ -24,6 +24,7 @@
                 <a href="02sinup.php">会員登録</a><br>
                 <a href="03kakunin.php">登録確認</a><br>
                 <a href="04.php">登録完了</a><br>
+                <a href="05.php">予約状況</a><br>
                 <a href="06.php">予約確認</a><br>
                 <a href="07.php">予約完了</a><br>
                 <a href="table.php">表</a><br>
