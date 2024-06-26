@@ -35,10 +35,7 @@ div.center{
     }
 
     .button{
-        width: 80%;
-        height: 100px;
         background-color: snow;
-        font-size: 100px;
         color: black;
     }
 }
