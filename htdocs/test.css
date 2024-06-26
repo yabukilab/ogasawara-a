@@ -40,6 +40,7 @@ div.center{
         background-color: snow;
         font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
         color: black;
+        font-size: 3em;
     }
 }
 
