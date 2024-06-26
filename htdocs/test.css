@@ -34,7 +34,7 @@ div.center{
         font-size: 2em;
     }
 
-    .button{
+    input.button{
         background-color: snow;
         color: black;
     }
@@ -50,11 +50,11 @@ h2.login{
 
 input.button{
     width: 50%;
-    height: 25%;
+    height: 60px;
     background-color: snow;
+    border-radius: 20px;
 }
 
 .button:hover{
-    background-color: aqua;
-    
+    background-color: #A3DCDC;
 }
