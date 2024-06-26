@@ -8,7 +8,7 @@
     <body>
         <div class="center">
             <h1 class="cit">CIT Sports</h1>
-            <h2 class="login">ログイン</h2>
+            <h2>ログイン</h2>
 
             <form action="" method="post">
                 <div class="number">学籍番号</div>

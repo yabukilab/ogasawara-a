@@ -27,7 +27,7 @@ div.center{
         box-sizing: border-box;
     }
 
-    h1.cit, h2.login, div, div {
+    h1, h2, div{
         font-size: 2em; /* 文字サイズを2倍に設定 */
     }
     input{
@@ -40,11 +40,11 @@ div.center{
     }
 }
 
-h1.cit{
+h1{
     color: rgb(70, 70, 200);
 }
 
-h2.login{
+h2{
     color: skyblue;
 }
 
