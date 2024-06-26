@@ -59,10 +59,6 @@ input.button{
 }
 
 div.hyou{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     width: 90%;
     height: 50%;
     overflow: auto;
