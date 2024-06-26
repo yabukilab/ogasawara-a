@@ -1,27 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>予約確認ページ</title>
+        <link rel="stylesheet" type="text/css" href="./test.css">
+    </head>
+    <body>
+        <div class="center">
+            <h1 class="cit">CIT Sports</h1>
+            <h2>予約確認</h2>
 
-<head>
-    <meta charset="utf-8" />
-    <title>予約確認ページ</title>
-    <link rel="stylesheet" href="global.css">
-</head>
-
-<body>
-<form action="" method="POST">
-    <div class="A">
-        <div class="B">
-            <p class="CIT">CIT sports</p>
-            <p class="date">○月×日（△）</p>
-            <p class="sentence">以下の内容で<br>予約しますか？
-            <p class="date">⚪︎⚪︎⚪︎<br>⚪︎⚪︎：××〜⚪︎⚪︎：××</p>
-            <!--<nav>-->
-                <input type="submit" value="予約する" class="ellipse">
-                <a href="" class="back-link">戻る</a>
-            <!--</nav>-->
+            <div>○月×日（△）（当日の日にち）</div>
+            <form action="" method="post">
+                <div>以下の内容で予約しますか？</div>
+                <div>〇〇〇（施設名）</div>
+                <div>⚪︎⚪︎：××〜⚪︎⚪︎：××（予約時間）</div>
+                <input type="submit" value="予約する" class="button">
+            </form>
+            <div>前ページに戻る</div>
         </div>
-    </div>
-</form>
-</body>
-
+    </body>
 </html>
