@@ -27,7 +27,7 @@ div.center{
         box-sizing: border-box;
     }
 
-    h1.cit, h2.login, h3, h4 {
+    h1.cit, h2.login, div, div {
         font-size: 5em; /* 文字サイズを2倍に設定 */
     }
     input{
@@ -41,7 +41,6 @@ div.center{
 }
 
 h1.cit{
-    /*font-size: 40px;*/
     color: rgb(70, 70, 200);
 }
 
@@ -53,7 +52,7 @@ input.button{
     width: 50%;
     height: 25%;
     background-color: snow;
-    font-size: 30px;
+    font-size: 5em
 }
 
 .button:hover{
