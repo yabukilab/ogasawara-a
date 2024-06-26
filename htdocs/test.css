@@ -36,7 +36,7 @@ div.center{
 
     .button {
         width: 50%;
-        height: 60px;
+        height: 100px;
         background-color: snow;
         font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
         color: black;
