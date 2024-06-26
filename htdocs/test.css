@@ -28,7 +28,7 @@ div.center{
     }
 
     h1.cit, h2.login, div, div {
-        font-size: 5em; /* 文字サイズを2倍に設定 */
+        font-size: 2em; /* 文字サイズを2倍に設定 */
     }
     input{
         font-size: 2em;
