@@ -60,7 +60,7 @@ input.button{
 
 div.hyou{
     width: 100%;
-    height: 100hv;
+    height: 100vh;
     overflow: auto;
     border: 1px solid #000;
 }
