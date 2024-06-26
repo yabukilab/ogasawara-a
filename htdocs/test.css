@@ -38,9 +38,8 @@ div.center{
         width: 50%;
         height: 100px;
         background-color: snow;
-        font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
+        font-size: 5em;
         color: black;
-        font-size: 3em;
     }
 }
 
