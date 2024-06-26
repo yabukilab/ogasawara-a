@@ -59,11 +59,10 @@ input.button{
 }
 
 div.hyou{
-    width: 100%;
+    width: 90%;
     height: 50%;
     overflow: auto;
     border: 1px solid #000;
-    margin: 5px;
 }
 
 table {
