@@ -30,7 +30,17 @@ div.center{
     h1.cit, h2.login, h3, h4 {
         font-size: 5em; /* 文字サイズを2倍に設定 */
     }
+    input{
+        font-size: 2em;
+    }
 
+    input.button {
+        width: 50%;
+        height: 25%;
+        background-color: snow;
+        font-size: 2em; /* ボタンの文字サイズも2倍に設定 */
+        color: black;
+    }
 }
 
 h1.cit{
