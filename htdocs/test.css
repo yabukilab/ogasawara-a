@@ -1,0 +1,103 @@
+/*test.css*/
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0%;
+    background:url(https://www.ryonetsu.co.jp/files/download/WorkImageBlocks/22428a5a-1ae1-4fdb-b541-de98dfbf3024/value01/value05);
+}
+
+div.center{
+    background-color: beige;
+    width: 400px;
+    text-align: center;
+    height: 100vh;
+}
+
+/* スマホ表示用のスタイル */
+@media screen and (max-width: 1000px) {
+    body {
+        justify-content: flex-start;
+    }
+
+    div.center {
+        width: 100%;
+        height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    h1, h2, div{
+        font-size: 2em; /* 文字サイズを2倍に設定 */
+    }
+    input{
+        font-size: 2em;
+    }
+
+    input.button{
+        background-color: snow;
+        color: black;
+    }
+}
+
+h1{
+    color: rgb(70, 70, 200);
+}
+
+h2{
+    color: skyblue;
+}
+
+input.button{
+    width: 50%;
+    background-color: snow;
+    border-radius: 20px;
+}
+
+.button:hover{
+    background-color: #A3DCDC;
+}
+
+div.hyou{
+    text-align: left;
+    height: 75%;
+    overflow: auto;
+    border: 1px solid #000;
+    margin: 2%;
+    position: relative;
+}
+
+thead th{
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    border: 1px solid #000;
+}
+
+tbody th{
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border: 1px solid #000;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th{
+    border: 1px solid #000;
+    background-color: #f2f2f2;
+    border: 1px solid black;
+    height: 12.5vh;
+    position: relative;
+}
+
+td{
+    border: 1px solid #000;
+    background-color: white;
+    position: relative;
+}
