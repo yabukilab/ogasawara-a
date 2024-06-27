@@ -22,7 +22,7 @@
             <h4>新規会員登録は<a href="02signup.php">こちら</a></h4>
             下記はあと消す<br>
                 <a href="02signup.php">会員登録</a><br>
-                <a href="03kakunin.php">登録確認</a><br>
+                <a href="03confirmation.php">登録確認</a><br>
                 <a href="04completion.php">登録完了</a><br>
                 <a href="05table.php">予約状況</a><br>
                 <a href="06reservation.php">予約確認</a><br>
