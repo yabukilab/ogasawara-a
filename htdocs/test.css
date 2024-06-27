@@ -101,3 +101,9 @@ td{
     background-color: white;
     position: relative;
 }
+
+div.screen{
+    text-align: left;
+    color: red;
+    margin: 0% 15%;
+}
