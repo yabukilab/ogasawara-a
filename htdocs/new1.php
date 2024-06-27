@@ -22,7 +22,7 @@
             <?php print($_POST['pass'].""); ?>
 
             </p>
-            <p class="s">ログインは<a href=""class="login">こちら</a></p>
+            <p class="s">ログインは<a href="login.php"class="login">こちら</a></p>
             </form>
         </div>
     </div>

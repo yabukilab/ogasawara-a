@@ -54,17 +54,21 @@ body {
 }
 
 
-nav a{
-    text-decoration: none;
-    color: blue;
-    font-size: 20px;
+.submit-button {
+    display: inline-block;
+    width: 200px;
+    height: 75px;
+    line-height: 75px; /* テキストの垂直方向の中央揃え */
+    text-align: center; /* テキストの水平方向の中央揃え */
+    background-color: blue; /* ボタンの背景色を青に設定 */
+    color: white;
+    font-size: 25px;
+    border: none;
+    border-radius: 50px; /* 角丸の設定 */
+    cursor: pointer;
+    margin-top: 20px; /* ボタンと上の要素との間隔 */
 }
 
-.link-container {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px;
-    border: 2px solid blue; /*ボーダーの色と太さを指定*/
-    border-radius: 5px; /*角丸にするための設定*/
-    background-color: blue;
+.submit-button:hover {
+    background-color: darkblue; /* ホバー時の背景色 */
 }

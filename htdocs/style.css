@@ -65,3 +65,22 @@ nav a{
     border-radius: 5px; /*角丸にするための設定*/
     background-color: blue;
 }
+
+.submit-button {
+    display: inline-block;
+    width: 200px;
+    height: 75px;
+    line-height: 75px; /* テキストの垂直方向の中央揃え */
+    text-align: center; /* テキストの水平方向の中央揃え */
+    background-color:  rgb(70, 70, 200); /* ボタンの背景色を青に設定 */
+    color: white;
+    font-size: 25px;
+    border: none;
+    border-radius: 50px; /* 角丸の設定 */
+    cursor: pointer;
+    margin-top: 20px; /* ボタンと上の要素との間隔 */
+}
+
+.submit-button:hover {
+    background-color: rgb(10, 10, 183); /* ホバー時の背景色 */
+}
