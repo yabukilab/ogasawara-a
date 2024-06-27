@@ -10,17 +10,16 @@
             <h1>CIT Sports</h1>
             <h2>新規会員登録</h2>
 
-            <form action="" method="post">
-                <div class="number">学籍番号</div>
-                <input type="text" name="number">
+            <form action="03confirmation.php" method="post">
+                <div class="student_number">学籍番号</div>
+                <input type="text" name="student_number">
                 <div class="pass">パスワード</div>
-                <input type="password" name="pass">
+                <input type="password" name="password_hash">
                 <br>
                 <br>
                 <input type="submit" value="確認する" class="button">
             </form>
-            <h4>ログインは<a  href="">こちら</a></h4>
-            
+            <h4>ログインは<a href="index.php">こちら</a></h4>
         </div>
     </body>
 </html>

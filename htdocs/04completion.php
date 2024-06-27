@@ -11,7 +11,7 @@
             <h2>新規会員登録</h2>
 
             <form action="" method="post">
-                <div>以下の内容でよろしければ登録ボタンを押してください</div>
+                <div>以下の内容で登録が完了しました</div>
                 <div class="number">学籍番号</div>
                 前の情報をpost
                 <div class="pass">パスワード</div>
@@ -21,7 +21,7 @@
                 <div>書き直す</div>
                 <input type="submit" value="登録" class="button">
             </form>
-            <h4>新規会員登録は<a href="">こちら</a></h4>
+            <h4>ログインは<a href="index.php">こちら</a></h4>
             
         </div>
     </body>
