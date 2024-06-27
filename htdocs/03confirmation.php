@@ -8,12 +8,12 @@
     <body>
         <div class="center">
             <h1>CIT Sports</h1>
-            <h2>新規会員登録</h2>
+            <h2>確認画面</h2>
 
             <form action="" method="post">
                 <div>以下の内容でよろしければ登録ボタンを押してください</div>
                 <div class="number">学籍番号</div>
-                前の情報をpost
+                <?php echo htmlspecialchars($student_number); ?>
                 <div class="pass">パスワード</div>
                 前の情報をpost
                 <br>
@@ -21,8 +21,6 @@
                 <div>書き直す</div>
                 <input type="submit" value="登録" class="button">
             </form>
-            <h4>新規会員登録は<a href="">こちら</a></h4>
-            
         </div>
     </body>
 </html>

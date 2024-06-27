@@ -21,7 +21,7 @@
                 <div>書き直す</div>
                 <input type="submit" value="登録" class="button">
             </form>
-            <h4>ログインは<a href="">こちら</a></h4>
+            <h4>ログインは<a href="index.php">こちら</a></h4>
             
         </div>
     </body>
