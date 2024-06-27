@@ -19,7 +19,7 @@
                 <br>
                 <input type="submit" value="確認する" class="button">
             </form>
-            <h4>ログインは<a  href="">こちら</a></h4>
+            <h4>ログインは<a href="">こちら</a></h4>
             
         </div>
     </body>

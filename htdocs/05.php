@@ -2,13 +2,13 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>予約完了ページ</title>
+        <title>予約状況確認ページ</title>
         <link rel="stylesheet" type="text/css" href="./test.css">
     </head>
     <body>
         <div class="center">
             <h1>CIT Sports</h1>
-            <h2>予約完了</h2>
+            <h2>予約状況確認</h2>
 
             <div>○月×日（△）（当日の日にち）</div>
             <div class="hyou">
