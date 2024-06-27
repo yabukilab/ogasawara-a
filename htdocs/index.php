@@ -28,7 +28,6 @@
                 <a href="06.php">予約確認</a><br>
                 <a href="07.php">予約完了</a><br>
                 <a href="table.php">表</a><br>
-                <a href=""></a><br>
         </div>
     </body>
 </html>
