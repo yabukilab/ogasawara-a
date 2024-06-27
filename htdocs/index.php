@@ -23,11 +23,10 @@
             下記はあと消す<br>
                 <a href="02sinup.php">会員登録</a><br>
                 <a href="03kakunin.php">登録確認</a><br>
-                <a href="04.php">登録完了</a><br>
-                <a href="05.php">予約状況</a><br>
-                <a href="06.php">予約確認</a><br>
-                <a href="07.php">予約完了</a><br>
-                <a href="test.php">表</a><br>
+                <a href="04completion.php">登録完了</a><br>
+                <a href="05table.php">予約状況</a><br>
+                <a href="06reservation.php">予約確認</a><br>
+                <a href="07reserved.php">予約完了</a><br>
         </div>
     </body>
 </html>
