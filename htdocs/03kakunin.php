@@ -7,7 +7,7 @@
     </head>
     <body>
         <div class="center">
-            <h1 class="cit">CIT Sports</h1>
+            <h1>CIT Sports</h1>
             <h2>新規会員登録</h2>
 
             <form action="" method="post">

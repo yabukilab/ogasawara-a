@@ -7,7 +7,7 @@
     </head>
     <body>
         <div class="center">
-            <h1 class="cit">CIT Sports</h1>
+            <h1>CIT Sports</h1>
             <h2>予約完了</h2>
 
             <div>○月×日（△）（当日の日にち）</div>
