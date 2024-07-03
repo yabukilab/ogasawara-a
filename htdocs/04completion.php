@@ -1,3 +1,19 @@
+<?php
+session_start();
+if(isset($_SESSION['student_number'])){
+    $student_number=$_SESSION['student_number'];
+    unset($_SESSION['student_number']);
+}else{
+    $student_number='不明';
+}
+if(isset($_SESSION['password'])){
+    $password=$_SESSION['password'];
+    unset($_SESSION['password']);
+}else{
+    $password='不明';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -13,13 +29,15 @@
             <form action="" method="post">
                 <div>以下の内容で登録が完了しました</div>
                 <div class="number">学籍番号</div>
-                前の情報をpost
+                <?php echo htmlspecialchars($student_number); ?>
                 <div class="pass">パスワード</div>
-                前の情報をpost
-                <br>
-                <br>
-                <div>書き直す</div>
-                <input type="submit" value="登録" class="button">
+                <?php
+                if($password=="不明"){
+                    echo htmlspecialchars($password);
+                }else{
+                echo str_repeat('*',strlen($password)); 
+                }
+                ?>
             </form>
             <h4>ログインは<a href="index.php">こちら</a></h4>
             

@@ -1,3 +1,17 @@
+<!--05table.php-->
+<?php
+session_start();
+require('db.php');
+?>
+
+<?php
+$date=date('Y-m-d');
+$today=date('n月j日');
+$weekday=date('w');
+$weekdays=['日','月','火','水','木','金','土'];
+$weekday_japanese=$weekdays[$weekday];
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -10,64 +24,58 @@
             <h1>CIT Sports</h1>
             <h2>予約完了</h2>
 
-            <div>○月×日（△）（当日の日にち）</div>
-            <div class="hyou">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>施設/時間　　　　　</th>
-                            <th>10:15-10:45</th>
-                            <th>10:45-11:15</th>
-                            <th>11:15-11:45</th>
-                            <th>11:45-12:15</th>
-                            <th>12:45-13:15</th>
-                            <th>13:15-13:45</th>
-                            <th>13:45-14:15</th>
-                            <th>14:15-14:45</th>
-                            <th>14:45-15:15</th>
-                            <th>15:15-15:45</th>
-                            <th>15:45-16:15</th>
-                            <th>16:15-16:45</th>
-                        </tr>
-                    </thead>
+            
+                <?php
+                echo "<div>{$today}（{$weekday_japanese}）</div>";
+                ?>
+            <?php
+            $sportsList = ["卓球", "バスケ", "スカッシュ", "クライミング", "テニス", "野球", "サッカー"];
+            $timeSlots = ["10:15-10:45", "10:45-11:15", "11:15-11:45", "11:45-12:15","12:45-13:15", "13:15-13:45", "13:45-14:15", "14:15-14:45","14:45-15:15", "15:15-15:45", "15:45-16:15", "16:15-16:45"];
+            ?>
 
-                    <tbody>
-                        <?php
-                        for($i=0; $i<7; $i++){
-                            if($i==0){
-                                $sports="卓球";
-                            }elseif($i==1){
-                                $sports="バスケ";
-                            }elseif($i==2){
-                                $sports="スカッシュ";
-                            }elseif($i==3){
-                                $sports="クライミング";
-                            }elseif($i==4){
-                                $sports="テニス";
-                            }elseif($i==5){
-                                $sports="野球";
-                            }elseif($i==6){
-                                $sports="サッカー";
-                            }
-
-                            print("<tr>
-                            <th>{$sports}</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>");
-                        }
-                        ?>
-                    </tbody>
-                </table>
+<div class="hyou">
+    <table>
+        <thead>
+            <tr>
+                <th>施設/時間　　　　　</th>
+                <?php foreach ($timeSlots as $time) { ?>
+                    <th><?php echo $time; ?></th>
+                <?php } ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($sportsList as $sports) {
+                echo "<tr>";
+                echo "<th>{$sports}</th>";
+                foreach ($timeSlots as $time) {
+                    // クエリを準備
+                    $sql = "SELECT * FROM reservations WHERE facility = :facility AND time = :time AND date = :date";
+                    $sth = $db->prepare($sql);
+                    // プレースホルダに変数をバインド
+                    $sth->bindParam(':facility', $sports);
+                    $sth->bindParam(':time', $time);
+                    $sth->bindParam(':date', $date);
+                    // クエリを実行
+                    $sth->execute();
+                    $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+                    // 結果を確認
+                    if (count($result) > 0) {
+                        echo "<td class='no'>×</td>";
+                    } else {
+                        echo "<td><form action='06reservation.php' method='POST'>
+                                <input type='hidden' name='sports' value='" . htmlspecialchars($sports, ENT_QUOTES, 'UTF-8') . "'>
+                                <input type='hidden' name='time' value='" . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "'>
+                                <input type='submit' style='color:red; font-size: 70px; background: none; border: none; cursor: pointer;' value='○'>
+                              </form></td>";
+                    }
+                }
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
             </div>
         </div>
     </body>
