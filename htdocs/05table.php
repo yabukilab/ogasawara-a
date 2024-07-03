@@ -10,6 +10,12 @@ $today=date('n月j日');
 $weekday=date('w');
 $weekdays=['日','月','火','水','木','金','土'];
 $weekday_japanese=$weekdays[$weekday];
+
+if(isset($_SESSION['student_number'])){
+    $student_number=$_SESSION['student_number'];
+}else{
+    $student_number="";
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +28,8 @@ $weekday_japanese=$weekdays[$weekday];
     <body>
         <div class="center">
             <h1>CIT Sports</h1>
-            <h2>予約完了</h2>
+            <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
+            <h2>予約状況</h2>
 
             
                 <?php
@@ -36,7 +43,7 @@ $weekday_japanese=$weekdays[$weekday];
 <div class="hyou">
     <table>
         <thead>
-            <tr>
+            <tr style="height: auto;">
                 <th>施設/時間　　　　　</th>
                 <?php foreach ($timeSlots as $time) { ?>
                     <th><?php echo $time; ?></th>
@@ -46,7 +53,7 @@ $weekday_japanese=$weekdays[$weekday];
         <tbody>
             <?php
             foreach ($sportsList as $sports) {
-                echo "<tr>";
+                echo "<tr style='height: auto;'>";
                 echo "<th>{$sports}</th>";
                 foreach ($timeSlots as $time) {
                     // クエリを準備
@@ -61,12 +68,13 @@ $weekday_japanese=$weekdays[$weekday];
                     $result = $sth->fetchAll(PDO::FETCH_ASSOC);
                     // 結果を確認
                     if (count($result) > 0) {
-                        echo "<td class='no'>×</td>";
+                        echo "<td style='text-align: center;'><div style='color: blue; font-size: 50px; background: white; border: none; cursor: pointer;'>×</div></td>";
                     } else {
-                        echo "<td><form action='06reservation.php' method='POST'>
+                        echo "<td style='text-align: center;'><form action='06reservation.php' method='POST'>
+                                <input type='hidden' name='student_number' value='" . htmlspecialchars($student_number, ENT_QUOTES, 'UTF-8') . "'>
                                 <input type='hidden' name='sports' value='" . htmlspecialchars($sports, ENT_QUOTES, 'UTF-8') . "'>
                                 <input type='hidden' name='time' value='" . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "'>
-                                <input type='submit' style='color:red; font-size: 70px; background: none; border: none; cursor: pointer;' value='○'>
+                                <input type='submit' style='color:red; font-size: 50px; background: white; border: none; cursor: pointer; text-align: center;' value='○'>
                               </form></td>";
                     }
                 }
