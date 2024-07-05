@@ -95,8 +95,6 @@ if(isset($_SESSION['student_number'])){
 <?php
 if (isset($_POST['logout'])) {
     $_SESSION = array(); // セッション変数を全て削除
-    if (isset($_COOKIE["PHPSESSID"])) { // セッションクッキーを削除
-        setcookie("PHPSESSID", '', time() - 1800, '/');
     }
     session_destroy(); // セッションの登録データを削除
     header("Location:index.php");
