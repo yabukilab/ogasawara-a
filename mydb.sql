@@ -55,7 +55,7 @@ CREATE TABLE `users` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `student_number` (`student_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,6 +64,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'2242040','$2y$10$2pVG1Y0MfBZmALPSOchpfO23Fk7s88/NsAmo09YGadN1x1wDYVuYG','2024-07-05 05:02:10'),(2,'2242095','$2y$10$RpEW0OCzi.EQZjlLxNsHT.FALrcXeDB7EyZhq8klZzoKpu3u2OSyC','2024-07-05 05:03:11'),(3,'2242011','$2y$10$YUHAozmvnVjVnZZvmHgxYum2TDRRCxzI4STFNDadc2K.h75Kfwh1m','2024-07-05 05:03:46'),(4,'2242099','$2y$10$4pccslH17jbdV1g8CPbAleBAj8CnZacP8cz6XU6C9HUvxMSne9gqm','2024-07-05 05:05:40');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -76,4 +77,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-05 10:51:22
+-- Dump completed on 2024-07-05 14:07:35
