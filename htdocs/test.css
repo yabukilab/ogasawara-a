@@ -1,4 +1,6 @@
 /*test.css*/
+/*bodyはすべてのページに参照している*/
+
 body{
     display: flex;
     flex-direction: column;
@@ -9,6 +11,7 @@ body{
     background: url(https://www.ryonetsu.co.jp/files/download/WorkImageBlocks/22428a5a-1ae1-4fdb-b541-de98dfbf3024/value01/value05)center center/cover no-repeat;
 }
 
+/*div.centerもすべてのページに参照している*/
 div.center{
     background-color: beige;
     width: 400px;
@@ -17,6 +20,7 @@ div.center{
 }
 
 /* スマホ表示用のスタイル */
+/*スマホ用もできれば変更したい*/
 @media screen and (max-width: 1000px) {
     body {
         justify-content: flex-start;
@@ -42,27 +46,32 @@ div.center{
     }
 }
 
+/*CIT Sportsのスタイル*/
 h1{
     color: rgb(70, 70, 200);
 }
 
+/*ページタイトル（CIT Sportsの下に表示されるもの）のスタイル*/
 h2{
     color: skyblue;
 }
 
+/*ボタン（ログインや書き直す等）のスタイル*/
 input.button{
     width: 50%;
     background-color: snow;
     border-radius: 20px;
 }
 
+/*ボタンの上にカーソルを乗せたときの挙動*/
 .button:hover{
     background-color: #A3DCDC;
 }
 
+/*予約表（予約テーブル）のスタイル・・・使ってるのは05table.phpだけかな*/
 div.hyou{
     text-align: left;
-    height: 75%;
+    height:55%;
     overflow: auto;
     border: 1px solid #000;
     margin: 2%;
@@ -92,7 +101,6 @@ th{
     border: 1px solid #000;
     background-color: #f2f2f2;
     border: 1px solid black;
-    height: 12.5vh;
     position: relative;
 }
 
@@ -101,25 +109,11 @@ td{
     background-color: white;
     position: relative;
 }
+/*ここまで予約表のスタイル*/
 
+/*※（米印）のスタイル・・・使ってるのは07reserved.phpだけかな*/
 div.screen{
     text-align: left;
     color: red;
     margin: 0% 15%;
-}
-
-/* ○ボタンのスタイル */
-.link-button {
-    color:red; 
-    font-size: 10px; 
-    background: none; 
-    border: none; 
-    cursor: pointer;
-}
-
-/* ×のスタイル */
-.no {
-    background-color: red;
-    color: white;
-    text-align: center;
 }
