@@ -1,10 +1,7 @@
-<!--05table.php-->
 <?php
 session_start();
 require('db.php');
-?>
 
-<?php
 $date=date('Y-m-d');
 $today=date('n月j日');
 $weekday=date('w');
@@ -15,6 +12,13 @@ if(isset($_SESSION['student_number'])){
     $student_number=$_SESSION['student_number'];
 }else{
     $student_number="";
+}
+
+// ログアウト処理
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
 }
 ?>
 
@@ -29,73 +33,65 @@ if(isset($_SESSION['student_number'])){
         <div class="center">
             <h1>CIT Sports</h1>
             <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
-            <form method="POST">
-            <button type="submit" name="logout">ログアウト</button><br>
+            <!-- ログアウトボタン -->
+            <form action="" method="post">
+                <input type="submit" name="logout" value="ログアウト">
             </form>
             <h2>予約状況</h2>
 
-            
-                <?php
-                echo "<div>{$today}（{$weekday_japanese}）</div>";
-                ?>
+            <?php
+            echo "<div>{$today}（{$weekday_japanese}）</div>";
+            ?>
+
             <?php
             $sportsList = ["卓球", "バスケ", "スカッシュ", "クライミング", "テニス", "野球", "サッカー"];
             $timeSlots = ["10:15-10:45", "10:45-11:15", "11:15-11:45", "11:45-12:15","12:45-13:15", "13:15-13:45", "13:45-14:15", "14:15-14:45","14:45-15:15", "15:15-15:45", "15:45-16:15", "16:15-16:45"];
             ?>
 
-<div class="hyou">
-    <table>
-        <thead>
-            <tr style="height: auto;">
-                <th>施設/時間　　　　　</th>
-                <?php foreach ($timeSlots as $time) { ?>
-                    <th><?php echo $time; ?></th>
-                <?php } ?>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($sportsList as $sports) {
-                echo "<tr style='height: auto;'>";
-                echo "<th>{$sports}</th>";
-                foreach ($timeSlots as $time) {
-                    // クエリを準備
-                    $sql = "SELECT * FROM reservations WHERE facility = :facility AND time = :time AND date = :date";
-                    $sth = $db->prepare($sql);
-                    // プレースホルダに変数をバインド
-                    $sth->bindParam(':facility', $sports);
-                    $sth->bindParam(':time', $time);
-                    $sth->bindParam(':date', $date);
-                    // クエリを実行
-                    $sth->execute();
-                    $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-                    // 結果を確認
-                    if (count($result) > 0) {
-                        echo "<td style='text-align: center;'><div style='color: blue; font-size: 50px; background: white; border: none; cursor: pointer;'>×</div></td>";
-                    } else {
-                        echo "<td style='text-align: center;'><form action='06reservation.php' method='POST'>
-                                <input type='hidden' name='student_number' value='" . htmlspecialchars($student_number, ENT_QUOTES, 'UTF-8') . "'>
-                                <input type='hidden' name='sports' value='" . htmlspecialchars($sports, ENT_QUOTES, 'UTF-8') . "'>
-                                <input type='hidden' name='time' value='" . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "'>
-                                <input type='submit' style='color:red; font-size: 50px; background: white; border: none; cursor: pointer; text-align: center;' value='○'>
-                              </form></td>";
-                    }
-                }
-                echo "</tr>";
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
+            <div class="hyou">
+                <table>
+                    <thead>
+                        <tr style="height: auto;">
+                            <th>施設/時間　　　　　</th>
+                            <?php foreach ($timeSlots as $time) { ?>
+                                <th><?php echo $time; ?></th>
+                            <?php } ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($sportsList as $sports) {
+                            echo "<tr style='height: auto;'>";
+                            echo "<th>{$sports}</th>";
+                            foreach ($timeSlots as $time) {
+                                // クエリを準備
+                                $sql = "SELECT * FROM reservations WHERE facility = :facility AND time = :time AND date = :date";
+                                $sth = $db->prepare($sql);
+                                // プレースホルダに変数をバインド
+                                $sth->bindParam(':facility', $sports);
+                                $sth->bindParam(':time', $time);
+                                $sth->bindParam(':date', $date);
+                                // クエリを実行
+                                $sth->execute();
+                                $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+                                // 結果を確認
+                                if (count($result) > 0) {
+                                    echo "<td style='text-align: center;'><div style='color: blue; font-size: 50px; background: white; border: none; cursor: pointer;'>×</div></td>";
+                                } else {
+                                    echo "<td style='text-align: center;'><form action='06reservation.php' method='POST'>
+                                            <input type='hidden' name='student_number' value='" . htmlspecialchars($student_number, ENT_QUOTES, 'UTF-8') . "'>
+                                            <input type='hidden' name='sports' value='" . htmlspecialchars($sports, ENT_QUOTES, 'UTF-8') . "'>
+                                            <input type='hidden' name='time' value='" . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "'>
+                                            <input type='submit' style='color:red; font-size: 50px; background: white; border: none; cursor: pointer; text-align: center;' value='○'>
+                                          </form></td>";
+                                }
+                            }
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>
 </html>
-
-<?php
-if (isset($_POST['logout'])) {
-    $_SESSION = array(); // セッション変数を全て削除
-    }
-    session_destroy(); // セッションの登録データを削除
-    header("Location:index.php");
-?>
