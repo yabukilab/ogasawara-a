@@ -1,7 +1,6 @@
 <?php
 require('db.php');
 
-// データを取得して表示する関数
 function displayTable($db, $tableName) {
     try {
         $stmt = $db->query("SELECT * FROM $tableName");
@@ -21,9 +20,11 @@ function displayTable($db, $tableName) {
                 foreach ($row as $value) {
                     echo "<td>" . h($value) . "</td>";
                 }
+                echo "<td><a href='delete.php?table=$tableName&id=" . h($row['ID']) . "'>Delete</a></td>";
                 echo "</tr>";
             }
             echo "</table>";
+            echo "<a href='add.php?table=$tableName'>Add New Entry</a>";
         } else {
             echo "<p>No data found in table " . h($tableName) . ".</p>";
         }
@@ -32,7 +33,6 @@ function displayTable($db, $tableName) {
     }
 }
 
-// ページのヘッダー
 echo "<!DOCTYPE html>";
 echo "<html lang='ja'>";
 echo "<head>";
@@ -42,11 +42,9 @@ echo "</head>";
 echo "<body>";
 echo "<h1>Database Tables</h1>";
 
-// テーブルを表示
 displayTable($db, 'reservations');
 displayTable($db, 'users');
 
-// ページのフッター
 echo "</body>";
 echo "</html>";
 ?>
