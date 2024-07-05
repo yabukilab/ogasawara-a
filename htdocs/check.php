@@ -22,4 +22,5 @@ try {
         echo '</tr>';
     }
     echo '</table>';
+}
 ?>
