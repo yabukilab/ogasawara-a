@@ -2,7 +2,6 @@
 // db.php で定義されたデータベース接続コードを読み込む
 require('db.php');
 
-try {
     // データベースからデータを取得するクエリを作成
     $stmt = $db->query('SELECT * FROM reservations');
 
@@ -22,5 +21,5 @@ try {
         echo '</tr>';
     }
     echo '</table>';
-}
+
 ?>
