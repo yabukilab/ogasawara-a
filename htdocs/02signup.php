@@ -15,7 +15,7 @@
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'blank'): 
                 ?>
-                <div style="color: red;">入力されていない項目があります</div>
+                <div style="color: red; font-weight: bold;">入力されていない項目があります</div>
                 <?php
                 endif;
                 ?>
@@ -24,14 +24,14 @@
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'student_number'): 
                 ?>
-                <div style="color: red;">学籍番号は7文字で入力してください</div>
+                <div style="color: red; font-weight: bold;">学籍番号は7文字で入力してください</div>
                 <?php
                 endif;
                 ?>
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'Duplicates'):
                 ?>
-                <div style="color: red;">この学籍番号は既に登録されています</div>
+                <div style="color: red; font-weight: bold;">この学籍番号は既に登録されています</div>
                 <?php
                 endif;
                 ?>

@@ -15,14 +15,14 @@
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'blank'): 
                 ?>
-                <div style="color: red;">入力されていない項目があります</div>
+                <div style="color: red; font-weight: bold;">入力されていない項目があります</div>
                 <?php
                 endif;
                 ?>
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'Discrepancy'): 
                 ?>
-                <div style="color: red;">学籍番号またはパスワードが一致しません</div>
+                <div style="color: red; font-weight: bold;">学籍番号またはパスワードが一致しません</div>
                 <?php
                 endif;
                 ?>
