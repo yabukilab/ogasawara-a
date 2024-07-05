@@ -48,8 +48,9 @@ if($student_number=="" || $password=="" || $password2==""){
                 <div class="pass">パスワード</div>
                 <!--str_repeat・・・複数回繰り返す-->
                 <!--strlen($password_hash)・・・$password_hashの文字数を数える-->
-                <!--mb_stlren・・・日本語が含まれたものも数える-->
+                <div style="color:red;">
                 <?php echo str_repeat('*',strlen($password)); ?>
+                </div>
                 <input type="hidden" name="password" value="<?php echo htmlspecialchars($password); ?>">
                 </div>
                 <br>
