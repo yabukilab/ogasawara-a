@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="center">
-            <h1><img src="CIT_Sports.jpg" alt="test" width="auto" height="auto"></h1>
+            <div><img src="CIT_Sports.jpg" alt="test" width="auto" height="auto"></div>
             <h2>ログイン</h2>
 
             <form action="authenticate.php" method="post">
