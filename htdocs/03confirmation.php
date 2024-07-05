@@ -11,7 +11,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 if($student_number=="" || $password=="" || $password2==""){
     header("Location: 02signup.php?error=blank");
     exit();
-}elseif(!(mb_strlen($student_number)==7)){
+}elseif(!(strlen($student_number)==7)){
     header("Location: 02signup.php?error=student_number");
     exit();
 }elseif(strlen($password)<4 || strlen($password)>16){
