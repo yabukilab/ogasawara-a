@@ -38,8 +38,8 @@ if($student_number=="" || $password=="" || $password2==""){
             <form action="register.php" method="post">
                 <div>以下の内容でよろしければ登録ボタンを押してください</div>
                 <br>
+                <div class="confirmation">
                 <div class="number">学籍番号</div>
-
                 <!--フォームなどからユーザのデータをブラウザに表示する場合，原則すべてのデータにhtmlspecialchars()関数を使う-->
                 <?php echo htmlspecialchars($student_number); ?>
                 <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
@@ -49,6 +49,7 @@ if($student_number=="" || $password=="" || $password2==""){
                 <!--mb_stlren・・・日本語が含まれたものも数える-->
                 <?php echo str_repeat('*',strlen($password)); ?>
                 <input type="hidden" name="password" value="<?php echo htmlspecialchars($password); ?>">
+                </div>
                 <br>
                 <br>
                 <input type="button" value="書き直す" onclick="history.back()" class="button">
