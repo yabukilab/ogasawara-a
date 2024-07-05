@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <meta charset="utf-8">
+    <title>利用履歴</title>
+</html>
+<body>
+
 <?php
 // db.php で定義されたデータベース接続コードを読み込む
 require('db.php');
@@ -23,3 +30,6 @@ require('db.php');
     echo '</table>';
 
 ?>
+
+<a href="top.php">トップ</a>
+</body>
