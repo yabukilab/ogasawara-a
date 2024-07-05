@@ -32,7 +32,7 @@ if($student_number=="" || $password=="" || $password2==""){
     </head>
     <body>
         <div class="center">
-            <h1>CIT Sports</h1>
+        <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
             <h2>確認画面</h2>
 
             <form action="register.php" method="post">

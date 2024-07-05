@@ -36,7 +36,7 @@ if(isset($_SESSION['time'])){
     </head>
     <body>
         <div class="center">
-            <h1>CIT Sports</h1>
+        <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
             <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
             <h2>予約完了</h2>
 
