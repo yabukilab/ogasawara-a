@@ -98,5 +98,4 @@ if (isset($_POST['logout'])) {
     }
     session_destroy(); // セッションの登録データを削除
     header("Location:index.php");
-}
 ?>
