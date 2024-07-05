@@ -29,6 +29,9 @@ if(isset($_SESSION['student_number'])){
         <div class="center">
             <h1>CIT Sports</h1>
             <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
+            <form method="POST">
+            <button type="submit" name="logout">ログアウト</button><br>
+            </form>
             <h2>予約状況</h2>
 
             
@@ -88,3 +91,14 @@ if(isset($_SESSION['student_number'])){
         </div>
     </body>
 </html>
+
+<?php
+if (isset($_POST['logout'])) {
+    $_SESSION = array(); // セッション変数を全て削除
+    if (isset($_COOKIE["PHPSESSID"])) { // セッションクッキーを削除
+        setcookie("PHPSESSID", '', time() - 1800, '/');
+    }
+    session_destroy(); // セッションの登録データを削除
+    header("Location:index.php");
+}
+?>
