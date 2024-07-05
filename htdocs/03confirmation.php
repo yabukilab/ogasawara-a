@@ -41,7 +41,9 @@ if($student_number=="" || $password=="" || $password2==""){
                 <div class="confirmation">
                 <div class="number">学籍番号</div>
                 <!--フォームなどからユーザのデータをブラウザに表示する場合，原則すべてのデータにhtmlspecialchars()関数を使う-->
+                <div style="color:red;">
                 <?php echo htmlspecialchars($student_number); ?>
+                </div>
                 <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
                 <div class="pass">パスワード</div>
                 <!--str_repeat・・・複数回繰り返す-->
