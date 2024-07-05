@@ -22,8 +22,4 @@ try {
         echo '</tr>';
     }
     echo '</table>';
-
-} catch (PDOException $e) {
-    echo "Database query failed: " . h($e->getMessage());
-}
 ?>
