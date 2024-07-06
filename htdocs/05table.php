@@ -35,7 +35,7 @@ if (isset($_POST['logout'])) {
             <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
             <!-- ログアウトボタン -->
             <form action="" method="post">
-                <input type="submit" name="logout" value="ログアウト">
+                <input type="submit" name="logout" value="ログアウト" class="button">
             </form>
             <h2>予約状況</h2>
 
