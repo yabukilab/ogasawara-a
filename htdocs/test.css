@@ -72,6 +72,10 @@ input.button{
     background-color: #A3DCDC;
 }
 
+div.number2{
+    text-align: right;
+}
+
 /*予約表（予約テーブル）のスタイル・・・使ってるのは05table.phpだけかな*/
 div.hyou{
     text-align: left;

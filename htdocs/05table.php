@@ -32,7 +32,7 @@ if (isset($_POST['logout'])) {
     <body>
         <div class="center">
         <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
-            <div>学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
+            <div class="number2">学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
             <!-- ログアウトボタン -->
             <form action="" method="post">
                 <input type="submit" name="logout" value="ログアウト" class="button">
