@@ -32,9 +32,10 @@ if (isset($_POST['logout'])) {
     <body>
         <div class="center">
             <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
+            <div class="title">予約状況</div>
             <div class="number2">学籍番号</div>
             <div class="number2"><?php echo htmlspecialchars($student_number); ?></div>
-            <div class="title">予約状況</div>
+            
             <div>
             <?php
             echo "{$today}（{$weekday_japanese}）";
