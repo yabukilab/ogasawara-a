@@ -31,14 +31,9 @@ if (isset($_POST['logout'])) {
     </head>
     <body>
         <div class="center">
-        <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
-            <div class="number2">学籍番号:<?php echo htmlspecialchars($student_number); ?></div>
-            <!-- ログアウトボタン -->
-            <form action="" method="post">
-                <input type="submit" name="logout" value="ログアウト" class="button">
-            </form>
+            <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
+            <div class="number2">学籍番号:<?php echo htmlspecialchars($student_number); ?>　</div>
             <h2>予約状況</h2>
-
             <?php
             echo "<div>{$today}（{$weekday_japanese}）</div>";
             ?>
@@ -83,7 +78,7 @@ if (isset($_POST['logout'])) {
                                             <input type='hidden' name='sports' value='" . htmlspecialchars($sports, ENT_QUOTES, 'UTF-8') . "'>
                                             <input type='hidden' name='time' value='" . htmlspecialchars($time, ENT_QUOTES, 'UTF-8') . "'>
                                             <input type='submit' style='color:red; font-size: 50px; background: white; border: none; cursor: pointer; text-align: center;' value='○'>
-                                          </form></td>";
+                                        </form></td>";
                                 }
                             }
                             echo "</tr>";
@@ -92,6 +87,10 @@ if (isset($_POST['logout'])) {
                     </tbody>
                 </table>
             </div>
+            <!-- ログアウトボタン -->
+            <form action="" method="post">
+                <input type="submit" name="logout" value="ログアウト" class="button">
+            </form>
         </div>
     </body>
 </html>
