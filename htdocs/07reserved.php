@@ -44,11 +44,13 @@ if(isset($_SESSION['time'])){
                 echo "<div>{$today}（{$weekday_japanese}）</div>";
             ?>
             <div>以下の内容で予約しました</div>
+            <div class="confirmation">
             <div>
                 <?php echo htmlspecialchars($sports); ?>
             </div>
             <div>
                 <?php echo htmlspecialchars($time); ?>
+            </div>
             </div>
             <div class="screen">※この画面は窓口で必要になります。<br>
                 　この画面のままにするか、<br>

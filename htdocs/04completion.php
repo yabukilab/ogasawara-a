@@ -26,11 +26,14 @@ if(isset($_SESSION['password'])){
         <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
             <h2>新規会員登録</h2>
 
-            <form action="" method="post">
                 <div>以下の内容で登録が完了しました</div>
+                <div class="confirmation">
                 <div class="number">学籍番号</div>
+                <div style="color:red;">
                 <?php echo htmlspecialchars($student_number); ?>
+                </div>
                 <div class="pass">パスワード</div>
+                <div style="color:red;">
                 <?php
                 if($password=="不明"){
                     echo htmlspecialchars($password);
@@ -38,7 +41,7 @@ if(isset($_SESSION['password'])){
                 echo str_repeat('*',strlen($password)); 
                 }
                 ?>
-            </form>
+                </div>
             <h4>ログインは<a href="index.php">こちら</a></h4>
             
         </div>
