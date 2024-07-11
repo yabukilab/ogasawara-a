@@ -35,11 +35,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 
             <form action="create.php" method="post">
                 <div>以下の内容で予約しますか？</div>
-                <div class="confirmation">
+                <div class="confirmation" style="color:red;">
                 <?php echo htmlspecialchars($sports); ?>
                 <input type="hidden" name="sports" value="<?php echo htmlspecialchars($sports); ?>">
                 </div>
-                <div class="confirmation">
+                <div class="confirmation" style="color:red;">
                 <?php echo htmlspecialchars($time); ?>
                 <input type="hidden" name="time" value="<?php echo htmlspecialchars($time); ?>">
                 </div>
