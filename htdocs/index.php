@@ -3,7 +3,7 @@
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>ログインページ　</title>
+        <title>ログインページ</title>
         <link rel="stylesheet" type="text/css" href="./test.css">
     </head>
     <body>

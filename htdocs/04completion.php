@@ -27,6 +27,7 @@ if(isset($_SESSION['password'])){
             <h2>新規会員登録</h2>
 
                 <div>以下の内容で登録が完了しました</div>
+                <br>
                 <div class="confirmation">
                 <div class="number">学籍番号</div>
                 <div style="color:red;">
