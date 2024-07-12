@@ -39,19 +39,19 @@ if($student_number=="" || $password=="" || $password2==""){
                 <div>以下の内容でよろしければ<br>登録ボタンを押してください</div>
                 <br>
                 <div class="confirmation">
-                <div>学籍番号</div>
+                    <div>学籍番号</div>
                 <!--フォームなどからユーザのデータをブラウザに表示する場合，原則すべてのデータにhtmlspecialchars()関数を使う-->
-                <div style="color:red;">
-                <?php echo htmlspecialchars($student_number); ?>
-                </div>
-                <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
-                <div>パスワード</div>
+                    <div style="color:red;">
+                    <?php echo htmlspecialchars($student_number); ?>
+                    </div>
+                    <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
+                    <div>パスワード</div>
                 <!--str_repeat・・・複数回繰り返す-->
                 <!--strlen($password_hash)・・・$password_hashの文字数を数える-->
-                <div style="color:red;">
-                <?php echo str_repeat('*',strlen($password)); ?>
-                </div>
-                <input type="hidden" name="password" value="<?php echo htmlspecialchars($password); ?>">
+                    <div style="color:red;">
+                    <?php echo str_repeat('*',strlen($password)); ?>
+                    </div>
+                    <input type="hidden" name="password" value="<?php echo htmlspecialchars($password); ?>">
                 </div>
                 <br>
                 <br>
