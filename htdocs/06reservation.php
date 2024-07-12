@@ -47,7 +47,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                 </div>
                 <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
                 <input type="hidden" name="date" value="<?php echo htmlspecialchars($date); ?>">
-                <input type="button" value="前ページに戻る" onclick="history.back()" class="button">
+                <input type="button" value="前ページに戻る" onclick="history.back()" class="button" style="font-size:0.7em;">
                 <br>
                 <br>
                 <input type="submit" value="予約する" class="button">
