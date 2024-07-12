@@ -99,6 +99,7 @@ div.screen{
     text-align: left;
     color: red;
     margin: 0% 15%;
+    font-weight: bold;
 }
 
 /* スマホ表示用のスタイル */
