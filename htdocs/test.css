@@ -19,34 +19,6 @@ div.center{
     height: 100vh;
 }
 
-/* スマホ表示用のスタイル */
-/*スマホ用もできれば変更したい*/
-@media screen and (max-width: 1000px) {
-    body {
-        justify-content: flex-start;
-    }
-
-    div.center {
-        width: 100%;
-        height: 100vh;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    h1, h2, div{
-        font-size: 2em; /* 文字サイズを2倍に設定 */
-    }
-
-    input{
-        font-size: 2em;
-    }
-
-    input.button{
-        background-color: snow;
-        color: black;
-    }
-}
-
 /*CIT Sportsのスタイル*/
 h1{
     color: rgb(70, 70, 200);
@@ -126,4 +98,32 @@ div.screen{
     text-align: left;
     color: red;
     margin: 0% 15%;
+}
+
+/* スマホ表示用のスタイル */
+/*スマホ用もできれば変更したい*/
+@media screen and (max-width: 1000px) {
+    body {
+        justify-content: flex-start;
+    }
+
+    div.center {
+        width: 100%;
+        height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    h1, h2, div{
+        font-size: 2em; /* 文字サイズを2倍に設定 */
+    }
+
+    input{
+        font-size: 2em;
+    }
+
+    input.button{
+        background-color: snow;
+        color: black;
+    }
 }
