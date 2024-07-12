@@ -137,4 +137,7 @@ div.screen{
     div.hyou{
         height: 50%;
     }
+    div.screen{
+        font-size: 1em;
+    }
 }
