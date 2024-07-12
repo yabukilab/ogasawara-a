@@ -132,4 +132,8 @@ div.screen{
         background-color: snow;
         color: black;
     }
+
+    th.sisetu{
+        font-size: 0.7;
+    }
 }
