@@ -29,19 +29,20 @@ if(isset($_SESSION['password'])){
                 <div>以下の内容で登録が完了しました</div>
                 <br>
                 <div class="confirmation">
-                <div class="number">学籍番号</div>
-                <div style="color:red;">
-                <?php echo htmlspecialchars($student_number); ?>
-                </div>
-                <div class="pass">パスワード</div>
-                <div style="color:red;">
-                <?php
-                if($password=="不明"){
-                    echo htmlspecialchars($password);
-                }else{
-                echo str_repeat('*',strlen($password)); 
-                }
-                ?>
+                    <div class="number">学籍番号</div>
+                    <div style="color:red;">
+                    <?php echo htmlspecialchars($student_number); ?>
+                    </div>
+                    <div class="pass">パスワード</div>
+                    <div style="color:red;">
+                    <?php
+                    if($password=="不明"){
+                        echo htmlspecialchars($password);
+                    }else{
+                    echo str_repeat('*',strlen($password)); 
+                    }
+                    ?>
+                    </div>
                 </div>
             <h4>ログインは<a href="index.php">こちら</a></h4>
             
