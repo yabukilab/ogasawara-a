@@ -36,16 +36,16 @@ if($student_number=="" || $password=="" || $password2==""){
             <h2>確認画面</h2>
 
             <form action="register.php" method="post">
-                <div>以下の内容でよろしければ登録ボタンを押してください</div>
+                <div>以下の内容でよろしければ<br>登録ボタンを押してください</div>
                 <br>
                 <div class="confirmation">
-                <div class="number">学籍番号</div>
+                <div>学籍番号</div>
                 <!--フォームなどからユーザのデータをブラウザに表示する場合，原則すべてのデータにhtmlspecialchars()関数を使う-->
                 <div style="color:red;">
                 <?php echo htmlspecialchars($student_number); ?>
                 </div>
                 <input type="hidden" name="student_number" value="<?php echo htmlspecialchars($student_number); ?>">
-                <div class="pass">パスワード</div>
+                <div>パスワード</div>
                 <!--str_repeat・・・複数回繰り返す-->
                 <!--strlen($password_hash)・・・$password_hashの文字数を数える-->
                 <div style="color:red;">

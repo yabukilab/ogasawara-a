@@ -20,7 +20,7 @@
                 endif;
                 ?>
 
-                <div class="student_number">学籍番号</div>
+                <div>学籍番号</div>
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'student_number'): 
                 ?>
@@ -37,7 +37,7 @@
                 ?>
                 <input type="text" name="student_number">
 
-                <div class="pass">パスワード</div>
+                <div>パスワード</div>
                 <?php
                 if(isset($_GET['error']) && $_GET['error'] == 'password'): 
                 ?>
