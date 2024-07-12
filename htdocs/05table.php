@@ -50,7 +50,7 @@ if (isset($_POST['logout'])) {
                 <table>
                     <thead>
                         <tr style="height: auto;">
-                            <th calss="sisetu">施設/時間　　　　　</th>
+                            <th calss="sisetu">施設/時間　　　　</th>
                             <?php foreach ($timeSlots as $time) { ?>
                                 <th><?php echo $time; ?></th>
                             <?php } ?>
