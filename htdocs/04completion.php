@@ -25,7 +25,6 @@ if(isset($_SESSION['password'])){
         <div class="center">
         <div><img src="CIT_Sports.jpg" alt="test" width="80%" height="80%"></div>
             <h2>新規会員登録</h2>
-
                 <div class="com">以下の内容で登録が完了しました</div>
                 <br>
                 <div class="confirmation">
