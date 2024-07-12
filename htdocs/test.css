@@ -117,6 +117,9 @@ div.screen{
     h1, h2, div{
         font-size: 2em; /* 文字サイズを2倍に設定 */
     }
+    h4{
+        font-size: 1em;
+    }
 
     input{
         font-size: 2em;
