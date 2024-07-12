@@ -104,7 +104,7 @@ div.screen{
 
 /* スマホ表示用のスタイル */
 /*スマホ用もできれば変更したい*/
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 800px) {
     body {
         justify-content: flex-start;
     }
