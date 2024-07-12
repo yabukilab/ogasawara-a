@@ -132,4 +132,7 @@ div.screen{
         background-color: snow;
         color: black;
     }
+    div.hyou{
+        height: 50%;
+    }
 }
