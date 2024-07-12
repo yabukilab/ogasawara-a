@@ -38,6 +38,7 @@ input.button{
     width: 50%;
     background-color: snow;
     border-radius: 20px;
+    text-align: center;
 }
 
 /*ボタンの上にカーソルを乗せたときの挙動*/
