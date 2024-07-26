@@ -18,7 +18,7 @@ if(isset($_SESSION['password'])){
 <html lang="ja">
     <head>
         <meta charset="utf-8">
-        <title>確認ページ</title>
+        <title>新規会員登録完了ページ</title>
         <link rel="stylesheet" type="text/css" href="./test.css">
     </head>
     <body>
