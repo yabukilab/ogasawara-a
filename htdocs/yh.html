@@ -3,51 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>おすすめの公園</title>
+    <title>画像表示例</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            line-height: 1.6;
+            margin: 0; /* デフォルトのマージンを削除 */
+            padding: 0; /* デフォルトのパディングを削除 */
+        }
+
+        .head, .team, .main, .info, .footer {
+            text-align: left;
+            padding: 15px; /* スマホ用にパディングを調整 */
+            width: 100%; /* 幅を100%に設定 */
+            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        }
+
+        .btn-all {
+            margin: 5px 0; /* 縦のマージンのみ設定 */
+            width: 100%; /* ボタンを幅いっぱいに */
+        }
+
+        a.btn-solid {
+            color: #fff;
+            border-top: 4px solid #48ecc4;
+            border-right: 4px solid #0a5f4a;
+            border-bottom: 4px solid #0f745b;
+            border-left: 4px solid #8cf9de;
+            border-radius: 0;
+            background: #11a37f;
+        }
+        
+        a.btn-solid:hover {
+            color: #fff;
+            border-top: 4px solid #0f745b;
+            border-right: 4px solid #8cf9de;
+            border-bottom: 4px solid #48ecc4;
+            border-left: 4px solid #0a5f4a;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px; /* スマホ用にパディングを調整 */
+            margin: 5px 0; /* 縦のマージンのみ設定 */
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 100%; /* ボタンを幅いっぱいに */
+            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
             background-color: #f4f4f4;
+            padding: 10px 0; /* フッターのパディング */
         }
-        h1 {
-            text-align: center;
-        }
-        .park {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-            padding: 15px;
-        }
-        img {
-            max-width: 100%;
-            border-radius: 8px;
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            .btn {
+                padding: 15px; /* スマホ用にパディングを調整 */
+            }
         }
     </style>
 </head>
 <body>
-
-<h1>おすすめの公園</h1>
-
-<div class="park">
-    <h2>パチンカス</h2>
-    <img src="c:\Users\esah8\OneDrive\画像\Screenshots\スクリーンショット 2024-10-04 113630.png" alt="代々木公園">
-    <p>代々木公園は、東京の中心に位置する広大な公園です。自然を感じながらの散歩や、ピクニックに最適です。</p>
-</div>
-<!-- test -->
-<div class="park">
-    <h2>上野公園</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Ueno_Park_in_Spring.jpg/640px-Ueno_Park_in_Spring.jpg" alt="上野公園">
-    <p>上野公園は美術館や動物園もあり、文化と自然が楽しめる場所です。桜の季節には特に賑わいます。</p>
-</div>
-
-<div class="park">
-    <h2>中央公園</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Central_Park_New_York.jpg/640px-Central_Park_New_York.jpg" alt="中央公園">
-    <p>中央公園は、都会のオアシスとして親しまれています。ジョギングや散歩にぴったりなトレイルがあります。</p>
-</div>
-
+    <div class="head">
+        <h1>画像表示例</h1>
+        <img src="/images/screenshot.png" alt="スクリーンショット"> <!-- 画像のパスを修正 -->
+    </div>
+    <div class="footer">
+        <p>フッター内容</p>
+    </div>
 </body>
 </html>
