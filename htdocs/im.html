@@ -67,4 +67,49 @@
     </header>
 
     <main>
-        <section clas
+        <section class="hero">
+            <h1>谷津奏の杜公園</h1>
+            <p>広大な芝生が広がる開放的な公園</p>
+            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜1.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜3.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜2.jpg" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <section class="info">
+            <h2>基本情報</h2>
+            <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p>
+            <p><strong>開園日:</strong> 常時開園</p>
+            <p><strong>入園料:</strong> 無料</p>
+            <p><strong>駐車場:</strong> あり（9:00~17:00）</p>
+        </section>
+
+        <section class="access">
+            <h2>交通案内</h2>
+            <p>JR総武線「津田沼」駅から、徒歩13分</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 OGASAWARA-A</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          new Splide('#image-carousel').mount(); // スライダーを初期化
+      });
+    </script>
+</body>
+</html>
