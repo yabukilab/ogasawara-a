@@ -14,6 +14,18 @@ body {
     box-sizing: border-box; /* パディングを含めて幅を計算 */
 }
 
+.btn {
+    display: inline-block;
+    padding: 15px; /* スマホ用にパディングを調整 */
+    margin: 5px 0; /* 縦のマージンのみ設定 */
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 100%; /* ボタンを幅いっぱいに */
+    box-sizing: border-box; /* パディングを含めて幅を計算 */
+}
+
 .btn-all {
     margin: 5px 0; /* 縦のマージンのみ設定 */
     width: 100%; /* ボタンを幅いっぱいに */
@@ -28,40 +40,3 @@ a.btn-solid {
     border-radius: 0;
     background: #11a37f;
   }
-  
-  a.btn-solid:hover {
-    color: #fff;
-    border-top: 4px solid #0f745b;
-    border-right: 4px solid #8cf9de;
-    border-bottom: 4px solid #48ecc4;
-    border-left: 4px solid #0a5f4a;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 15px; /* スマホ用にパディングを調整 */
-    margin: 5px 0; /* 縦のマージンのみ設定 */
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    width: 100%; /* ボタンを幅いっぱいに */
-    box-sizing: border-box; /* パディングを含めて幅を計算 */
-}
-
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-.footer {
-    background-color: #f4f4f4;
-    padding: 10px 0; /* フッターのパディング */
-}
-
-/* レスポンシブデザイン */
-@media (max-width: 768px) {
-    .btn {
-        padding: 15px; /* スマホ用にパディングを調整 */
-    }
-}
