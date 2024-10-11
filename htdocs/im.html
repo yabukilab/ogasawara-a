@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>谷津奏の杜公園 - YATU KANADENOMORI PARK</title>
     <link rel="stylesheet" href="im.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンクを追加 -->
 </head>
 <body>
 
     <header>
         <div class="logo">
-          <title>津田沼おすすめの遊び場紹介</title>
+            <title>津田沼おすすめの遊び場紹介</title>
         </div>
         <nav>
             <ul>
@@ -23,7 +24,21 @@
         <section class="hero">
             <h1>谷津奏の杜公園</h1>
             <p>広大な芝生が広がる開放的な公園</p>
-            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\ogasawara-a\谷津奏の杜1.jpg" alt="谷津奏の杜公園">
+            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜1.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜3.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜2.jpg" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </section>
 
         <section class="info">
@@ -31,7 +46,7 @@
             <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p>
             <p><strong>開園日:</strong> 常時開園</p>
             <p><strong>入園料:</strong> 無料</p>
-            <p><strong>駐車場:</strong> あり（9:00~17:00）
+            <p><strong>駐車場:</strong> あり（9:00~17:00）</p> <!-- ここに閉じタグを追加 -->
         </section>
 
         <section class="access">
@@ -43,5 +58,12 @@
     <footer>
         <p>&copy; 2024 OGASAWARA-A</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンクを追加 -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          new Splide('#image-carousel').mount(); // スライダーを初期化
+      });
+    </script>
 </body>
 </html>
