@@ -33,9 +33,9 @@ body {
 a.btn-solid {
     color: #fff;
     border-top: 4px solid #48ecc4;
-    border-right: 4px solid #0a5f4a;
-    border-bottom: 4px solid #0f745b;
+    border-right: 4px solid #4CAF50;
+    border-bottom: 4px solid #4CAF50;
     border-left: 4px solid #8cf9de;
     border-radius: 0;
-    background: #11a37f;
+    background: #4CAF50;
 }
