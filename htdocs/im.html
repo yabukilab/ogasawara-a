@@ -5,7 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>谷津奏の杜公園 - YATU KANADENOMORI PARK</title>
     <link rel="stylesheet" href="im.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンクを追加 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
+    <style>
+        body {
+            margin: 0; /* ページ全体の余白をなくす */
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; /* 背景色の追加（オプション） */
+        }
+
+        header, footer {
+            text-align: center; /* ヘッダーとフッターを中央揃え */
+            padding: 10px;
+            background-color: #fff; /* 背景色の追加（オプション） */
+        }
+
+        .hero {
+            position: relative; /* 画像スライダーの位置調整 */
+        }
+
+        #image-carousel .splide__slide img {
+            width: 100%; /* 画像の幅を100%に */
+            height: auto; /* 高さは自動 */
+            display: block; /* 画像の表示設定 */
+            margin: 0; /* 余白をなくす */
+        }
+
+        section {
+            padding: 15px; /* セクションの内側に少し余白を追加 */
+        }
+
+        @media (max-width: 768px) {
+            header, footer {
+                padding: 10px 5px; /* モバイル用のパディングを調整 */
+            }
+            section {
+                padding: 10px; /* モバイル用のパディングを調整 */
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -46,7 +84,7 @@
             <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p>
             <p><strong>開園日:</strong> 常時開園</p>
             <p><strong>入園料:</strong> 無料</p>
-            <p><strong>駐車場:</strong> あり（9:00~17:00）</p> <!-- ここに閉じタグを追加 -->
+            <p><strong>駐車場:</strong> あり（9:00~17:00）</p>
         </section>
 
         <section class="access">
@@ -59,7 +97,7 @@
         <p>&copy; 2024 OGASAWARA-A</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンクを追加 -->
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
           new Splide('#image-carousel').mount(); // スライダーを初期化
