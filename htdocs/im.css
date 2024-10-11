@@ -6,8 +6,13 @@ body {
 
 header {
     background-color: #4CAF50;
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 1em;
+}
+
+.splide__slide img {
+    width: 100%;  /* 画像の幅を100%に */
+    height: auto; /* 高さは自動 */
 }
 
 header .logo img {
@@ -30,13 +35,13 @@ nav ul li {
 }
 
 .hero img {
-    width: 100%;
-    max-width: 600px;
-    height: auto;
+    width: 100%;      /* 幅を100%に設定 */
+    max-width: none; /* 最大幅の制限を解除 */
+    height: auto;     /* 高さは自動 */
 }
 
 .info, .access {
-    padding: 1em 2em;
+    padding: 1em 2em; /* パディングを調整 */
 }
 
 footer {
@@ -44,4 +49,15 @@ footer {
     color: white;
     text-align: center;
     padding: 1em 0;
+}
+
+/* スマートフォン表示に対応 */
+@media (max-width: 768px) {
+    .info, .access {
+        padding: 1em; /* モバイル用のパディングを調整 */
+    }
+
+    nav ul li {
+        margin-right: 10px; /* モバイル用のマージンを調整 */
+    }
 }

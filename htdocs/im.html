@@ -5,19 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>谷津奏の杜公園 - YATU KANADENOMORI PARK</title>
     <link rel="stylesheet" href="im.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
+    <style>
+        body {
+            margin: 0; /* ページ全体の余白をなくす */
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4; /* 背景色の追加（オプション） */
+        }
+
+        header {
+            background-color: #4CAF50; /* ヘッダーの背景色を緑に設定 */
+            color: white; /* ヘッダーの文字色を白に設定 */
+            text-align: center; /* ヘッダーを中央揃え */
+            padding: 10px; /* ヘッダーのパディング */
+        }
+
+        footer {
+            text-align: center; /* フッターを中央揃え */
+            padding: 10px;
+            background-color: #4CAF50; /* フッターの背景色も緑に設定 */
+            color: white; /* フッターの文字色を白に設定 */
+        }
+
+        .hero {
+            position: relative; /* 画像スライダーの位置調整 */
+        }
+
+        #image-carousel .splide__slide img {
+            width: 100%; /* 画像の幅を100%に */
+            height: auto; /* 高さは自動 */
+            display: block; /* 画像の表示設定 */
+            margin: 0; /* 余白をなくす */
+        }
+
+        section {
+            padding: 15px; /* セクションの内側に少し余白を追加 */
+        }
+
+        @media (max-width: 768px) {
+            header, footer {
+                padding: 10px 5px; /* モバイル用のパディングを調整 */
+            }
+            section {
+                padding: 10px; /* モバイル用のパディングを調整 */
+            }
+        }
+    </style>
 </head>
 <body>
+
     <header>
         <div class="logo">
-            <img src="tokyo-park-logo.png" alt="Tokyo Park Logo">
+            <title>津田沼おすすめの遊び場紹介</title>
         </div>
         <nav>
             <ul>
                 <li><a href="#">ホーム</a></li>
-                <li><a href="#">公園情報</a></li>
-                <li><a href="#">イベント</a></li>
-                <li><a href="#">アクセス</a></li>
-                <li><a href="#">お問い合わせ</a></li>
             </ul>
         </nav>
     </header>
@@ -26,7 +70,21 @@
         <section class="hero">
             <h1>谷津奏の杜公園</h1>
             <p>広大な芝生が広がる開放的な公園</p>
-            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\ogasawara-a\谷津奏の杜1.jpg" alt="谷津奏の杜公園">
+            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜1.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜3.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜2.jpg" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </section>
         </section>
 
         <section class="info">
@@ -34,6 +92,7 @@
             <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p>
             <p><strong>開園日:</strong> 常時開園</p>
             <p><strong>入園料:</strong> 無料</p>
+            <p><strong>駐車場:</strong> あり（9:00~17:00）</p>
         </section>
 
         <section class="access">
@@ -42,6 +101,15 @@
         </section>
     </main>
 
-   
+    <footer>
+        <p>&copy; 2024 OGASAWARA-A</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          new Splide('#image-carousel').mount(); // スライダーを初期化
+      });
+    </script>
 </body>
 </html>
