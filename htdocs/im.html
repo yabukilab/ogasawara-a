@@ -61,7 +61,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="https://ogasawara-b.pm-chiba.tech/">ホーム</a></li> <!-- リンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/">ホーム</a></li> <!-- リンクを追加 -->
             </ul>
         </nav>
     </header>
@@ -74,13 +74,13 @@
                 <div class="splide__track">
                     <ul class="splide__list">
                         <li class="splide__slide">
-                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜1.jpg" alt="">
+                            <img src="C:/Users/USER/Desktop/PM実験/ogasawara-a/htdocs/ogasawara-a/谷津奏の杜1.jpg" alt="">
                         </li>
                         <li class="splide__slide">
-                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜3.jpg" alt="">
+                            <img src="C:/Users/USER/Desktop/PM実験/ogasawara-a/htdocs/ogasawara-a/谷津奏の杜3.jpg" alt="">
                         </li>
                         <li class="splide__slide">
-                            <img src="C:\Users\USER\Desktop\PM実験\ogasawara-a\htdocs\ogasawara-a\谷津奏の杜2.jpg" alt="">
+                            <img src="C:/Users/USER/Desktop/PM実験/ogasawara-a/htdocs/ogasawara-a/谷津奏の杜2.jpg" alt="">
                         </li>
                     </ul>
                 </div>
@@ -108,7 +108,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-          new Splide('#image-carousel').mount(); // スライダーを初期化
+          new Splide('#image-carousel', {
+              type       : 'slide', // スライドタイプ
+              perPage    : 1, // 1ページあたりのスライド数
+              perMove    : 1, // 移動するスライド数
+              loop       : true, // ループさせる
+              autoplay   : false, // 自動再生をオフ
+              pagination : false, // ページネーションをオフ
+              arrows     : true, // 矢印を表示
+          }).mount(); // スライダーを初期化
       });
     </script>
 </body>
