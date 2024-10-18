@@ -31,6 +31,14 @@
       line-height: 1.2; /* 行間を調整 */
     }
 
+    .sub-title {
+      color: white; /* 文字色を白に */
+      font-size: 12px; /* タイトルの5分の1のサイズ */
+      position: absolute; /* 絶対位置を設定 */
+      right: 20px; /* 右側に配置 */
+      bottom: 10px; /* 下部に配置 */
+    }
+
     section {
       padding: 15px; /* セクションの内側に少し余白を追加 */
       border: 2px solid #4CAF50; /* 緑の外枠を追加 */
@@ -43,8 +51,9 @@
 
 <body>
   <!-- ヘッダーセクション -->
-  <div class="head">
+  <div class="head" style="position: relative;">
     <h1>幼稚園・保育園児<br>おすすめの場所</h1> <!-- タイトル -->
+    <div class="sub-title">※PM実験用のサイトです。</div> <!-- サブタイトル -->
   </div>
 
   <!-- スライドショーセクション -->
