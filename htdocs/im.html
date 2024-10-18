@@ -1,141 +1,162 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja"> <!-- HTML文書が日本語で書かれていることを指定 -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>谷津奏の杜公園 - YATU KANADENOMORI PARK</title>
-    <link rel="stylesheet" href="im.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
+    <!-- メタデータセクション -->
+    <meta charset="UTF-8"> <!-- 文書の文字エンコーディングをUTF-8に設定 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- レスポンシブデザイン対応のビューポート設定 -->
+    <title>谷津奏の杜公園 - YATSU KANADENOMORI PARK</title> <!-- ブラウザタブに表示されるページタイトル -->
+
+    <!-- 外部CSSファイルのリンク -->
+    <link rel="stylesheet" href="im.css"> <!-- "im.css"というスタイルシートファイルをリンク -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splideという画像スライド用ライブラリのCSSを読み込む -->
+
     <style>
+        /* ページ全体のスタイル */
         body {
             margin: 0; /* ページ全体の余白をなくす */
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4; /* 背景色の追加（オプション） */
+            font-family: Arial, sans-serif; /* フォントをArial、またはsans-serifに設定 */
+            background-color: #f4f4f4; /* 背景色を淡いグレーに設定 */
         }
 
+        /* ヘッダーのスタイル */
         header {
             background-color: #4CAF50; /* ヘッダーの背景色を緑に設定 */
             color: white; /* ヘッダーの文字色を白に設定 */
-            text-align: center; /* ヘッダーを中央揃え */
-            padding: 10px; /* ヘッダーのパディング */
+            text-align: center; /* ヘッダー内のテキストを中央揃え */
+            padding: 10px; /* ヘッダーの上下に余白を追加 */
         }
 
+        /* フッターのスタイル */
         footer {
-            text-align: center; /* フッターを中央揃え */
-            padding: 10px;
-            background-color: #4CAF50; /* フッターの背景色も緑に設定 */
+            text-align: center; /* フッター内のテキストを中央揃え */
+            padding: 10px; /* フッターに余白を追加 */
+            background-color: #4CAF50; /* フッターの背景色を緑に設定 */
             color: white; /* フッターの文字色を白に設定 */
         }
 
+        /* ヒーローセクション（メインイメージ部分）のスタイル */
         .hero {
             position: relative; /* 画像スライダーの位置調整 */
         }
 
+        /* 画像スライダー内の画像のスタイル */
         #image-carousel .splide__slide img {
-            width: 80%; /* 画像の幅を80%に */
-            height: auto; /* 高さは自動 */
-            display: block; /* 画像の表示設定 */
-            margin: 0 auto; /* 余白をなくし、中央揃え */
+            width: 80%; /* 画像の幅を画面の80%に設定 */
+            height: auto; /* 画像の高さを自動で調整 */
+            display: block; /* ブロック要素として表示 */
+            margin: 0 auto; /* 画像を中央揃え */
         }
 
+        /* 各セクションのスタイル */
         section {
-            padding: 15px; /* セクションの内側に少し余白を追加 */
-            border: 2px solid #4CAF50; /* 緑の外枠を追加 */
+            padding: 15px; /* セクション内に15pxの余白を追加 */
+            border: 2px solid #4CAF50; /* 緑色の枠線を追加 */
             border-radius: 15px; /* 角を丸くする */
-            background-color: white; /* 背景色を白に設定 */
-            margin: 15px 0; /* セクション間のマージンを追加 */
+            background-color: white; /* セクションの背景色を白に設定 */
+            margin: 15px 0; /* 各セクションの間に15pxの余白を追加 */
         }
 
+        /* タイトル（h1タグ）のスタイル */
         h1 {
-            font-size: 2.5em; /* タイトルのフォントサイズを大きく設定 */
-            margin: 0; /* マージンをリセット */
+            font-size: 2.5em; /* フォントサイズを大きく設定 */
+            margin: 0; /* デフォルトのマージンをリセット */
         }
 
+        /* モバイル画面向けのスタイル（幅768px以下の画面向け） */
         @media (max-width: 768px) {
             header, footer {
-                padding: 10px 5px; /* モバイル用のパディングを調整 */
+                padding: 10px 5px; /* モバイル用にパディングを調整 */
             }
             section {
-                padding: 10px; /* モバイル用のパディングを調整 */
+                padding: 10px; /* モバイル用にセクションの余白を調整 */
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ヘッダーセクション -->
     <header>
         <nav>
             <ul>
-                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li><!-- HOMEのリンクを追加 -->
-                <li><a href="https://ogasawara-a.pm-chiba.tech/ir.html">PUSH2</a></li> <!-- PUSH2のリンクを追加 -->
-                <li><a href="https://ogasawara-a.pm-chiba.tech/yh.html">PUSH3</a></li> <!-- PUSH3のリンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li> <!-- HOMEへのリンク -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/ir.html">遊び場2</a></li> <!-- PUSH2へのリンク -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/yh.html">遊び場3</a></li> <!-- PUSH3へのリンク -->
             </ul>
         </nav>
     </header>
 
+    <!-- メインコンテンツ -->
     <main>
+        <!-- ヒーローセクション（メインイメージとタイトル） -->
         <section class="hero">
-            <h1>谷津奏の杜公園</h1>
-            <p>広大な芝生が広がる開放的な公園</p>
+            <h1>谷津奏の杜公園</h1> <!-- メインタイトル -->
+            <p>広大な芝生が広がる開放的な公園</p> <!-- サブタイトルの説明文 -->
+
+            <!-- Splideを使った画像スライダー -->
             <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
                 <div class="splide__track">
                     <ul class="splide__list">
                         <li class="splide__slide">
-                            <img src="self/新1.jpg" alt="">
+                            <img src="self/新1.jpg" alt=""> <!-- 1枚目のスライド画像 -->
                         </li>
                         <li class="splide__slide">
-                            <img src="self/新2.jpg" alt="">
+                            <img src="self/新2.jpg" alt=""> <!-- 2枚目のスライド画像 -->
                         </li>
                         <li class="splide__slide">
-                            <img src="self/新3.jpg" alt="">
+                            <img src="self/新3.jpg" alt=""> <!-- 3枚目のスライド画像 -->
                         </li>
                     </ul>
                 </div>
             </section>
         </section>
 
-        <!-- 公園の特徴セクションを追加 -->
+        <!-- 公園の特徴セクション -->
         <section class="features">
             <h2>遊び場の特徴</h2>
             <ul>
-                <li>1. とっても広い！サッカーコート約3面分</li>
-                <li>2. 無料駐車場あり！</li>
-                <li>3. コンビネーション遊具・トイレ完備！</li>
+                <li>1. とっても広い！サッカーコート約3面分</li> <!-- 特徴1 -->
+                <li>2. 無料駐車場あり！</li> <!-- 特徴2 -->
+                <li>3. コンビネーション遊具・トイレ完備！</li> <!-- 特徴3 -->
             </ul>
         </section>
 
+        <!-- 基本情報セクション -->
         <section class="info">
             <h2>基本情報</h2>
-            <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p>
-            <p><strong>開園日:</strong> 常時開園</p>
-            <p><strong>入園料:</strong> 無料</p>
-            <p><strong>駐車場:</strong> あり（9:00~17:00）</p>
+            <p><strong>所在地:</strong> 千葉県習志野市奏の杜2丁目</p> <!-- 公園の所在地 -->
+            <p><strong>開園日:</strong> 常時開園</p> <!-- 開園時間 -->
+            <p><strong>入園料:</strong> 無料</p> <!-- 入園料 -->
+            <p><strong>駐車場:</strong> あり（9:00~17:00）</p> <!-- 駐車場情報 -->
         </section>
 
+        <!-- 交通案内セクション -->
         <section class="access">
             <h2>交通案内</h2>
-            <p>JR総武線「津田沼」駅から、徒歩13分</p>
+            <p>JR総武線「津田沼」駅から、徒歩13分</p> <!-- アクセス方法 -->
         </section>
     </main>
 
+    <!-- フッターセクション -->
     <footer>
-        <p>&copy; 2024 OGASAWARA-A</p>
+        <p>&copy; 2024 OGASAWARA-A</p> <!-- 著作権表記 -->
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <!-- SplideのJavaScriptを使ってスライダーを初期化 -->
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
           new Splide('#image-carousel', {
               type       : 'slide', // スライドタイプ
-              perPage    : 1, // 1ページあたりのスライド数
-              perMove    : 1, // 移動するスライド数
-              loop       : true, // ループさせる
-              rewind     : true, // 最後に達したら最初に戻る
+              perPage    : 1, // 1ページあたりに表示するスライド数
+              perMove    : 1, // スライド移動時に進むスライド数
+              loop       : true, // ループ動作を有効にする
+              rewind     : true, // 最後までスライドしたら最初に戻る
               autoplay   : false, // 自動再生をオフ
               pagination : false, // ページネーションをオフ
-              arrows     : true, // 矢印を表示
-          }).mount(); // スライダーを初期化
+              arrows     : true, // 左右の矢印を表示
+          }).mount(); // Splideの初期化
       });
     </script>
 </body>
