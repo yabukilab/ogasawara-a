@@ -42,40 +42,46 @@
 </head>
 
 <body>
+  <!-- ヘッダーセクション -->
   <div class="head">
-    <h1>幼稚園・保育園児<br>おすすめの場所</h1>
+    <h1>幼稚園・保育園児<br>おすすめの場所</h1> <!-- タイトル -->
   </div>
 
+  <!-- スライドショーセクション -->
   <div class="slideshow-container">
-    <img class="slides" src="auto.images/1丁目.jpg" alt="スライド1" />
-    <img class="slides" src="auto.images/谷津.jpg" alt="スライド2" />
-    <img class="slides" src="auto.images/モーリーファンタジー４.jpg" alt="スライド3" />
+    <img class="slides" src="auto.images/1丁目.jpg" alt="スライド1" /> <!-- スライド画像1 -->
+    <img class="slides" src="auto.images/谷津.jpg" alt="スライド2" /> <!-- スライド画像2 -->
+    <img class="slides" src="auto.images/モーリーファンタジー４.jpg" alt="スライド3" /> <!-- スライド画像3 -->
   </div>
 
+  <!-- メインコンテンツセクション -->
   <div class="main">
     <div class="btn-all">
+      <!-- 各公園情報セクション -->
       <section class="park-info">
-        <h3>谷津奏の杜公園</h3>
-        <p>広さが魅力！</p>
-        <a href="im.html" class="btn btn-solid"><span>PUSH1</span></a>
+        <h3>谷津奏の杜公園</h3> <!-- 公園名 -->
+        <p>広さが魅力！</p> <!-- 公園の特徴 -->
+        <a href="im.html" class="btn btn-solid"><span>PUSH1</span></a> <!-- ボタン -->
       </section>
       <section class="park-info">
-        <h3>津田沼1丁目公園</h3>
-        <p>公園に汽車！？</p>
-        <a href="ir.html" class="btn btn-solid"><span>PUSH2</span></a>
+        <h3>津田沼1丁目公園</h3> <!-- 公園名 -->
+        <p>公園に汽車！？</p> <!-- 公園の特徴 -->
+        <a href="ir.html" class="btn btn-solid"><span>PUSH2</span></a> <!-- ボタン -->
       </section>
       <section class="park-info">
-        <h3>モーリーファンタジー</h3>
-        <p>ボールプールなどがあるよ</p>
-        <a href="yh.html" class="btn btn-solid"><span>PUSH3</span></a>
+        <h3>モーリーファンタジー</h3> <!-- 公園名 -->
+        <p>ボールプールなどがあるよ</p> <!-- 公園の特徴 -->
+        <a href="yh.html" class="btn btn-solid"><span>PUSH3</span></a> <!-- ボタン -->
       </section>
     </div>
   </div>
 
+  <!-- フッターセクション -->
   <div class="footer">
-    <span class="letter">© 小笠原研究室 A</span>
+    <span class="letter">2024 OGASAWARA-A</span> <!-- フッターの著作権表示 -->
   </div>
 
+  <!-- スライドショーのJavaScript -->
   <script>
     let slideIndex = 0;
     showSlides();
@@ -83,13 +89,13 @@
     function showSlides() {
       const slides = document.getElementsByClassName("slides");
       for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
+        slides[i].style.display = "none"; // 全てのスライドを非表示
       }
-      slideIndex++;
+      slideIndex++; // スライドインデックスを増加
       if (slideIndex > slides.length) {
-        slideIndex = 1;
+        slideIndex = 1; // 最後のスライドの次は最初のスライド
       }
-      slides[slideIndex - 1].style.display = "block";
+      slides[slideIndex - 1].style.display = "block"; // 現在のスライドを表示
       setTimeout(showSlides, 3000); // 3秒ごとに切り替え
     }
   </script>

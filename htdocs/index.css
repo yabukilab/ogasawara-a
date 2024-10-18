@@ -1,18 +1,21 @@
+/* ボディ全体のスタイル */
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+    font-family: Arial, sans-serif; /* フォントファミリーを設定 */
+    line-height: 1.6; /* 行間を1.6に設定 */
     margin: 0; /* デフォルトのマージンを削除 */
     padding: 0; /* デフォルトのパディングを削除 */
-    background-color: #aeeeeea7; /* 肌色に設定 */
+    background-color: #aeeeeea7; /* 背景色を肌色に設定 */
 }
 
+/* 共通セクションのスタイル */
 .head, .team, .main, .info, .footer {
-    text-align: left;
+    text-align: left; /* 左揃え */
     padding: 15px; /* スマホ用にパディングを調整 */
     width: 100%; /* 幅を100%に設定 */
     box-sizing: border-box; /* パディングを含めて幅を計算 */
 }
 
+/* ヘッダーのスタイル */
 .head {
     background-color: #4CAF50; /* 背景色を設定 */
     color: white; /* 文字の色を白に設定 */
@@ -20,72 +23,81 @@ body {
     text-align: center; /* 中央揃え */
 }
 
+/* ボタンのスタイル */
 .btn {
-    display: inline-block;
+    display: inline-block; /* インラインブロック表示 */
     padding: 15px; /* スマホ用にパディングを調整 */
     margin: 5px 0; /* 縦のマージンのみ設定 */
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+    background-color: #007BFF; /* ボタンの背景色 */
+    color: white; /* 文字の色を白に設定 */
+    text-decoration: none; /* 下線を削除 */
+    border-radius: 5px; /* 角を丸くする */
     width: 100%; /* ボタンを幅いっぱいに */
     box-sizing: border-box; /* パディングを含めて幅を計算 */
 }
 
+/* 全てのボタンをまとめるコンテナのスタイル */
 .btn-all {
     margin: 10px 0; /* 縦のマージンを1センチに相当 */
     width: 100%; /* ボタンを幅いっぱいに */
 }
 
+/* 固定スタイルのボタン */
 a.btn-solid {
-    color: #fff;
-    border-top: 4px solid #48ecc4;
-    border-right: 4px solid #4CAF50;
-    border-bottom: 4px solid #4CAF50;
-    border-left: 4px solid #8cf9de;
-    border-radius: 0;
-    background: #4CAF50;
+    color: #fff; /* 文字色を白に設定 */
+    border-top: 4px solid #48ecc4; /* 上部のボーダーを設定 */
+    border-right: 4px solid #4CAF50; /* 右側のボーダーを設定 */
+    border-bottom: 4px solid #4CAF50; /* 下部のボーダーを設定 */
+    border-left: 4px solid #8cf9de; /* 左側のボーダーを設定 */
+    border-radius: 0; /* 角を直角にする */
+    background: #4CAF50; /* 背景色を設定 */
 }
 
+/* スライドショーのコンテナスタイル */
 .slideshow-container {
-    position: relative;
-    max-width: 100%;
-    margin: auto;
-    overflow: hidden;
+    position: relative; /* 相対位置を設定 */
+    max-width: 100%; /* 最大幅を100%に設定 */
+    margin: auto; /* 中央揃え */
+    overflow: hidden; /* コンテナからはみ出た部分を隠す */
     text-align: center; /* 中央揃え */
 }
 
+/* スライドのスタイル */
 .slides {
-    display: none;
+    display: none; /* デフォルトでは非表示 */
     width: 100%; /* 幅を100%に設定 */
-    height: auto;
+    height: auto; /* 高さは自動調整 */
     margin: auto; /* 中央揃え */
     aspect-ratio: 4 / 3; /* 縦3、横4の比率を指定 */
 }
 
+/* 前後ボタンのスタイル */
 .prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
+    cursor: pointer; /* カーソルをポインターに変更 */
+    position: absolute; /* 絶対位置を設定 */
+    top: 50%; /* 縦中央に配置 */
+    width: auto; /* 幅は自動 */
+    padding: 16px; /* パディングを設定 */
+    color: white; /* 文字色を白に設定 */
+    font-weight: bold; /* 文字を太字に設定 */
+    font-size: 18px; /* フォントサイズを設定 */
+    transition: 0.6s ease; /* ホバー時のトランジションを設定 */
+    border-radius: 0 3px 3px 0; /* 右上と右下を丸くする */
+    user-select: none; /* ユーザーによる選択を無効化 */
 }
 
+/* 次のボタンのスタイル */
 .next {
-    right: 0;
-    border-radius: 3px 0 0 3px;
+    right: 0; /* 右側に配置 */
+    border-radius: 3px 0 0 3px; /* 左上と左下を丸くする */
 }
 
+/* ホバー時のボタンスタイル */
 .prev:hover, .next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8); /* ホバー時の背景色 */
 }
 
+/* フッターのスタイル */
 .footer {
     background-color: #4CAF50; /* 背景色を設定 */
     color: white; /* 文字の色を白に設定 */
