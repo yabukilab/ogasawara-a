@@ -3,81 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像表示例</title>
+    <title>スキッズガーデン - SUKITTZUGA=DENN</title>
+    <link rel="stylesheet" href="yh.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
     <style>
         body {
+            margin: 0; /* ページ全体の余白をなくす */
+            padding: 0;
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0; /* デフォルトのマージンを削除 */
-            padding: 0; /* デフォルトのパディングを削除 */
+            background-color: #f4f4f4; /* 背景色の追加（オプション） */
         }
 
-        .head, .team, .main, .info, .footer {
-            text-align: left;
-            padding: 15px; /* スマホ用にパディングを調整 */
-            width: 100%; /* 幅を100%に設定 */
-            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        header {
+            background-color: #4CAF50; /* ヘッダーの背景色を緑に設定 */
+            color: white; /* ヘッダーの文字色を白に設定 */
+            text-align: center; /* ヘッダーを中央揃え */
+            padding: 10px; /* ヘッダーのパディング */
         }
 
-        .btn-all {
-            margin: 5px 0; /* 縦のマージンのみ設定 */
-            width: 100%; /* ボタンを幅いっぱいに */
+        footer {
+            text-align: center; /* フッターを中央揃え */
+            padding: 10px;
+            background-color: #4CAF50; /* フッターの背景色も緑に設定 */
+            color: white; /* フッターの文字色を白に設定 */
         }
 
-        a.btn-solid {
-            color: #fff;
-            border-top: 4px solid #48ecc4;
-            border-right: 4px solid #0a5f4a;
-            border-bottom: 4px solid #0f745b;
-            border-left: 4px solid #8cf9de;
-            border-radius: 0;
-            background: #11a37f;
-        }
-        
-        a.btn-solid:hover {
-            color: #fff;
-            border-top: 4px solid #0f745b;
-            border-right: 4px solid #8cf9de;
-            border-bottom: 4px solid #48ecc4;
-            border-left: 4px solid #0a5f4a;
+        .hero {
+            position: relative; /* 画像スライダーの位置調整 */
         }
 
-        .btn {
-            display: inline-block;
-            padding: 15px; /* スマホ用にパディングを調整 */
-            margin: 5px 0; /* 縦のマージンのみ設定 */
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            width: 100%; /* ボタンを幅いっぱいに */
-            box-sizing: border-box; /* パディングを含めて幅を計算 */
+        #image-carousel .splide__slide img {
+            width: 80%; /* 画像の幅を80%に */
+            height: auto; /* 高さは自動 */
+            display: block; /* 画像の表示設定 */
+            margin: 0 auto; /* 余白をなくし、中央揃え */
         }
 
-        .btn:hover {
-            background-color: #0056b3;
+        section {
+            padding: 15px; /* セクションの内側に少し余白を追加 */
+            border: 2px solid #4CAF50; /* 緑の外枠を追加 */
+            border-radius: 15px; /* 角を丸くする */
+            background-color: white; /* 背景色を白に設定 */
+            margin: 15px 0; /* セクション間のマージンを追加 */
         }
 
-        .footer {
-            background-color: #f4f4f4;
-            padding: 10px 0; /* フッターのパディング */
+        h1 {
+            font-size: 2.5em; /* タイトルのフォントサイズを大きく設定 */
+            margin: 0; /* マージンをリセット */
         }
 
-        /* レスポンシブデザイン */
         @media (max-width: 768px) {
-            .btn {
-                padding: 15px; /* スマホ用にパディングを調整 */
+            header, footer {
+                padding: 10px 5px; /* モバイル用のパディングを調整 */
+            }
+            section {
+                padding: 10px; /* モバイル用のパディングを調整 */
             }
         }
     </style>
 </head>
 <body>
-    <div class="head">
-        <h1>画像表示例</h1>
-        <img src="/images/screenshot.png" alt="スクリーンショット"> <!-- 画像のパスを修正 -->
-    </div>
-    <div class="footer">
-        <p>フッター内容</p>
-    </div>
+
+    <header>
+        <nav>
+            <ul>
+                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li><!-- HOMEのリンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/im.html">PUSH1</a></li> <!-- PUSH2のリンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/ir.html">PUSH2</a></li> <!-- PUSH3のリンクを追加 -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>スキッズガーデン</h1>
+            <p>雨の日でも安心！一人でも遊べる屋内遊び場！</p>
+            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <img src="self/モーリーファンタジー１.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="self/モーリーファンタジー４.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="self/モーリーファンタジー５.jpg" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+
+        <!-- 公園の特徴セクションを追加 -->
+        <section class="features">
+            <h2>公園の特徴</h2>
+            <ul>
+                <li>1. 雨の日も晴れの日もあそべる！</li>
+                <li>2. ボールプールやメリーゴーランドなど遊べる遊具がたくさん！</li>
+                <li>3. モーリーファンタジーにはメダルゲームやクレーンゲームもあり！</li>
+            </ul>
+        </section>
+
+        <section class="info">
+            <h2>基本情報</h2>
+            <p><strong>所在地:</strong> 千葉県習志野市津田沼1-23-1 イオンモール津田沼3階</p>
+            <p><strong>開園日:</strong> 10:00~18:00</p>
+            <p><strong>入園料:</strong> 最初の30分700円・延長15分毎300円（対象小学校2年生まで）</p>
+            <p><strong>駐車場:</strong> あり（お買上げ（１円以上）頂いたお客さまは２時間３０分迄無料それを超えると以降３０分毎１００円）</p>
+        </section>
+
+        <section class="access">
+            <h2>交通案内</h2>
+            <p>JR総武線「津田沼」駅から、徒歩7分
+            <p>新京成線 新津田沼駅より徒歩1分
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 OGASAWARA-A</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          new Splide('#image-carousel', {
+              type       : 'slide', // スライドタイプ
+              perPage    : 1, // 1ページあたりのスライド数
+              perMove    : 1, // 移動するスライド数
+              loop       : true, // ループさせる
+              autoplay   : false, // 自動再生をオフ
+              pagination : false, // ページネーションをオフ
+              arrows     : true, // 矢印を表示
+          }).mount(); // スライダーを初期化
+      });
+    </script>
 </body>
 </html>
