@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="ja">
 
 <head>
@@ -23,29 +22,6 @@
       margin: auto; /* 中央揃え */
     }
 
-    .prev, .next {
-      cursor: pointer;
-      position: absolute;
-      top: 50%;
-      width: auto;
-      padding: 16px;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      transition: 0.6s ease;
-      border-radius: 0 3px 3px 0;
-      user-select: none;
-    }
-
-    .next {
-      right: 0;
-      border-radius: 3px 0 0 3px;
-    }
-
-    .prev:hover, .next:hover {
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
     .head {
       text-align: center; /* 中央揃え */
     }
@@ -67,9 +43,6 @@
     <img class="slides" src="auto.images/ウサギ.jpg" alt="スライド2" />
     <img class="slides" src="auto.images/キャロット.jpg" alt="スライド3" />
     <img class="slides" src="auto.images/谷津.jpg" alt="スライド4" />
-
-    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a>
   </div>
 
   <div class="main">
@@ -116,16 +89,6 @@
       }
       slides[slideIndex - 1].style.display = "block";
       setTimeout(showSlides, 3000); // 3秒ごとに切り替え
-    }
-
-    function plusSlides(n) {
-      slideIndex += n - 1;
-      if (slideIndex < 0) {
-        slideIndex = 0;
-      } else if (slideIndex >= document.getElementsByClassName("slides").length) {
-        slideIndex = document.getElementsByClassName("slides").length - 1;
-      }
-      showSlides();
     }
   </script>
 
