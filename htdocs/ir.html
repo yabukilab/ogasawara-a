@@ -4,83 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>津田沼1丁目公園 - TSUDANUMA ITTYOUME PARK</title>
+    <!-- 外部CSSファイルのリンク。スタイルの定義はir.cssに記載されている -->
     <link rel="stylesheet" href="ir.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
+    <!-- SplideJSのスタイルシート。SplideJSはスライダー（画像カルーセル）用のライブラリ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
     <style>
+        /* ブラウザの余白を削除し、フォントや背景色を設定 */
         body {
-            margin: 0; /* ページ全体の余白をなくす */
+            margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4; /* 背景色の追加（オプション） */
+            background-color: #f4f4f4; /* 背景色を薄いグレーに設定 */
         }
 
+        /* ヘッダーのスタイル設定。背景色は緑、文字色は白 */
         header {
-            background-color: #4CAF50; /* ヘッダーの背景色を緑に設定 */
-            color: white; /* ヘッダーの文字色を白に設定 */
-            text-align: center; /* ヘッダーを中央揃え */
-            padding: 10px; /* ヘッダーのパディング */
-        }
-
-        footer {
-            text-align: center; /* フッターを中央揃え */
+            background-color: #4CAF50;
+            color: white;
+            text-align: center; /* 中央揃え */
             padding: 10px;
-            background-color: #4CAF50; /* フッターの背景色も緑に設定 */
-            color: white; /* フッターの文字色を白に設定 */
         }
 
+        /* フッターもヘッダーと同様に緑色の背景と白い文字 */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* 画像スライダー（ヒーローセクション）のスタイル設定 */
         .hero {
-            position: relative; /* 画像スライダーの位置調整 */
+            position: relative; /* 相対位置で配置 */
         }
 
+        /* 画像カルーセル内の画像サイズを調整 */
         #image-carousel .splide__slide img {
-            width: 80%; /* 画像の幅を80%に */
-            height: auto; /* 高さは自動 */
-            display: block; /* 画像の表示設定 */
-            margin: 0 auto; /* 余白をなくし、中央揃え */
+            width: 80%; /* 画像の幅を80%に設定 */
+            height: auto; /* 高さは自動調整 */
+            display: block;
+            margin: 0 auto; /* 画像を中央揃えに設定 */
         }
 
+        /* セクション要素のスタイル */
         section {
-            padding: 15px; /* セクションの内側に少し余白を追加 */
-            border: 2px solid #4CAF50; /* 緑の外枠を追加 */
-            border-radius: 15px; /* 角を丸くする */
+            padding: 15px; /* 内側に15pxの余白を追加 */
+            border: 2px solid #4CAF50; /* 緑色の枠線を追加 */
+            border-radius: 15px; /* 枠線の角を丸くする */
             background-color: white; /* 背景色を白に設定 */
-            margin: 15px 0; /* セクション間のマージンを追加 */
+            margin: 15px 0; /* 上下に余白を追加 */
         }
 
+        /* タイトル(h1)のスタイル */
         h1 {
-            font-size: 2.5em; /* タイトルのフォントサイズを大きく設定 */
+            font-size: 2.5em; /* フォントサイズを大きく設定 */
             margin: 0; /* マージンをリセット */
         }
 
+        /* 画面幅が768px以下（モバイル端末など）の場合に適用されるスタイル */
         @media (max-width: 768px) {
+            /* ヘッダーとフッターのパディングを調整してモバイル表示に対応 */
             header, footer {
-                padding: 10px 5px; /* モバイル用のパディングを調整 */
+                padding: 10px 5px;
             }
             section {
-                padding: 10px; /* モバイル用のパディングを調整 */
+                padding: 10px;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- ヘッダー部分。ナビゲーションメニューを含む -->
     <header>
         <nav>
             <ul>
-                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li><!-- HOMEのリンクを追加 -->
-                <li><a href="https://ogasawara-a.pm-chiba.tech/im.html">PUSH1</a></li> <!-- PUSH2のリンクを追加 -->
-                <li><a href="https://ogasawara-a.pm-chiba.tech/yh.html">PUSH3</a></li> <!-- PUSH3のリンクを追加 -->
+                <!-- メニュー項目。リンク先は各ページへ移動 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li>
+                <li><a href="https://ogasawara-a.pm-chiba.tech/im.html">遊び場1</a></li>
+                <li><a href="https://ogasawara-a.pm-chiba.tech/yh.html">遊び場3</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
+        <!-- ヒーローセクション。公園のメインタイトルと画像スライダーを含む -->
         <section class="hero">
             <h1>津田沼1丁目公園</h1>
             <p>津田沼駅のすぐそば！SL機関車もみれる開放的な公園！！</p>
-            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+            <!-- 画像カルーセルのセクション。SplideJSを使用 -->
+            <section id="image-carousel" class="splide" aria-label="津田沼1丁目公園">
                 <div class="splide__track">
                     <ul class="splide__list">
+                        <!-- 各スライドの画像 -->
                         <li class="splide__slide">
                             <img src="self/津田沼一丁目1.jpg" alt="">
                         </li>
@@ -95,7 +111,7 @@
             </section>
         </section>
 
-        <!-- 公園の特徴セクションを追加 -->
+        <!-- 公園の特徴セクション -->
         <section class="features">
             <h2>遊び場の特徴</h2>
             <ul>
@@ -105,6 +121,7 @@
             </ul>
         </section>
 
+        <!-- 公園の基本情報セクション -->
         <section class="info">
             <h2>基本情報</h2>
             <p><strong>所在地:</strong> 千葉県習志野市津田沼1-4</p>
@@ -113,31 +130,33 @@
             <p><strong>駐車場:</strong> なし</p>
         </section>
 
+        <!-- 交通案内セクション -->
         <section class="access">
             <h2>交通案内</h2>
-            <p>JR総武線「津田沼」駅から、徒歩3分
-            <p>新京成線 新津田沼駅より徒歩1分
-            </p>
+            <p>JR総武線「津田沼」駅から、徒歩3分</p>
+            <p>新京成線 新津田沼駅より徒歩1分</p>
         </section>
     </main>
 
+    <!-- フッター部分 -->
     <footer>
         <p>&copy; 2024 OGASAWARA-A</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <!-- SplideJSのJavaScriptファイルを読み込み、スライダーを初期化 -->
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
           new Splide('#image-carousel', {
-              type       : 'slide', // スライドタイプ
-              perPage    : 1, // 1ページあたりのスライド数
-              perMove    : 1, // 移動するスライド数
-              loop       : true, // ループさせる
+              type       : 'slide', // スライドタイプを設定（フェードやループなどのオプションもあり）
+              perPage    : 1, // 1ページに表示するスライド数
+              perMove    : 1, // 1回の移動で進むスライド数
+              loop       : true, // スライドをループさせる
               rewind     : true, // 最後に達したら最初に戻る
-              autoplay   : false, // 自動再生をオフ
-              pagination : false, // ページネーションをオフ
-              arrows     : true, // 矢印を表示
-          }).mount(); // スライダーを初期化
+              autoplay   : false, // 自動再生をオフにする
+              pagination : false, // ページネーションを表示しない
+              arrows     : true, // 次へ、前へボタンを表示
+          }).mount(); // SplideJSを初期化してスライダーを動作させる
       });
     </script>
 </body>
