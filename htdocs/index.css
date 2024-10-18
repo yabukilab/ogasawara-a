@@ -51,9 +51,9 @@ a.btn-solid {
 .slides {
     display: none;
     width: 100%; /* 幅を100%に設定 */
-    height: auto;
+    height: 75%; /* 高さを設定し、比率を維持 */
     margin: auto; /* 中央揃え */
-    aspect-ratio: 4 / 3; /* 縦3、横4の比率を指定 */
+    object-fit: cover; /* 画像を枠に収める */
 }
 
 .prev, .next {
