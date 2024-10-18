@@ -3,7 +3,7 @@ body {
     line-height: 1.6;
     margin: 0; /* デフォルトのマージンを削除 */
     padding: 0; /* デフォルトのパディングを削除 */
-    background-color: #aeeeee; /* 肌色に設定 */
+    background-color: #aeeeeea7; /* 肌色に設定 */
 }
 
 .head, .team, .main, .info, .footer {
