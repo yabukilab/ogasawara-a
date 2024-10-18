@@ -30,6 +30,14 @@
       margin: 0; /* マージンをリセット */
       line-height: 1.2; /* 行間を調整 */
     }
+
+    section {
+      padding: 15px; /* セクションの内側に少し余白を追加 */
+      border: 2px solid #4CAF50; /* 緑の外枠を追加 */
+      border-radius: 15px; /* 角を丸くする */
+      background-color: white; /* 背景色を白に設定 */
+      margin: 15px 0; /* セクション間のマージンを追加 */
+    }
   </style>
 </head>
 
@@ -40,31 +48,29 @@
 
   <div class="slideshow-container">
     <img class="slides" src="auto.images/1丁目.jpg" alt="スライド1" />
-    <img class="slides" src="auto.images/ウサギ.jpg" alt="スライド2" />
-    <img class="slides" src="auto.images/キャロット.jpg" alt="スライド3" />
-    <img class="slides" src="auto.images/谷津.jpg" alt="スライド4" />
+    <img class="slides" src="auto.images/谷津.jpg" alt="スライド2" />
+    <img class="slides" src="auto.images/モーリーファンタジー４.jpg" alt="スライド3" />
   </div>
 
   <div class="main">
     <div class="btn-all">
-      <div class="park-info">
+      <section class="park-info">
         <h3>谷津奏の杜公園</h3>
-        <p></p>
-        <a href="im.html" class="btn btn-solid"><span>PUSH1</span></a>
-      </div>
-      <div class="park-info">
-        <h3>津田沼1丁目公園</h3>
         <p>広さが魅力！</p>
+        <a href="im.html" class="btn btn-solid"><span>PUSH1</span></a>
+      </section>
+      <section class="park-info">
+        <h3>津田沼1丁目公園</h3>
+        <p>公園に汽車！？</p>
         <a href="ir.html" class="btn btn-solid"><span>PUSH2</span></a>
-      </div>
-      <div class="park-info">
-        <h3>公園3の名前</h3>
-        <p>美しい花々に囲まれた公園で、ピクニックにも最適です。</p>
+      </section>
+      <section class="park-info">
+        <h3>モーリーファンタジー</h3>
+        <p>ボールプールなどがあるよ</p>
         <a href="yh.html" class="btn btn-solid"><span>PUSH3</span></a>
-      </div>
+      </section>
     </div>
   </div>
-
 
   <div class="footer">
     <span class="letter">© 小笠原研究室 A</span>
