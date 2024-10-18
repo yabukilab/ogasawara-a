@@ -3,61 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>おすすめの公園3.4</title>
+    <title>津田沼1丁目公園 - TSUDANUMA ITTYOUME PARK</title>
+    <link rel="stylesheet" href="ir.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css"> <!-- Splide CSSのリンク -->
     <style>
         body {
+            margin: 0; /* ページ全体の余白をなくす */
+            padding: 0;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f4f4f4; /* 背景色の追加（オプション） */
         }
+
+        header {
+            background-color: #4CAF50; /* ヘッダーの背景色を緑に設定 */
+            color: white; /* ヘッダーの文字色を白に設定 */
+            text-align: center; /* ヘッダーを中央揃え */
+            padding: 10px; /* ヘッダーのパディング */
+        }
+
+        footer {
+            text-align: center; /* フッターを中央揃え */
+            padding: 10px;
+            background-color: #4CAF50; /* フッターの背景色も緑に設定 */
+            color: white; /* フッターの文字色を白に設定 */
+        }
+
+        .hero {
+            position: relative; /* 画像スライダーの位置調整 */
+        }
+
+        #image-carousel .splide__slide img {
+            width: 80%; /* 画像の幅を80%に */
+            height: auto; /* 高さは自動 */
+            display: block; /* 画像の表示設定 */
+            margin: 0 auto; /* 余白をなくし、中央揃え */
+        }
+
+        section {
+            padding: 15px; /* セクションの内側に少し余白を追加 */
+            border: 2px solid #4CAF50; /* 緑の外枠を追加 */
+            border-radius: 15px; /* 角を丸くする */
+            background-color: white; /* 背景色を白に設定 */
+            margin: 15px 0; /* セクション間のマージンを追加 */
+        }
+
         h1 {
-            text-align: center;
+            font-size: 2.5em; /* タイトルのフォントサイズを大きく設定 */
+            margin: 0; /* マージンをリセット */
         }
-        .park {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0;
-            padding: 15px;
-        }
-        img {
-            max-width: 100%;
-            border-radius: 8px;
+
+        @media (max-width: 768px) {
+            header, footer {
+                padding: 10px 5px; /* モバイル用のパディングを調整 */
+            }
+            section {
+                padding: 10px; /* モバイル用のパディングを調整 */
+            }
         }
     </style>
 </head>
 <body>
 
-<h1>おすすめの公園</h1>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="https://ogasawara-a.pm-chiba.tech/">HOME</a></li><!-- HOMEのリンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/im.html">PUSH2</a></li> <!-- PUSH2のリンクを追加 -->
+                <li><a href="https://ogasawara-a.pm-chiba.tech/yh.html">PUSH3</a></li> <!-- PUSH3のリンクを追加 -->
+            </ul>
+        </nav>
+    </header>
 
-<div class="park">
-    <h2>3.ラビット公園</h2>
-    <img src="c:\Users\esah8\OneDrive\画像\Screenshots\スクリーンショット 2024-10-04 113630.png" alt="代々木公園">
-    <p>「奏の杜」に整備された都市型公園です。２つのエリアに分けられ、複合施設が置かれた広々としたエリアと砂場のエリアがあります。
-    <pr/>砂場には無料で使うことができる道具も置いてあります。
-    <pr/>＜基本情報＞
-    <pr/>所在地：千葉県習志野市奏の杜3丁目9
-    <pr/>料金：無料
-    <pr/>開園時間：２４時間
-    <pr/>駐車場：なし
-    
+    <main>
+        <section class="hero">
+            <h1>津田沼1丁目公園</h1>
+            <p>津田沼駅のすぐそば！SL機関車もみれる開放的な公園！！</p>
+            <section id="image-carousel" class="splide" aria-label="谷津奏の杜公園">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <img src="self/津田沼一丁目1.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="self/津田沼一丁目2.jpg" alt="">
+                        </li>
+                        <li class="splide__slide">
+                            <img src="self/津田沼一丁目5.jpg" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </section>
 
-    </p>
-</div>
-<!-- test -->
-<div class="park">
-    <h2>4.キャロット公園</h2>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Ueno_Park_in_Spring.jpg/640px-Ueno_Park_in_Spring.jpg" alt="上野公園">
-    <p>マンションの横に造られた街区公園です。スプリング遊具、滑り台があり、遊び場にはちょうど良い広さの公園です。
-    <pr/>大人はゆっくりとベンチに座ることができ、子供たちを安全に見守ることができます。
-    <pr/>＜基本情報＞
-    <pr/>所在地：千葉県習志野市奏の杜1丁目11
-    <pr/>料金：無料
-    <pr/>開園時間：２４時間
-    <pr/>駐車場：なし
-</div>
+        <!-- 公園の特徴セクションを追加 -->
+        <section class="features">
+            <h2>公園の特徴</h2>
+            <ul>
+                <li>1. 駅から徒歩3分！津田沼駅から</li>
+                <li>2. 津田沼で唯一模型SL機関車の見れる公園！</li>
+                <li>3. 遊具だけでなく砂場でも遊べる！</li>
+            </ul>
+        </section>
 
+        <section class="info">
+            <h2>基本情報</h2>
+            <p><strong>所在地:</strong> 千葉県習志野市津田沼1-4</p>
+            <p><strong>開園日:</strong> 常時開園</p>
+            <p><strong>入園料:</strong> 無料</p>
+            <p><strong>駐車場:</strong> なし</p>
+        </section>
 
+        <section class="access">
+            <h2>交通案内</h2>
+            <p>JR総武線「津田沼」駅から、徒歩3分
+            <p>新京成線 新津田沼駅より徒歩1分
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 OGASAWARA-A</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script> <!-- Splide JavaScriptのリンク -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          new Splide('#image-carousel', {
+              type       : 'slide', // スライドタイプ
+              perPage    : 1, // 1ページあたりのスライド数
+              perMove    : 1, // 移動するスライド数
+              loop       : true, // ループさせる
+              autoplay   : false, // 自動再生をオフ
+              pagination : false, // ページネーションをオフ
+              arrows     : true, // 矢印を表示
+          }).mount(); // スライダーを初期化
+      });
+    </script>
 </body>
 </html>
