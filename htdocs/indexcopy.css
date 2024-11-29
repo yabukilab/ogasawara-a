@@ -40,7 +40,7 @@ section {
     margin-bottom: 2rem;
 }
 
-.play, .kindergarten, .supermarket {
+.index, .play, .kindergarten, .supermarket {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -50,7 +50,7 @@ section {
 }
 
 /* 各セクションのイラストやアイコン */
-.play::before, .kindergarten::before, .supermarket::before {
+.index, .play::before, .kindergarten::before, .supermarket::before {
     content: '';
     position: absolute;
     top: -20px;
@@ -63,7 +63,7 @@ section {
     z-index: 1;
 }
 
-.play img, .kindergarten img, .supermarket img {
+.index, .play img, .kindergarten img, .supermarket img {
     width: 100%;
     height: auto;
     border-radius: 10px;
