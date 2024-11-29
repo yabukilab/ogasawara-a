@@ -20,7 +20,7 @@ header {
 /* Headerにアイコンやイラストを追加 */
 header::before {
     content: '';
-    background-image: url('img/park2.png'); /* ここに写真のURLを指定 */
+    background-image: url('img/shopping1.png'); /* ここに写真のURLを指定 */
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
