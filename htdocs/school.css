@@ -12,7 +12,7 @@ header {
     color: white;
     text-align: center;
     padding: 1.5rem;
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     font-weight: bold;
     position: relative;
 }
@@ -40,7 +40,7 @@ section {
     margin-bottom: 2rem;
 }
 
-.play, .kindergarten, .supermarket {
+.index, .play, .kindergarten, .supermarket {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -50,7 +50,7 @@ section {
 }
 
 /* 各セクションのイラストやアイコン */
-.play::before, .kindergarten::before, .supermarket::before {
+.index, .play::before, .kindergarten::before, .supermarket::before {
     content: '';
     position: absolute;
     top: -20px;
@@ -63,7 +63,7 @@ section {
     z-index: 1;
 }
 
-.play img, .kindergarten img, .supermarket img {
+.index, .play img, .kindergarten img, .supermarket img {
     width: 100%;
     height: auto;
     border-radius: 10px;
@@ -100,13 +100,13 @@ footer {
 
 /* タイトルフォントのサイズ調整 */
 h2 {
-    font-size: 1.4rem;
+    font-size: 2.0rem;
     color: #ff686b;
     margin-bottom: 0.8rem;
 }
 
 p {
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #555;
 }
 
@@ -119,4 +119,38 @@ ul {
 ul li::before {
     content: '🍀';
     margin-right: 0.5rem;
+}
+
+/* 小さい画面向け */
+@media screen and (max-width: 768px) {
+    header {
+        font-size: 1.2rem; /* ヘッダーのフォントサイズを縮小 */
+        padding: 0.8rem; /* 上下の余白を減らす */
+    }
+
+    main {
+        padding: 0.5rem; /* 余白を狭める */
+    }
+
+    a {
+        font-size: 1.5rem; /* リンクのフォントサイズを縮小 */
+    }
+
+    footer {
+        font-size: 1rem; /* フッターの文字サイズを縮小 */
+    }
+}
+
+
+a {
+    display: block; /* リンクをタップしやすくする */
+    margin: 0.5rem 0;
+    color:  #555;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+
+a:hover {
+    color: #ff8587;
 }
