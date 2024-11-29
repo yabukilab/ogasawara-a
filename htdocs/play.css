@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f5f0;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #ffb6b9;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    position: relative;
+}
+
+/* Headerにアイコンやイラストを追加 */
+header::before {
+    content: '';
+    background-image: url('img/park2.png'); /* ここに写真のURLを指定 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 250px;  /* 写真の幅 */
+    height: 250px; /* 写真の高さ */
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+main {
+    padding: 2rem;
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+.play, .kindergarten, .supermarket {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 各セクションのイラストやアイコン */
+.play::before, .kindergarten::before, .supermarket::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background-image: url('https://path-to-your-illustration.png'); /* イラストURL */
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.play img, .kindergarten img, .supermarket img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #ffb6b9;
+    color: white;
+    font-size: 0.9rem;
+}
+
+/* ボタンスタイル */
+.button {
+    display: inline-block;
+    background-color: #ff686b;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #ff8587;
+}
+
+/* タイトルフォントのサイズ調整 */
+h2 {
+    font-size: 1.4rem;
+    color: #ff686b;
+    margin-bottom: 0.8rem;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 各項目の説明や補足にアイコンを加える */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li::before {
+    content: '🍀';
+    margin-right: 0.5rem;
+}
+
+/* メディアクエリでレスポンシブ対応 
+@media (max-width: 768px) {
+    header {
+        font-size: 1.2rem;
+    }
+
+    .button {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+iframe{
+    pointer-events:none;
+}
+*/
