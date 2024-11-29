@@ -1,62 +1,122 @@
-/* こんにちは */
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
     margin: 0;
     padding: 0;
+    background-color: #f9f5f0;
+    color: #333;
+    line-height: 1.6;
 }
 
 header {
-    background-color: #007BFF;
+    background-color: #ffb6b9;
     color: white;
     text-align: center;
-    padding: 1em 0;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    position: relative;
 }
 
-header h1 {
-    margin: 0;
+/* Headerにアイコンやイラストを追加 */
+header::before {
+    content: '';
+    background-image: url('img/park2.png'); /* ここに写真のURLを指定 */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 250px;  /* 写真の幅 */
+    height: 250px; /* 写真の高さ */
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 main {
-    padding: 20px;
+    padding: 2rem;
 }
 
 section {
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
+    margin-bottom: 2rem;
 }
 
-h2 {
-    color: #333;
-    text-align: center;
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 10px;
+.play, .kindergarten, .supermarket {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
 }
 
-.school {
-    margin-bottom: 20px;
+/* 各セクションのイラストやアイコン */
+.play::before, .kindergarten::before, .supermarket::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background-image: url('https://path-to-your-illustration.png'); /* イラストURL */
+    background-size: cover;
+    opacity: 0.1;
+    z-index: 1;
 }
 
-.school h3 {
-    color: #007BFF;
-}
-
-.school img {
+.play img, .kindergarten img, .supermarket img {
     width: 100%;
-    max-width: 500px;
     height: auto;
-    display: block;
-    margin: 10px auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
 }
 
 footer {
     text-align: center;
-    background-color: #007BFF;
+    padding: 1rem;
+    background-color: #ffb6b9;
     color: white;
-    padding: 10px 0;
-    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+/* ボタンスタイル */
+.button {
+    display: inline-block;
+    background-color: #ff686b;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #ff8587;
+}
+
+/* タイトルフォントのサイズ調整 */
+h2 {
+    font-size: 1.4rem;
+    color: #ff686b;
+    margin-bottom: 0.8rem;
+}
+
+p {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 各項目の説明や補足にアイコンを加える */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li::before {
+    content: '🍀';
+    margin-right: 0.5rem;
 }
