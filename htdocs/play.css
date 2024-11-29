@@ -120,3 +120,23 @@ ul li::before {
     content: '🍀';
     margin-right: 0.5rem;
 }
+
+/* 小さい画面向け */
+@media screen and (max-width: 768px) {
+    header {
+        font-size: 1.2rem; /* ヘッダーのフォントサイズを縮小 */
+        padding: 0.8rem; /* 上下の余白を減らす */
+    }
+
+    main {
+        padding: 0.5rem; /* 余白を狭める */
+    }
+
+    a {
+        font-size: 1rem; /* リンクのフォントサイズを縮小 */
+    }
+
+    footer {
+        font-size: 0.8rem; /* フッターの文字サイズを縮小 */
+    }
+}
