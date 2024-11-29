@@ -121,6 +121,7 @@ ul li::before {
     margin-right: 0.5rem;
 }
 
+
 /* メディアクエリでレスポンシブ対応 
 @media (max-width: 768px) {
     header {
