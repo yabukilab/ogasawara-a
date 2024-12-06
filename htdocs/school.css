@@ -144,6 +144,11 @@ ul li::before {
     footer {
         font-size: 1rem; /* フッターの文字サイズを縮小 */
     }
+
+    .under {
+        text-decoration: underline; /* アンダーラインをつける */
+    }
+
 }
 
 
