@@ -197,7 +197,7 @@ a.btn--circle {
 }
 
 /* レスポンシブ対応: スマホ用スタイル */
-@media (max-width: 768px) {
+@media (max-width: 120px) {
     a.btn--circle {
         width: 100px; /* ボタンサイズを縮小 */
         height: 100px;
