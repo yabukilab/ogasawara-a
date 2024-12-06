@@ -206,6 +206,6 @@ a.btn--circle {
 
     .btn-container {
         gap: 10px; /* ボタン間の隙間を調整 */
-        padding: 5px; /* コンテナの余白を追加 */
+
     }
 }
