@@ -155,3 +155,42 @@ a {
 a:hover {
     color: #ff8587;
 }
+
+/* ボタンスタイル */
+a.btn--orange {
+    color: #fff;
+    background-color: #ffb6b9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    font-size: 37px; /* テキストサイズを大きく */
+    font-weight: bold; /* 文字を目立たせる（任意） */
+  }
+  
+  a.btn--orange:hover {
+    color: #fff;
+    background: #ffb6b9;
+  }
+  
+  a.btn--shadow {
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  a.btn--circle {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    padding: 0;
+  }
+  
+  /* 親要素のスタイル */
+  .btn-container {
+    display: flex;
+    justify-content: center; /* 中央配置 */
+    align-items: center;
+    gap: 80px; /* ボタン間の隙間 */
+    height: 100vh; /* ビューポート全体の高さ */
+  }
