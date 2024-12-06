@@ -192,6 +192,8 @@ a.btn--circle {
     justify-content: center; /* 中央配置 */
     align-items: center;
     gap: 80px; /* ボタン間の隙間 */
+    margin-top: 20px; /* 上の文章との余白を調整 */
+    margin-bottom: 10px; /* 下の要素との余白 */
     height: 100vh; /* ビューポート全体の高さ */
 
 }
@@ -206,6 +208,6 @@ a.btn--circle {
 
     .btn-container {
         gap: 10px; /* ボタン間の隙間を調整 */
-
+        margin-top: 10px; /* 上の文章との余白をさらに狭く */
     }
 }
