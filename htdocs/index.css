@@ -167,30 +167,45 @@ a.btn--orange {
     text-decoration: none;
     font-size: 37px; /* テキストサイズを大きく */
     font-weight: bold; /* 文字を目立たせる（任意） */
-  }
-  
-  a.btn--orange:hover {
+}
+
+a.btn--orange:hover {
     color: #fff;
     background: #ffb6b9;
-  }
-  
-  a.btn--shadow {
+}
+
+a.btn--shadow {
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
-  }
-  
-  a.btn--circle {
+}
+
+a.btn--circle {
     border-radius: 50%;
     width: 250px;
     height: 250px;
     padding: 0;
-  }
-  
-  /* 親要素のスタイル */
-  .btn-container {
+}
+
+/* 親要素のスタイル */
+.btn-container {
     display: flex;
     justify-content: center; /* 中央配置 */
     align-items: center;
     gap: 80px; /* ボタン間の隙間 */
     height: 100vh; /* ビューポート全体の高さ */
-  }
+    flex-wrap: wrap; /* スマホで折り返し対応 */
+}
+
+/* レスポンシブ対応: スマホ用スタイル */
+@media (max-width: 768px) {
+    a.btn--circle {
+        width: 150px; /* ボタンサイズを縮小 */
+        height: 150px;
+        font-size: 24px; /* テキストサイズを縮小 */
+    }
+
+    .btn-container {
+        gap: 40px; /* ボタン間の隙間を調整 */
+        padding: 20px; /* コンテナの余白を追加 */
+    }
+}
