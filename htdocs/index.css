@@ -159,7 +159,7 @@ a:hover {
 /* ボタンスタイル */
 a.btn--orange {
     color: #fff;
-    background-color: #ffb6b9;
+    background-color: #ff8587;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -171,7 +171,7 @@ a.btn--orange {
 
 a.btn--orange:hover {
     color: #fff;
-    background: #ffb6b9;
+    background: #ff8587;
 }
 
 a.btn--shadow {
@@ -204,12 +204,13 @@ a.btn--circle {
     a.btn--circle {
         width: 100px; /* ボタンサイズを縮小 */
         height: 100px;
-        font-size: 18px; /* テキストサイズを縮小 */
+        font-size: 20px; /* テキストサイズを縮小 */
     }
 
     .btn-container {
         gap: 10px; /* ボタン間の隙間を調整 */
         padding: 5px; /* スマホ画面では内側余白をさらに狭く */
         margin-top: 10px; /* 上の文章との余白をさらに狭く */
+        margin-bottom: 10px; /* 下の要素との余白 */
     }
 }
