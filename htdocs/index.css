@@ -199,13 +199,13 @@ a.btn--circle {
 /* レスポンシブ対応: スマホ用スタイル */
 @media (max-width: 768px) {
     a.btn--circle {
-        width: 150px; /* ボタンサイズを縮小 */
-        height: 150px;
-        font-size: 24px; /* テキストサイズを縮小 */
+        width: 100px; /* ボタンサイズを縮小 */
+        height: 100px;
+        font-size: 20px; /* テキストサイズを縮小 */
     }
 
     .btn-container {
-        gap: 40px; /* ボタン間の隙間を調整 */
+        gap: 10px; /* ボタン間の隙間を調整 */
         padding: 20px; /* コンテナの余白を追加 */
     }
 }
