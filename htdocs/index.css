@@ -197,7 +197,7 @@ a.btn--circle {
 }
 
 /* レスポンシブ対応: スマホ用スタイル */
-@media (max-width: 1000px) {
+@media (max-width: 768px) {
     a.btn--circle {
         width: 100px; /* ボタンサイズを縮小 */
         height: 100px;
@@ -206,6 +206,6 @@ a.btn--circle {
 
     .btn-container {
         gap: 10px; /* ボタン間の隙間を調整 */
-        padding: 20px; /* コンテナの余白を追加 */
+        padding: 5px; /* コンテナの余白を追加 */
     }
 }
