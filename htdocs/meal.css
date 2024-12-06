@@ -63,6 +63,7 @@ section {
     z-index: 1;
 }
 
+
 .index, .play img, .kindergarten img, .supermarket img {
     width: 100%;
     height: auto;
@@ -158,4 +159,10 @@ a {
 
 a:hover {
     color: #ff8587;
+}
+
+
+.ao {
+    color: blue; /* 青色の文字 */
+    text-decoration: underline; /* アンダーラインをつける */
 }
