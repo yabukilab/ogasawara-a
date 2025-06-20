@@ -67,7 +67,7 @@
         <?php
         $dbServer = '127.0.0.1';
         $dbName = 'mydb';
-        $dbuser = 'testuser';
+        $dbUser = 'testuser';
         $dbPass = 'pass';
 
         $message = '';

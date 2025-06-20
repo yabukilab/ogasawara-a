@@ -198,7 +198,7 @@ if (!$is_logged_in) {
             <?php
             $dbServer = '127.0.0.1';
             $dbName = 'mydb';
-            $dbuser = 'testuser';
+            $dbUser = 'testuser';
             $dbPass = 'pass';
 
             function getTermName($term_num) {

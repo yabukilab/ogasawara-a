@@ -12,7 +12,7 @@
     // データベース接続情報 (제공해주신 정보로 업데이트)
         $dbServer = '127.0.0.1';
         $dbName = 'mydb';
-        $dbuser = 'testuser';
+        $dbUser = 'testuser';
         $dbPass = 'pass';            // 비밀번호는 빈 문자열 ''
 
     // データベース接続
