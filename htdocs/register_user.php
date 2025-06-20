@@ -91,7 +91,7 @@
                 $messageType = 'error';
             } else {
                 try {
-                    $pdo = new PDO("mysql:host=$dbServer;dbname=$dbName;charset=utf8", $dbuser, $dbpass);
+                    $pdo = new PDO("mysql:host=$dbServer;dbname=$dbName;charset=utf8", $dbuser, $dbPass);
                     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                     // student_number 중복 확인
