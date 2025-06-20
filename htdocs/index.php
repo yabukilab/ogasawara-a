@@ -1,3 +1,54 @@
+<?php
+session_start(); // セッション開始
+
+// ログイン確認 - student_number로 로그인 여부 확인
+$is_logged_in = isset($_SESSION['student_number']);
+$current_student_number = $is_logged_in ? $_SESSION['student_number'] : 'ゲスト';
+
+// ユーザーがログインしていない場合、時間割機能の代わりにログイン/登録を促すメッセージを表示
+if (!$is_logged_in) {
+    echo '<!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>授業登録 (Class Registration)</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; text-align: center; }
+            .auth-container { max-width: 600px; margin: 100px auto; padding: 30px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+            h1 { color: #333; margin-bottom: 20px; }
+            p { color: #555; font-size: 1.1em; margin-bottom: 25px; }
+            .auth-links a {
+                display: inline-block;
+                padding: 12px 25px;
+                margin: 0 10px;
+                background-color: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 1.1em;
+                transition: background-color 0.3s ease;
+            }
+            .auth-links a:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="auth-container">
+            <h1>時間割登録システム</h1>
+            <p>時間割を編集・保存するには、ログインまたは新規ユーザー登録が必要です。</p>
+            <div class="auth-links">
+                <a href="login.php">ログイン</a>
+                <a href="register_user.php">新規ユーザー登録</a>
+            </div>
+        </div>
+    </body>
+    </html>';
+    exit; // ログインしていない場合、ここでスクリプト実行を中断
+}
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -30,12 +81,12 @@
         /* 2時限連続表示に対応するためのクラス */
         .time-slot.filled-primary {
             background-color: #e6f7ff;
-            border-bottom: none; /* 2時限連続 表示を 위해 아래쪽 테두리 제거 */
+            border-bottom: none; 
         }
         .time-slot.filled-secondary {
             background-color: #e6f7ff;
-            border-top: none; /* 2時限連続 表示を 위해 위쪽 테두리 제거 */
-            color: #666; /* 連結されたコマは薄く表示 */
+            border-top: none; 
+            color: #666; 
             font-size: 0.8em;
             text-align: center;
         }
@@ -47,11 +98,6 @@
         select, button { padding: 8px; margin-right: 5px; }
         #selectedClassInfo { margin-top: 15px; padding: 10px; background-color: #f9f9f9; border: 1px dashed #ccc; border-radius: 5px; }
         .remove-button { background-color: #f44336; color: white; padding: 3px 6px; border: none; border-radius: 3px; cursor: pointer; font-size: 0.7em; position: absolute; top: 2px; right: 2px;}
-        /*
-        // 이 부분은 이제 필요 없으므로 주석 처리하거나 삭제합니다.
-        .links a { display: inline-block; margin-right: 10px; text-decoration: none; color: #007bff; }
-        .links a:hover { text-decoration: underline; }
-        */
 
         /* 確定後のスタイル */
         .timetable-finalized .add-button,
@@ -62,8 +108,8 @@
         .timetable-finalized #confirmTimetableBtn,
         .timetable-finalized #term_filter_form button,
         .timetable-finalized #grade_filter_form button, 
-        .timetable-finalized #grade_filter, /* 학년 필터 드롭다운도 비활성화 */
-        .timetable-finalized #term_filter { /* 학기 필터 드롭다운도 비활성화 */
+        .timetable-finalized #grade_filter, 
+        .timetable-finalized #term_filter { 
             pointer-events: none;
             opacity: 0.5;
             cursor: not-allowed;
@@ -89,14 +135,35 @@
             border: 1px solid #a0d0a0;
             border-radius: 5px;
         }
-        .term-display-in-cell { /* 時間표 셀 안에 학기 표시용 스타일 */
+        .term-display-in-cell { 
             font-size: 0.7em;
             color: #666;
             margin-top: 2px;
         }
+        .user-info {
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .user-info a {
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .user-info a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <div class="user-info">
+        ログイン中のユーザー: <?php echo htmlspecialchars($current_student_number); ?>
+        <?php if ($is_logged_in): ?>
+            <a href="logout.php">ログアウト</a>
+        <?php endif; ?>
+    </div>
+
     <h1>授業登録</h1>
 
     <div class="container">
@@ -129,13 +196,11 @@
             </form>
             
             <?php
-            // データベース接続情報
             $host = '127.0.0.1';
             $dbName = 'mydb';
             $user = 'root';
             $password = '';
 
-            // 学期番号を日本語に変換する関数
             function getTermName($term_num) {
                 switch ($term_num) {
                     case 1: return '前期';
@@ -242,10 +307,12 @@
                 </thead>
                 <tbody>
                     <?php
-                    $timetableFilePath = __DIR__ . '/confirmed_timetable_data_grade' . $selectedGrade . '.json';
+                    // 현재 로그인된 student_number를 사용하여 파일 경로에 추가
+                    // $_SESSION['student_id'] 대신 $_SESSION['student_number'] 사용
+                    $userSpecificFilePath = __DIR__ . '/confirmed_timetable_data_student' . $_SESSION['student_number'] . '_grade' . $selectedGrade . '.json';
                     $currentTimetableData = [];
-                    if (file_exists($timetableFilePath)) {
-                        $jsonContent = file_get_contents($timetableFilePath);
+                    if (file_exists($userSpecificFilePath)) {
+                        $jsonContent = file_get_contents($userSpecificFilePath);
                         if ($jsonContent !== false) {
                             $decodedData = json_decode($jsonContent, true);
                             if (json_last_error() === JSON_ERROR_NONE && is_array($decodedData)) {
@@ -307,13 +374,14 @@
                                 $cellDataAttrs .= " data-class-credit='" . htmlspecialchars($foundClass['classCredit']) . "'";
                                 $cellDataAttrs .= " data-class-term='" . htmlspecialchars($foundClass['classTerm']) . "'";
                                 $cellDataAttrs .= " data-class-grade='" . htmlspecialchars($foundClass['classGrade']) . "'";
-                                if ($cellClasses === 'time-slot filled-primary') {
+                                if (isset($foundClass['isPrimary']) && $foundClass['isPrimary'] === 'true') { // isPrimary 속성 추가 확인
                                     $cellDataAttrs .= " data-linked-period='" . ($i + 1) . "'";
                                     $cellDataAttrs .= " data-is-primary='true'";
-                                } elseif ($cellClasses === 'time-slot filled-secondary') {
+                                } elseif (isset($foundClass['isPrimary']) && $foundClass['isPrimary'] === 'false') {
                                     $cellDataAttrs .= " data-linked-period='" . ($i - 1) . "'";
                                     $cellDataAttrs .= " data-is-primary='false'";
                                 }
+
 
                                 $cellContent .= "<button class='remove-button' onclick='removeClassFromTimetable(this)'>X</button>";
                             }
@@ -334,9 +402,10 @@
         let selectedClass = null; 
         let totalCredits = 0; 
         let isTimetableFinalized = false; 
-        const registeredClasses = {}; 
         
         const currentSelectedGradeFromPHP = <?php echo json_encode($selectedGrade); ?>;
+        // 로그인된 사용자 학번을 JavaScript에서 사용 (PHP에서 세션으로 넘어옴)
+        const currentLoggedInStudentNumber = <?php echo json_encode($_SESSION['student_number'] ?? ''); ?>; // student_number로 변경
 
         const termMap = {
             '0': '全て', 
@@ -421,7 +490,7 @@
             primaryCell.dataset.classTerm = selectedClass.term;
             primaryCell.dataset.classGrade = selectedClass.grade; 
             primaryCell.dataset.linkedPeriod = nextPeriod; 
-            primaryCell.dataset.isPrimary = 'true'; 
+            primaryCell.dataset.isPrimary = 'true'; // 이 수업이 2연속 시간표의 시작임을 표시
 
             secondaryCell.classList.add('filled-secondary');
             secondaryCell.innerHTML = `<div class="term-display-in-cell">${termMap[selectedClass.term]}</div>`; 
@@ -431,7 +500,7 @@
             secondaryCell.dataset.classTerm = selectedClass.term; 
             secondaryCell.dataset.classGrade = selectedClass.grade; 
             secondaryCell.dataset.linkedPeriod = period; 
-            secondaryCell.dataset.isPrimary = 'false'; 
+            secondaryCell.dataset.isPrimary = 'false'; // 이 수업이 2연속 시간표의 끝임을 표시
             
             updateDisplayTotalCredits();
 
@@ -451,22 +520,17 @@
             const cell = button.closest('.time-slot'); 
             const day = cell.dataset.day;
             const period = parseInt(cell.dataset.time); 
-            const classIdToRemove = cell.dataset.classId;
-            const creditToRemove = parseInt(cell.dataset.classCredit);
             const linkedPeriod = cell.dataset.linkedPeriod ? parseInt(cell.dataset.linkedPeriod) : null;
-            const classGradeToRemove = parseInt(cell.dataset.classGrade); 
 
             function clearCell(targetCell) {
                 if (targetCell) {
                     targetCell.classList.remove('filled', 'filled-primary', 'filled-secondary'); 
                     targetCell.innerHTML = '';
-                    delete targetCell.dataset.classId;
-                    delete targetCell.dataset.className; 
-                    delete targetCell.dataset.classCredit;
-                    delete targetCell.dataset.classTerm;
-                    delete targetCell.dataset.classGrade; 
-                    delete targetCell.dataset.linkedPeriod; 
-                    delete targetCell.dataset.isPrimary; 
+                    // data- 속성 모두 제거
+                    for (const key in targetCell.dataset) {
+                        delete targetCell.dataset[key];
+                    }
+                    targetCell.style.display = ''; // 숨겨져 있던 셀을 다시 보이게 함 (필터링 때문에)
                 }
             }
 
@@ -509,7 +573,8 @@
                     const classCredit = parseInt(cell.dataset.classCredit);
                     const classTerm = cell.dataset.classTerm;
                     const classGrade = parseInt(cell.dataset.classGrade); 
-                    
+                    const isPrimary = cell.dataset.isPrimary; // isPrimary 속성 추가 저장
+
                     timetableData.push({
                         day: day,
                         period: period, 
@@ -517,12 +582,14 @@
                         className: className,
                         classCredit: classCredit,
                         classTerm: classTerm,
-                        classGrade: classGrade 
+                        classGrade: classGrade,
+                        isPrimary: isPrimary // isPrimary 속성 저장
                     });
                 });
 
                 try {
-                    const response = await fetch('save_timetable.php?grade=' + currentSelectedGradeFromPHP, { 
+                    // save_timetable.php로 student_number와 grade를 함께 전송
+                    const response = await fetch('save_timetable.php?student_number=' + currentLoggedInStudentNumber + '&grade=' + currentSelectedGradeFromPHP, { 
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -557,20 +624,29 @@
             document.getElementById('currentTimetableInfo').textContent = `時間割 (現在の学年: ${currentGradeText}, 学期: ${currentTermText})`;
 
 
-            const timetableCells = document.querySelectorAll('.time-slot.filled-primary, .time-slot.filled-secondary');
+            const timetableCells = document.querySelectorAll('.time-slot'); // 모든 시간표 셀을 선택
             
             timetableCells.forEach(cell => {
+                // 셀 초기화
+                cell.style.display = ''; // 일단 모든 셀을 보이게 한다
+
                 const classTermInCell = cell.dataset.classTerm;
                 
-                const matchesTermFilter = (selectedFilterTerm === '0' || classTermInCell === selectedFilterTerm);
+                // 해당 셀이 유효한 시간표 데이터를 가지고 있는지 확인 (filled-primary 또는 filled-secondary)
+                const hasClassData = cell.dataset.classId !== undefined;
 
-                if (matchesTermFilter) { 
-                    cell.style.display = ''; 
-                    if (cell.classList.contains('filled-secondary')) {
-                         cell.querySelector('.term-display-in-cell').style.display = '';
-                    }
-                } else {
+                // 필터 조건에 맞지 않으면 숨김
+                if (hasClassData && selectedFilterTerm !== '0' && classTermInCell !== selectedFilterTerm) {
                     cell.style.display = 'none'; 
+                }
+                // 연속 수업의 보조 셀인 경우, 메인 셀이 필터링되어 숨겨지면 함께 숨김
+                if (cell.classList.contains('filled-secondary')) {
+                    const primaryPeriod = parseInt(cell.dataset.linkedPeriod);
+                    const day = cell.dataset.day;
+                    const primaryCell = document.querySelector(`.time-slot[data-day="${day}"][data-time="${primaryPeriod}"]`);
+                    if (primaryCell && primaryCell.style.display === 'none') {
+                        cell.style.display = 'none';
+                    }
                 }
             });
         }
