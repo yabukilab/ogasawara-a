@@ -65,10 +65,10 @@
         <h1>ユーザー登録</h1>
 
         <?php
-        $host = '127.0.0.1';
-        $dbName = 'mydb'; // 데이터베이스명 확인
-        $user = 'root';
-        $password = '';
+        $dbServer = '127.0.0.1';
+        $dbName = 'mydb';
+        $dbuser = 'testuser';
+        $dbPass = 'pass';
 
         $message = '';
         $messageType = '';

@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$host = '127.0.0.1';
+$dbServer = '127.0.0.1';
 $dbName = 'mydb';
-$user = 'root';
-$password = '';
+$dbuser = 'testuser';
+$dbPass = 'pass';
 
 $message = '';
 $messageType = '';

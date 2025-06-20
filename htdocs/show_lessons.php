@@ -10,10 +10,10 @@
 
     <?php
     // データベース接続情報 (제공해주신 정보로 업데이트)
-    $host = '127.0.0.1';          // 호스트는 127.0.0.1
-    $dbName = 'mydb';             // 데이터베이스명은 mydb
-    $user = 'root';               // 사용자는 root
-    $password = '';               // 비밀번호는 빈 문자열 ''
+        $dbServer = '127.0.0.1';
+        $dbName = 'mydb';
+        $dbuser = 'testuser';
+        $dbPass = 'pass';            // 비밀번호는 빈 문자열 ''
 
     // データベース接続
     try {

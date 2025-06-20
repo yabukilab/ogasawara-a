@@ -196,10 +196,10 @@ if (!$is_logged_in) {
             </form>
             
             <?php
-            $host = '127.0.0.1';
+            $dbServer = '127.0.0.1';
             $dbName = 'mydb';
-            $user = 'root';
-            $password = '';
+            $dbuser = 'testuser';
+            $dbPass = 'pass';
 
             function getTermName($term_num) {
                 switch ($term_num) {
