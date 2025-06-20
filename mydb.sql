@@ -134,7 +134,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_number` int(7) NOT NULL,
   `department` char(50) NOT NULL,
-  `password` char(12) NOT NULL,
+  `password` char(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
