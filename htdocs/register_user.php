@@ -74,8 +74,9 @@
         $messageType = '';
 
         function logError($msg) {
-            file_put_contents(__DIR__ . '/user_registration_errors.log', date('Y-m-d H:i:s') . ' - ' . $msg . PHP_EOL, FILE_APPEND);
-        }
+            file_put_contents('C:/xampp/htdocs/ogasawara-a/user_registration_errors.log', date('Y-m-d H:i:s') . ' - ' . $msg . PHP_EOL, FILE_APPEND);
+            }
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $student_number = $_POST['student_number'] ?? ''; // student_number로 변경
