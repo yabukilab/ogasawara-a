@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             // db_config.php에서 생성된 PDO 객체 변수는 $pdo 입니다.
             // 기존 코드에서는 $db로 사용되었는데, $pdo로 일치시킵니다.
-            $stmt = $pdo->prepare("SELECT student_number, password, department FROM users WHERE student_number = :student_number");
+            $stmt = $db->prepare("SELECT student_number, password, department FROM users WHERE student_number = :student_number");
             $stmt->bindParam(':student_number', $student_number);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC); // 조회된 사용자 정보
