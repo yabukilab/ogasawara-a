@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messageType = 'error';
     } else {
         try {
-            $pdo = new PDO("mysql:host=$host;dbname=$dbName;charset=utf8", $user, $password);
+            $pdo = new PDO("mysql:host=$dbServer;dbname=$dbName;charset=utf8", $dbUser, $dbPass);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // student_number로 조회, password 컬럼에서 해시된 비밀번호 가져오기
