@@ -1,0 +1,342 @@
+/* General Body and Container Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.main-container {
+    display: flex;
+    gap: 20px;
+}
+
+/* User Info and Authentication Links */
+.user-info {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.user-info a,
+.auth-links a {
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.user-info a:hover,
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-container {
+    max-width: 500px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+.auth-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.auth-container p {
+    margin-bottom: 25px;
+}
+
+.auth-links a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.auth-links a:hover {
+    background-color: #0056b3;
+    text-decoration: none;
+}
+
+
+/* Headings */
+h1, h2, h3 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Messages */
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Forms and Filters */
+form {
+    margin-bottom: 15px;
+}
+
+label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+select, input[type="text"], input[type="password"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #28a745; /* Green for general actions */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Specific button for "확정済み時間割を見る" */
+.view-confirmed-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: none; /* For link-styled buttons */
+}
+.view-confirmed-button:hover {
+    background-color: #0056b3;
+}
+
+/* Navigation buttons (e.g., in confirmed_timetable.php) */
+.navigation-buttons {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.navigation-buttons a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745; /* Green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: none;
+    margin-right: 10px;
+}
+.navigation-buttons a:hover {
+    background-color: #218838;
+}
+
+.filter-form {
+    margin-bottom: 20px;
+    text-align: center;
+}
+.filter-form label, .filter-form select {
+    margin-right: 10px;
+}
+
+/* Class List Section */
+.class-list-section {
+    flex: 1; /* Take up remaining space */
+    min-width: 400px; /* Adjust as needed */
+    border-right: 1px solid #eee;
+    padding-right: 20px;
+}
+
+.class-list-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.class-list-section th, .class-list-section td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.class-list-section th {
+    background-color: #f2f2f2;
+}
+
+.class-list-section tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.class-list-section .add-button {
+    background-color: #007bff;
+    padding: 5px 10px;
+    font-size: 0.85em;
+}
+
+.class-list-section .add-button:hover {
+    background-color: #0056b3;
+}
+
+/* Timetable Section */
+.timetable-section {
+    flex: 2; /* Take up more space */
+}
+
+#selectedClassInfo {
+    background-color: #e9f7ef;
+    border: 1px solid #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#currentSelectedClassName {
+    font-weight: bold;
+    color: #007bff;
+}
+
+#totalCredits {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    color: #333;
+}
+
+#confirmTimetableBtn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    background-color: #28a745; /* Green */
+}
+
+#confirmTimetableBtn:hover {
+    background-color: #218838;
+}
+
+/* Timetable Table Specifics */
+.timetable-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    table-layout: fixed; /* Ensures columns are equally sized */
+}
+
+.timetable-table th, .timetable-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: top;
+    min-width: 80px; /* Minimum width for cells */
+    position: relative; /* For positioning term display */
+}
+
+.timetable-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.time-slot {
+    height: 80px; /* Fixed height for time slots */
+    background-color: #fdfdfd;
+}
+
+.time-slot.filled-primary {
+    background-color: #e6f7ff; /* Light blue for filled primary slots */
+    color: #333;
+    font-weight: bold;
+    position: relative; /* For remove button positioning */
+}
+
+.time-slot.filled-secondary {
+    background-color: #d6f2ff; /* Slightly darker blue for secondary slots */
+    color: #333;
+    font-style: italic;
+}
+
+.remove-button {
+    background-color: #dc3545; /* Red */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Make it round */
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    font-size: 0.7em;
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}
+
+.term-display-in-cell {
+    font-size: 0.7em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+    .class-list-section {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
+}
