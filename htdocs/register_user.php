@@ -53,7 +53,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="auth-container">
         <h1>新規ユーザー登録</h1>
-        <?php echo $message; ?>
+
+        <?php
+$dbServer = '127.0.0.1';
+$dbName = 'mydb';
+$dbUser = 'testuser';
+$dbPass = 'pass';
+
+$message = '';
+$messageType = '';
+
+function logError($msg) {
+    file_put_contents(
+        __DIR__ . '/user_registration_errors.log',
+        date('Y-m-d H:i:s') . ' - ' . $msg . PHP_EOL,
+        FILE_APPEND
+    );
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $student_number = $_POST['student_number'] ?? '';
+    $department = $_POST['department'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if ($student_number && $department && $password) {
+        try {
+            $pdo = new PDO("mysql:host=$dbServer;dbname=$dbName;charset=utf8", $dbUser, $dbPass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // パスワードはハッシュ化して保存（セキュリティのため）
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $pdo->prepare("INSERT INTO users (student_number, department, password) VALUES (:student_number, :department, :password)");
+            $stmt->execute([
+                ':student_number' => $student_number,
+                ':department' => $department,
+                ':password' => $hashedPassword
+            ]);
+
+            $message = '登録が完了しました。';
+            $messageType = 'success';
+
+        } catch (PDOException $e) {
+            logError($e->getMessage());
+            $message = 'データベースエラーが発生しました。';
+            $messageType = 'error';
+        }
+    } else {
+        $message = '全ての項目を入力してください。';
+        $messageType = 'error';
+    }
+}
+?>
         <form action="register_user.php" method="post" class="auth-form">
             <label for="student_number">学番:</label>
             <input type="text" id="student_number" name="student_number" required>
