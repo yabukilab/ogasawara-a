@@ -11,10 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($student_number) || empty($password)) {
         $message = '<p class="message error">学番とパスワードをすべて入力してください。</p>';
     } else {
-        // password 컬럼을 조회
-        $stmt = $pdo->prepare("SELECT student_number, password FROM users WHERE student_number = :student_number");
-        $stmt->execute([':student_number' => $student_number]);
-        $user = $stmt->fetch();
+        try {
+            $pdo = new PDO("mysql:host=$dbServer;dbname=$dbName;charset=utf8", $dbUser, $dbPass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // 조회된 password 컬럼의 해시 값과 입력된 비밀번호를 password_verify()로 비교
         if ($user && password_verify($password, $user['password'])) {
