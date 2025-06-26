@@ -6,7 +6,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'mydb'); // 실제 데이터베이스 이름으로 변경하세요.
 define('DB_USER', 'root'); // 실제 데이터베이스 사용자 이름으로 변경하세요.
-define('DB_PASS', 'your_actual_root_password_here'); // <-- 6번째 줄: 실제 root 비밀번호를 입력하거나, 없으면 빈 문자열 ''
+define('DB_PASS', ''); // <-- 6번째 줄: 실제 root 비밀번호를 입력하거나, 없으면 빈 문자열 ''
 
 try {
     // PDO 연결 시 상수를 사용합니다.
