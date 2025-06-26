@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-container">
         <h1>新規ユーザー登録</h1>
 
+        
         <?php
 $dbServer = '127.0.0.1';
 $dbName = 'mydb';
