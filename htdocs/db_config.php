@@ -1,11 +1,10 @@
 <?php
 // db_config.php
 
-define('DB_HOST', 'localhost');
 define('DB_NAME', 'mydb');
 define('DB_USER', 'root');
 // PHPMyAdmin에서 비밀번호 없이 로그인된다면, DB_PASS를 '' (빈 문자열)로 설정합니다.
-define('DB_PASS', ''); // <-- 이 부분을 이렇게 수정하세요!
+define('DB_PASS', 'pass'); // <-- 이 부분을 이렇게 수정하세요!
 
 try {
     $pdo = new PDO(
