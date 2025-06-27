@@ -9,7 +9,7 @@ $current_user_department = '未設定'; // 미설정
 
 if ($is_logged_in) {
     try {
-        $stmt = $pdo->prepare("SELECT department FROM users WHERE student_number = :student_number");
+        $stmt = $db->prepare("SELECT department FROM users WHERE student_number = :student_number");
         $stmt->execute([':student_number' => $current_student_number]);
         $user_info = $stmt->fetch();
         if ($user_info) {
@@ -62,7 +62,7 @@ try {
     }
     $sql .= " ORDER BY name ASC"; // 수업명으로 정렬
 
-    $stmt = $pdo->prepare($sql);
+    $stmt = $db->prepare($sql);
     $stmt->execute($params);
     $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -75,7 +75,7 @@ $currentTimetableData = [];
 if ($is_logged_in) {
     try {
         // SQL 쿼리에서 'ut.is_primary'를 제거
-        $stmt = $pdo->prepare("SELECT ut.day, ut.period, ut.class_id,
+        $stmt = $db->prepare("SELECT ut.day, ut.period, ut.class_id,
                                         c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
                                FROM user_timetables ut
                                JOIN class c ON ut.class_id = c.id
