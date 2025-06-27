@@ -3,7 +3,7 @@
 $host = 'localhost';
 $dbname = 'mydb';
 $username = 'root';
-$password = ''; // パスワードは環境に合わせて変更してください
+$password = 'pass'; // パスワードは環境に合わせて変更してください
 
 $message = '';
 
