@@ -36,17 +36,17 @@ if (empty($timetable_data)) {
 }
 
 try {
-    $pdo->beginTransaction();
+    $db->beginTransaction();
 
     // 현재 학년의 모든 기존 시간표 데이터 삭제
     // 모든 수업은 같은 학년이므로 첫 번째 데이터에서 학년을 가져옴
     $grade_to_delete = $timetable_data[0]['grade'];
-    $stmt = $pdo->prepare("DELETE FROM user_timetables WHERE student_number = :student_number AND grade = :grade");
+    $stmt = $db->prepare("DELETE FROM user_timetables WHERE student_number = :student_number AND grade = :grade");
     $stmt->execute([':student_number' => $student_number, ':grade' => $grade_to_delete]);
 
     // 새로운 시간표 데이터 삽입
     // is_primary 컬럼이 DB에 남아있을 경우를 대비하여 :is_primary 포함
-    $stmt = $pdo->prepare("INSERT INTO user_timetables (student_number, grade, day, period, class_id, is_primary) VALUES (:student_number, :grade, :day, :period, :class_id, :is_primary)");
+    $stmt = $db->prepare("INSERT INTO user_timetables (student_number, grade, day, period, class_id, is_primary) VALUES (:student_number, :grade, :day, :period, :class_id, :is_primary)");
 
     foreach ($timetable_data as $entry) {
         $stmt->execute([
@@ -64,7 +64,7 @@ try {
     $response['message'] = '時間割が正常に登録されました。';
 
 } catch (PDOException $e) {
-    $pdo->rollBack();
+    $db->rollBack();
     $response['message'] = '時間割の登録に失敗しました。';
     $response['error_details'] = $e->getMessage();
     error_log("Timetable save failed: " . $e->getMessage());
