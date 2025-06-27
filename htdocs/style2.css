@@ -41,20 +41,33 @@ body {
     box-sizing: border-box;
 }
 
-.auth-form input[type="submit"] {
+/* ログインボタン (type="submit" 버튼) のスタイルを青に変更 */
+.auth-form button[type="submit"] {
     width: 100%;
-    background-color: #4CAF50;
-    color: blue;
+    background-color: #007bff; /* 青色に変更 */
+    color: white; /* 文字色を白に変更 */
     padding: 12px;
     border: none;
     border-radius: 6px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-bottom: 15px; /* 下部マージンを追加 */
 }
 
-.auth-form input[type="submit"]:hover {
-    background-color: #45a049;
+.auth-form button[type="submit"]:hover {
+    background-color: #0056b3; /* ホバー時の色を濃い青に変更 */
+}
+
+/* 「新規ユーザー登録」リンクのスタイルを青に変更 */
+.auth-links a {
+    color: #007bff; /* 青色に変更 */
+    text-decoration: none; /* 下線を削除 */
+    font-weight: bold;
+}
+
+.auth-links a:hover {
+    text-decoration: underline; /* ホバー時に下線を表示 */
 }
 
 .message {
@@ -62,4 +75,9 @@ body {
     margin-bottom: 15px;
     text-align: center;
     font-size: 14px;
+}
+
+/* エラーメッセージの色を統一 */
+.message.error {
+    color: #dc3545; /* 赤系の色 */
 }
