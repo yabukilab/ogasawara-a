@@ -29,7 +29,12 @@ try {
   $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-  echo "Can't connect to the database: " . h($e->getMessage());
+  // データベース接続に失敗した場合の処理
+    // 開発者向けに詳細なエラーメッセージをサーバーログに記録します。
+    error_log("データベース接続エラー: " . $e->getMessage());
+    // ユーザーには一般的なメッセージを表示し、スクリプトの実行を停止します。
+    // この die() が、$db が null インスタンスとして渡されるのを防ぎます。
+    die("データベースエラーが発生しました。しばらくしてから再度お試しください。");
 }
 
 function getTerName($term_num) {
