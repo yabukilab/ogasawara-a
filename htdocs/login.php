@@ -1,52 +1,42 @@
 <?php
-// セッションを開始します。スクリプトの冒頭で常に呼び出す必要があります。
 session_start();
 // db_config.php ファイルを読み込みます。これにより、$pdo オブジェクトと h() 関数が利用可能になります。
 require_once 'db_config.php';
-
 // エラーメッセージを格納するための変数を初期化します。
 $error = '';
 
-// HTTPリクエストがPOSTメソッドである場合、つまりログインフォームが送信された場合
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ユーザーからの入力を取得し、h() 関数でサニタイズ（無害化）します。
-    $student_number = h($_POST['student_number'] ?? '');
-    $password = $_POST['password'] ?? ''; // パスワードはハッシュ化前に直接処理します。
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $student_number = $_POST['student_number'] ?? ''; // student_number로 변경
+    $password_input = $_POST['password'] ?? '';
 
-    // 入力フィールドが空でないかを検証します。
-    if (empty($student_number) || empty($password)) {
-        $error = "学番とパスワードをすべて入力してください。";
+    if (empty($student_number) || empty($password_input)) {
+        $message = '学籍番号とパスワードを入力してください。';
+        $messageType = 'error';
     } else {
         try {
-            // db_config.php で定義されている $pdo オブジェクトを使用します。
-            // ユーザー情報をデータベースから取得します。id, student_number, password, department を選択します。
-            $stmt = $db->prepare("SELECT id, student_number, password, department FROM users WHERE student_number = :student_number");
-            $stmt->bindParam(':student_number', $student_number);
-            $stmt->execute();
-            // 取得したユーザーデータを連想配列として $user 変数に格納します。
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $db = new PDO("mysql:host=$host;dbname=$dbName;charset=utf8", $user, $password);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            // パスワードを検証します。
-            // ユーザーが見つかり、かつ入力されたパスワードがデータベースに保存されているハッシュ化されたパスワードと一致するかを確認します。
-            if ($user && password_verify($password, $user['password'])) {
-                // ログイン成功！
-                // セッション変数にユーザー情報を保存します。
-                $_SESSION['student_number'] = $user['student_number']; // 学番をセッションに保存
-                $_SESSION['department'] = $user['department'];     // 学科情報をセッションに保存
-                $_SESSION['user_id'] = $user['id'];               // ユーザーIDをセッションに保存（任意ですが、良い習慣です）
+            // student_number로 조회, password 컬럼에서 해시된 비밀번호 가져오기
+            $stmt = $db->prepare("SELECT id, student_number, password FROM users WHERE student_number = :student_number");
+            $stmt->execute([':student_number' => $student_number]);
+            $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // ログイン成功後、index.php にリダイレクトします。
-                header("Location: index.php");
-                // リダイレクト後、スクリプトの実行を終了します。
-                exit();
+            // user_data가 존재하고, 비밀번호가 일치하는지 확인 (password 컬럼 사용)
+            if ($user_data && password_verify($password_input, $user_data['password'])) {
+                // 로그인 성공
+                $_SESSION['student_number'] = $user_data['student_number']; // 세션에 학번 저장
+                $_SESSION['user_db_id'] = $user_data['id']; // DB의 실제 ID도 저장 (내부 식별용)
+                header('Location: index.php'); // 성공 시 index.php로 리다이렉트
+                exit;
             } else {
-                // ログイン失敗（学番またはパスワードが間違っています）。
-                $error = "学番またはパスワードが間違っています。";
+                $message = '無効な学籍番号またはパスワードです。';
+                $messageType = 'error';
             }
+
         } catch (PDOException $e) {
-            // データベース関連のエラーが発生した場合の処理です。
-            error_log("Login DB Error: " . $e->getMessage()); // エラーの詳細をサーバーログに記録します。
-            $error = "データベースエラーが発生しました。しばらくしてから再度お試しください。"; // ユーザーには一般的なエラーメッセージを表示します。
+            $message = 'データベースエラーが発生しました: ' . htmlspecialchars($e->getMessage());
+            $messageType = 'error';
         }
     }
 }
@@ -57,24 +47,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン (Login)</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stlesheet" href="style.css">
 </head>
 <body>
-    <div class="auth-container">
+    <div class="container">
         <h1>ログイン</h1>
-        <?php if (!empty($error)): ?>
-            <p class="message error"><?php echo h($error); ?></p>
-        <?php endif; ?>
-        <form action="login.php" method="post" class="auth-form">
-            <label for="student_number">学番:</label>
-            <input type="text" id="student_number" name="student_number" required>
-            <label for="password">パスワード:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">ログイン</button>
+        <?php
+        if ($message) {
+            echo "<div class='message {$messageType}'>{$message}</div>";
+        }
+        ?>
+
+        <form action="login.php" method="post">
+            <div class="form-group">
+                <label for="student_number">学籍番号:</label>
+                <input type="text" id="student_number" name="student_number" required>
+            </div>
+            <div class="form-group">
+                <label for="password">パスワード:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="ログイン">
+            </div>
         </form>
-        <div class="auth-links">
-            <p>アカウントをお持ちでないですか？ <a href="register_user.php">新規ユーザー登録</a></p>
-        </div>
+        <a href="register_user.php" class="register-link">新規ユーザー登録はこちら</a>
     </div>
 </body>
 </html>
