@@ -1,48 +1,52 @@
 <?php
-session_start(); // 세션은 항상 스크립트 맨 처음에 시작해야 합니다.
-require_once 'db_config.php'; // db_config.php 파일을 포함
+// セッションを開始します。スクリプトの冒頭で常に呼び出す必要があります。
+session_start();
+// db_config.php ファイルを読み込みます。これにより、$db オブジェクトと h() 関数が利用可能になります。
+require_once 'db_config.php';
 
-// HTML 엔티티 변환 함수 (h())가 db_config.php에 없다면 여기에 정의하거나,
-// 아래 코드에서 htmlspecialchars()를 직접 사용하세요.
-// 이 예시에서는 htmlspecialchars()를 직접 사용합니다.
+// エラーメッセージを格納するための変数を初期化します。
+$error = '';
 
-$error = ''; // 에러 메시지를 저장할 변수 초기화
-
-// 로그인 폼 제출 처리
+// HTTPリクエストがPOSTメソッドである場合、つまりログインフォームが送信された場合
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 입력값 가져오기 및 보안 처리
-    // h() 함수가 정의되어 있다면 h()를 사용하고, 없다면 htmlspecialchars()를 직접 사용합니다.
-    $student_number = htmlspecialchars($_POST['student_number'] ?? ''); // 'student_id' 대신 'student_number' 사용
-    $password = $_POST['password'] ?? ''; // 비밀번호는 해시 전에 바로 처리
+    // ユーザーからの入力を取得し、h() 関数でサニタイズ（無害化）します。
+    $student_number = h($_POST['student_number'] ?? '');
+    $password = $_POST['password'] ?? ''; // パスワードはハッシュ化前に直接処理します。
 
-    // 입력값 유효성 검사
+    // 入力フィールドが空でないかを検証します。
     if (empty($student_number) || empty($password)) {
         $error = "学番とパスワードをすべて入力してください。";
     } else {
         try {
-            // db_config.php에서 생성된 PDO 객체 변수는 $pdo 입니다.
-            // 기존 코드에서는 $db로 사용되었는데, $pdo로 일치시킵니다.
-            $stmt = $db->prepare("SELECT student_number, password, department FROM users WHERE student_number = :student_number");
+            // db_config.php で定義されている $db オブジェクトを使用します。
+            // ユーザー情報をデータベースから取得します。id, student_number, password, department を選択します。
+            $stmt = $db->prepare("SELECT id, student_number, password, department FROM users WHERE student_number = :student_number");
             $stmt->bindParam(':student_number', $student_number);
             $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC); // 조회된 사용자 정보
+            // 取得したユーザーデータを連想配列として $user 変数に格納します。
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // 비밀번호 검증
+            // パスワードを検証します。
+            // ユーザーが見つかり、かつ入力されたパスワードがデータベースに保存されているハッシュ化されたパスワードと一致するかを確認します。
             if ($user && password_verify($password, $user['password'])) {
-                // 로그인 성공
-                $_SESSION['student_number'] = $user['student_number']; // 세션에 학번 저장
-                $_SESSION['department'] = $user['department']; // 세션에 학과 정보 저장 (index.php에서 사용)
+                // ログイン成功！
+                // セッション変数にユーザー情報を保存します。
+                $_SESSION['student_number'] = $user['student_number']; // 学番をセッションに保存
+                $_SESSION['department'] = $user['department'];     // 学科情報をセッションに保存
+                $_SESSION['user_id'] = $user['id'];               // ユーザーIDをセッションに保存
 
-                header("Location: index.php"); // 로그인 후 메인 페이지로 이동
+                // ログイン成功後、index.php にリダイレクトします。
+                header("Location: index.php");
+                // リダイレクト後、スクリプトの実行を終了します。
                 exit();
             } else {
-                // 로그인 실패 (학번 또는 비밀번호 불일치)
+                // ログイン失敗（学番またはパスワードが間違っています）。
                 $error = "学番またはパスワードが間違っています。";
             }
         } catch (PDOException $e) {
-            // 데이터베이스 오류 처리
-            error_log("Login DB Error: " . $e->getMessage()); // 서버 로그에 상세 에러 기록
-            $error = "データベースエラーが発生しました。しばらくしてから再度お試しください。";
+            // データベース関連のエラーが発生した場合の処理です。
+            error_log("Login DB Error: " . $e->getMessage()); // エラーの詳細をサーバーログに記録します。
+            $error = "データベースエラーが発生しました。しばらくしてから再度お試しください。"; // ユーザーには一般的なエラーメッセージを表示します。
         }
     }
 }
@@ -59,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="auth-container">
         <h1>ログイン</h1>
         <?php if (!empty($error)): ?>
-            <p class="message error"><?php echo htmlspecialchars($error); ?></p>
+            <p class="message error"><?php echo h($error); ?></p>
         <?php endif; ?>
         <form action="login.php" method="post" class="auth-form">
             <label for="student_number">学番:</label>
