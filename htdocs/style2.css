@@ -1,65 +1,94 @@
-/* 共通スタイル */
+/* ベーススタイル */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f2f2f2;
     margin: 0;
     padding: 0;
+    font-family: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
+/* 中央カード */
 .auth-container {
+    background: #ffffff;
+    padding: 40px 30px;
     width: 100%;
-    max-width: 400px;
-    margin: 60px auto;
-    background: #fff;
-    padding: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
+    max-width: 420px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
 }
 
+.auth-container:hover {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
+
+/* 見出し */
 .auth-container h1 {
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 24px;
-    color: #333;
+    font-size: 26px;
+    color: #2c3e50;
+    margin-bottom: 30px;
 }
 
+/* ラベル・入力欄 */
 .auth-form label {
     display: block;
-    margin-bottom: 6px;
+    font-size: 14px;
     color: #555;
-    font-weight: bold;
+    margin-bottom: 6px;
+    font-weight: 500;
 }
 
 .auth-form input[type="text"],
 .auth-form input[type="password"],
 .auth-form input[type="email"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.auth-form input:focus {
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.25);
+    outline: none;
+}
+
+/* ボタン */
 .auth-form input[type="submit"] {
-    width: 100%;
-    background-color: #4CAF50;
+    background: linear-gradient(to right, #42a5f5, #1e88e5);
     color: white;
-    padding: 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    padding: 14px;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .auth-form input[type="submit"]:hover {
-    background-color: #45a049;
+    background: linear-gradient(to right, #1e88e5, #1565c0);
+    transform: translateY(-2px);
 }
 
+/* メッセージ */
 .message {
-    color: red;
-    margin-bottom: 15px;
-    text-align: center;
+    color: #e53935;
     font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* レスポンシブ（スマホ用） */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 30px 20px;
+    }
 }
