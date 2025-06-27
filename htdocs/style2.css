@@ -43,19 +43,20 @@ body {
 
 .auth-form input[type="submit"] {
     width: 100%;
-    background-color: #4CAF50;
+    background-color: #007BFF; /* 青色に変更 */
     color: white;
-    padding: 12px;
+    padding: 16px; /* 少し大きめに調整 */
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 18px; /* フォントサイズも少し大きく */
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .auth-form input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #0069d9; /* ホバー時に少し濃い青 */
 }
+
 
 .message {
     color: red;
