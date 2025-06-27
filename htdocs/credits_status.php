@@ -22,9 +22,9 @@ try {
     $graduationRequirements = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$graduationRequirements) {
-        // 해당 학과의 졸업 요건이 없는 경우 기본값 설정 또는 에러 처리
-        // 'プロジェクトマネジメント学科'에 대한 데이터가 없을 경우를 대비하여 기본값을 설정합니다.
-        // 하지만 위 SQL을 실행했다면 이 블록은 'プロジェクトマネジメント学科'에 대해서는 실행되지 않습니다.
+        // 該当学科の卒業要件が存在しない場合には、デフォルト値を設定するか、エラー処理を行う.
+        // 「プロジェクトマネジメント学科」に関するデータが存在しない可能性に備えて、デフォルト値を設定する.
+        // ただし、上記のSQLを実行していれば、「プロジェクトマネジメント学科」に対してこの処理が実行されることはない.
         $error = "Warning: この学科 ({$current_user_department}) の卒業要件が設定されていません。一般的な要件で表示します。";
         $graduationRequirements = [
             'total_required_credits' => 124, // 仮のデフォルト値
@@ -39,15 +39,15 @@ try {
 
 // 2. ユーザーが現在までに取得済みの全授業の単位と種類を計算
 $totalAcquiredCredits = 0;
-$acquiredMajorCredits = 0;     // 専門科目 학점
-$acquiredLiberalArtsCredits = 0; // 教養科目 학점
-// 필요한 경우 다른 category1에 대한 변수도 추가
+$acquiredMajorCredits = 0;     // 専門科目単位
+$acquiredLiberalArtsCredits = 0; // 教養科目単位
+// 必要に応じて、他の category1 用の変数も追加する.
 
-$calculatedClassIds = []; // 중복 단위 계산 방지용 (class_id 기준)
+$calculatedClassIds = []; // 同じ授業（class_id）が重複して単位が加算されないようにするための対策
 
 try {
-    // user_timetables와 class 테이블을 JOIN하여 단위와 category1 (과목 종류)를 가져옵니다.
-    // 진급 및 졸업 학점은 전체 취득 학점을 기준으로 하므로, 학년(grade) 조건은 넣지 않습니다.
+    // user_timetables テーブルと class テーブルを JOIN して、単位数と科目の種類（category1）を取得する.
+    // 進級および卒業に必要な単位は、全体の取得単位数を基準とするため、学年（grade）の条件は含まない.
     $stmt = $db->prepare("SELECT c.id as class_id, c.credit, c.category1
                            FROM user_timetables ut
                            JOIN class c ON ut.class_id = c.id
@@ -58,9 +58,9 @@ try {
     foreach ($registeredClasses as $class) {
         if (!in_array($class['class_id'], $calculatedClassIds)) {
             $totalAcquiredCredits += (int)$class['credit'];
-            $calculatedClassIds[] = $class['class_id']; // 중복 방지를 위해 추가
+            $calculatedClassIds[] = $class['class_id']; // 重複を防ぐために追加.
 
-            // category1 값에 따라 학점을 분류
+            // category1 の値に応じて単位を分類.
             switch ($class['category1']) {
                 case '専門科目':
                     $acquiredMajorCredits += (int)$class['credit'];
@@ -68,7 +68,7 @@ try {
                 case '教養科目':
                     $acquiredLiberalArtsCredits += (int)$class['credit'];
                     break;
-                // 다른 category1 값이 있다면 여기에 추가 (예: '共通科目', '自由科目' 등)
+                // 他の category1（例：共通科目、自由科目など）があれば、ここに追加.
             }
         }
     }
@@ -77,22 +77,22 @@ try {
     $error = "履修単位の計算に失敗しました。";
 }
 
-// 3. 졸업까지 남은 단위 수 계산 (기존 로직)
+// 3. 卒業までに必要な残りの単位数を計算.
 $remainingTotalCredits = max(0, $graduationRequirements['total_required_credits'] - $totalAcquiredCredits);
 $remainingMajorCredits = max(0, $graduationRequirements['required_major_credits'] - $acquiredMajorCredits);
 $remainingLiberalArtsCredits = max(0, $graduationRequirements['required_liberal_arts_credits'] - $acquiredLiberalArtsCredits);
 
-// 4. 진급 조건 체크 (추가된 로직)
+// 4. 進級条件の判定.
 $promotionStatus = [];
 
-// 1학년에서 2학년으로 진급 조건: 총 24단위
+// 1年次から2年次への進級条件：合計24単位取得.
 $promotionStatus['1_to_2'] = [
     'required_total' => 24,
     'current_total' => $totalAcquiredCredits,
     'eligible' => ($totalAcquiredCredits >= 24)
 ];
 
-// 2학년에서 3학년으로 진급 조건: 총 64단위 AND 전문 44단위
+// 2年生から3年生への進級条件：合計64単位かつ専門科目44単位.
 $promotionStatus['2_to_3'] = [
     'required_total' => 64,
     'required_major' => 44,
@@ -101,7 +101,7 @@ $promotionStatus['2_to_3'] = [
     'eligible' => ($totalAcquiredCredits >= 64 && $acquiredMajorCredits >= 44)
 ];
 
-// 3학년에서 4학년으로 진급 조건: 총 102단위 AND 전문 74단위
+// 3年生から4年生への進級条件：合計102単位かつ専門科目74単位.
 $promotionStatus['3_to_4'] = [
     'required_total' => 102,
     'required_major' => 74,
@@ -110,7 +110,7 @@ $promotionStatus['3_to_4'] = [
     'eligible' => ($totalAcquiredCredits >= 102 && $acquiredMajorCredits >= 74)
 ];
 
-// 이제 이 변수들을 HTML에 표시
+// これらの変数をHTMLに表示.
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -153,35 +153,35 @@ $promotionStatus['3_to_4'] = [
             background: #f9f9f9;
             padding: 10px 15px;
             margin-bottom: 8px;
-            border-left: 5px solid #28a745; /* 기본 초록색 테두리 */
+            border-left: 5px solid #28a745; /* 緑色の枠線 */
             border-radius: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap; /* 내용이 길어질 경우 줄바꿈 */
+            flex-wrap: wrap; /* 内容が長くなる場合は改行する */
         }
         .promotion-details ul li {
-            border-left: 5px solid #007bff; /* 진급 상태는 파란색 테두리 */
+            border-left: 5px solid #007bff; /* 青色の枠線で表示 */
         }
         .credit-details ul li.met-requirement, .promotion-details ul li.met-requirement {
-            border-left-color: #28a745; /* 조건을 만족하면 초록색 */
+            border-left-color: #28a745; /* 条件を満たしたら緑色で表示 */
         }
         .credit-details ul li.not-met-requirement, .promotion-details ul li.not-met-requirement {
-            border-left-color: #dc3545; /* 조건을 만족하지 못하면 빨간색 */
+            border-left-color: #dc3545; /* 条件を満たさない場合は赤色 */
         }
         .credit-details ul li span, .promotion-details ul li span {
             font-weight: bold;
             color: #333;
-            flex-basis: 100%; /* 제목은 항상 한 줄에 */
+            flex-basis: 100%; /* タイトルは改行せずに1行で表示 */
             margin-bottom: 5px;
         }
         .credit-details ul li .remaining-credits, .promotion-details ul li .status-text {
-            color: #dc3545; /* 남은 단위는 빨간색 */
+            color: #dc3545; /* 残りの単位は赤色で表示 */
             font-size: 1.1em;
-            margin-left: auto; /* 오른쪽에 붙도록 */
+            margin-left: auto; /* 右揃えにする */
         }
         .promotion-details ul li .status-text.ok {
-            color: #28a745; /* 'OK'는 초록색 */
+            color: #28a745; /* 「OK」は緑色で表示 */
         }
         .navigation-buttons {
             text-align: center;
