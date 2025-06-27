@@ -16,7 +16,7 @@ $selectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 2; 
 // ユーザーの学科情報をロード (任意)
 $current_user_department = '未設定';
 try {
-    // ここで $pdo ではなく $db を使用します。
+    // ここで $db ではなく $db を使用します。
     $stmt = $db->prepare("SELECT department FROM users WHERE student_number = :student_number");
     $stmt->execute([':student_number' => $current_student_number]);
     $user_info = $stmt->fetch();
