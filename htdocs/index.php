@@ -57,11 +57,11 @@ try {
                            JOIN class c ON ut.class_id = c.id
                            WHERE ut.user_id = :user_id AND c.grade = :grade AND (c.term = :current_term OR :current_term = '全て')");
 
-    // '全て'を選択した場合、termフィルタリングを無効にする
+    // '全て'を選択した場合、termフィルタリングを無효화
     $term_param = ($current_term === '全て') ? '%' : $current_term;
 
     $stmt->execute([':user_id' => $current_user_id, ':grade' => $current_grade, ':current_term' => $term_param]);
-    $user_registered_classes = $stmt->fetchAll(PDOException::FETCH_ASSOC); // 오타 수정: PDO::FETCH_ASSOC
+    $user_registered_classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($user_registered_classes as $class) {
         $user_timetable[] = $class;
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
         if ($class_id && $day_of_week && $time_slot && $term) {
             try {
-                // 同じユーザー、同じ時間、同じ曜日に既に登録된 수업이 있는지 확인
+                // 同じユーザー、同じ時間、同じ曜日に既に登録された 수업이 있는지 확인
                 $stmt = $db->prepare("SELECT COUNT(*) FROM user_timetables ut JOIN class c ON ut.class_id = c.id WHERE ut.user_id = :user_id AND c.day_of_week = :day_of_week AND c.time_slot = :time_slot AND c.term = :term AND c.grade = :grade");
                 $stmt->execute([
                     ':user_id' => $current_user_id,
@@ -251,7 +251,8 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
             </table>
         </div>
 
-        <div class="timetable-section"> <h2>時間割</h2>
+        <div class="timetable-section">
+            <h2>時間割</h2>
 
             <div id="selectedClassInfo">
                 <p>選択中の授業: <span id="currentSelectedClassName">なし</span></p>
