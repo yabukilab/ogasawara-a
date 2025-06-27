@@ -2,7 +2,7 @@
 // DB接続情報
 $host = 'localhost';
 $dbname = 'mydb';
-$username = 'root';
+$username = 'testuser';
 $password = 'pass'; // パスワードは環境に合わせて変更してください
 
 $message = '';
