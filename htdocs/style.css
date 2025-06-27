@@ -17,14 +17,14 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* --- 이전에는 .main-container 관련 Flexbox 스타일이 없었을 것으로 추정 --- */
-/* .main-container {
+/* --- 핵심: main-container에 Flexbox 적용 --- */
+.main-container {
     display: flex;
-    gap: 20px;
-    justify-content: space-around;
-    padding: 20px;
-    flex-wrap: wrap;
-} */
+    gap: 20px; /* 섹션들 사이의 간격 */
+    justify-content: space-around; /* 가로 공간을 고르게 배분 */
+    padding: 20px; /* 내부 여백 */
+    flex-wrap: wrap; /* 작은 화면에서 요소들을 다음 줄로 넘김 */
+}
 
 /* User Info and Authentication Links */
 .user-info {
@@ -266,57 +266,24 @@ button:hover {
 
 /* Class List Section (index.php) */
 .class-list-section {
-    /* 이전에는 flex 관련 속성이 없었을 수 있음 */
-    /* flex: 1; */
-    /* min-width: 45%; */
-    /* max-width: 48%; */
+    flex: 1; /* 남은 공간 차지 */
+    min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
+    max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 20px; /* 세로로 정렬될 때 간격 */
-}
-
-.class-list-section table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.class-list-section th, .class-list-section td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.class-list-section th {
-    background-color: #f2f2f2;
-}
-
-.class-list-section tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.class-list-section .add-button {
-    background-color: #007bff;
-    padding: 5px 10px;
-    font-size: 0.85em;
-}
-
-.class-list-section .add-button:hover {
-    background-color: #0056b3;
 }
 
 /* Timetable Section (index.php) */
 .timetable-section {
-    /* 이전에는 flex 관련 속성이 없었을 수 있음 */
-    /* flex: 2; */
+    flex: 2; /* 더 많은 공간 차지 */
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    /* min-width: 45%; */
-    /* max-width: 48%; */
+    min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
+    max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
 }
 
 #selectedClassInfo {
@@ -369,8 +336,7 @@ button:hover {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    /* --- 이전에는 table-layout: fixed; 속성이 없었을 것으로 추정 --- */
-    /* table-layout: fixed; */
+    table-layout: fixed; /* --- 핵심 수정: 셀 너비를 고정하여 레이아웃이 깨지지 않도록 함 --- */
 }
 
 .timetable-table th, .timetable-table td {
@@ -379,14 +345,13 @@ button:hover {
     text-align: center;
     vertical-align: middle;
     font-size: 0.9em;
-    /* --- 이전에는 min-width가 없거나 적절히 설정되지 않았을 수 있음 --- */
-    /* min-width: 60px; */
+    min-width: 60px; /* --- 조정: 셀 최소 너비 (요일 표시가 깨지지 않도록) --- */
     position: relative;
 }
-/* 요일 헤더 너비 강제 조정 (필요시) - 이 부분도 없었을 수 있음 */
-/* .timetable-table th:first-child {
+/* '時間' 헤더의 너비가 다른 요일 헤더와 같아지지 않도록 조정 (필요시) */
+.timetable-table th:first-child {
     min-width: 80px;
-} */
+}
 
 
 .timetable-table th {
@@ -447,24 +412,24 @@ button:hover {
     margin-top: 3px;
 }
 
-/* Responsive adjustments (이전에는 없거나 간단했을 수 있음) */
-/* @media (max-width: 768px) {
+/* Responsive adjustments */
+@media (max-width: 768px) {
     .main-container {
-        flex-direction: column;
+        flex-direction: column; /* 화면이 작아지면 세로로 정렬 */
     }
     .class-list-section, .timetable-section {
         min-width: 90%;
         max-width: 95%;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 20px;
+        margin-left: auto; /* 중앙 정렬 */
+        margin-right: auto; /* 중앙 정렬 */
+        margin-bottom: 20px; /* 세로 간격 추가 */
     }
     .class-list-section {
         border-right: none;
         border-bottom: 1px solid #eee;
         padding-bottom: 20px;
     }
-} */
+}
 
 /* Disabled button style */
 .disabled-button {
