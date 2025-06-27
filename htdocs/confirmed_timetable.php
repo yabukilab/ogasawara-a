@@ -4,22 +4,24 @@ session_start();
 require_once 'db_config.php';
 
 // ログイン確認
-if (!isset($_SESSION['student_number'])) {
+// $_SESSION['student_number'] 뿐만 아니라 $_SESSION['user_id']도 확인하는 것이 좋습니다.
+if (!isset($_SESSION['student_number']) || !isset($_SESSION['user_id'])) {
     // ログインされていない場合、ログインページにリダイレクト
     header('Location: login.php');
     exit;
 }
 
 $current_student_number = $_SESSION['student_number'];
+$current_user_id = $_SESSION['user_id']; // ★★★ user_id をセッションから取得 ★★★
 $selectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 2; // デフォルトは2年生
 
-// ユーザーの学科情報をロード (任意)
+// ユーザーの学科情報をロード
 $current_user_department = '未設定';
 try {
-    // ここで $db ではなく $db を使用します。
-    $stmt = $db->prepare("SELECT department FROM users WHERE student_number = :student_number");
-    $stmt->execute([':student_number' => $current_student_number]);
-    $user_info = $stmt->fetch();
+    // student_number ではなく user_id を使って学科情報を取得
+    $stmt = $db->prepare("SELECT department FROM users WHERE id = :user_id");
+    $stmt->execute([':user_id' => $current_user_id]); // ★★★ student_number ではなく user_id を使用 ★★★
+    $user_info = $stmt->fetch(PDO::FETCH_ASSOC); // fetch(PDO::FETCH_ASSOC) を使用して連想配列で取得
     if ($user_info) {
         $current_user_department = htmlspecialchars($user_info['department']);
     }
@@ -33,15 +35,14 @@ $confirmedTimetableData = [];
 $fetchError = ''; // データ取得エラーメッセージ初期化
 
 try {
-    // ここでも $pdo ではなく $db を使用します。
     $stmt = $db->prepare("SELECT ut.day, ut.period, ut.class_id,
-                                 c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
+                                  c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
                            FROM user_timetables ut
                            JOIN class c ON ut.class_id = c.id
-                           WHERE ut.student_number = :student_number AND ut.grade = :grade
-                           ORDER BY ut.day, ut.period"); // 요일, 시한 순으로 정렬
+                           WHERE ut.user_id = :user_id AND ut.grade = :grade
+                           ORDER BY ut.day, ut.period"); // ★★★ student_number ではなく user_id を使用 ★★★
     $stmt->execute([
-        ':student_number' => $current_student_number,
+        ':user_id' => $current_user_id, // ★★★ student_number ではなく user_id をバインド ★★★
         ':grade' => $selectedGrade
     ]);
     $confirmedTimetableData = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -71,8 +72,8 @@ foreach ($confirmedTimetableData as $entry) {
 
 // 時間割データをマップ形式に変換してアクセスしやすくする
 $timetableMap = [];
-foreach ($days_of_week as $day_key => $day_name) { // $day_key を使用して 0-5 인덱스 생성
-    $timetableMap[$day_name] = []; // 각 요일별로 빈 배열 초기화
+foreach ($days_of_week as $day_key => $day_name) { // $day_key を使用して 0-5 インデックス生成
+    $timetableMap[$day_name] = []; // 各曜日別に 빈 배열 초기화
     for ($i = 1; $i <= 10; $i++) { // 각 시한별로 초기화
         $timetableMap[$day_name][$i] = null; // 기본값은 null
     }
@@ -96,6 +97,7 @@ foreach ($confirmedTimetableData as $entry) {
         .navigation-buttons {
             margin-top: 20px;
             margin-bottom: 20px;
+            text-align: center; /* 버튼을 중앙 정렬합니다 */
         }
         .navigation-buttons a {
             display: inline-block;
@@ -107,13 +109,14 @@ foreach ($confirmedTimetableData as $entry) {
             cursor: pointer;
             font-size: 1em;
             text-decoration: none;
-            margin-right: 10px;
+            margin: 0 5px; /* 버튼 간격 조절 */
         }
         .navigation-buttons a:hover {
             background-color: #218838;
         }
         .filter-form {
             margin-bottom: 20px;
+            text-align: center; /* 필터 폼 중앙 정렬 */
         }
         .filter-form label, .filter-form select {
             margin-right: 10px;
@@ -149,6 +152,12 @@ foreach ($confirmedTimetableData as $entry) {
             color: #007bff; /* 青色 */
             margin-top: 3px;
         }
+        #totalCredits {
+            text-align: right;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -161,6 +170,7 @@ foreach ($confirmedTimetableData as $entry) {
 
     <div class="navigation-buttons">
         <a href="index.php?grade_filter=<?= htmlspecialchars($selectedGrade) ?>">時間割を編集</a>
+        <a href="credits_status.php">単位取得状況を確認</a>
     </div>
 
     <div class="filter-form">
@@ -202,7 +212,7 @@ foreach ($confirmedTimetableData as $entry) {
                         $termDisplayInCell = '';
 
                         // timetableMap から該当する曜日・時限のデータを取得
-                        // $day_name を直接キーとして 사용
+                        // $day_name を直接キーとして使用
                         $classEntry = $timetableMap[$day_name][$i] ?? null;
 
                         if ($classEntry) {
