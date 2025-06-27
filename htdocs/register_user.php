@@ -11,17 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm_password = $_POST['confirm_password'] ?? '';
 
     if (empty($student_number) || empty($department) || empty($password) || empty($confirm_password)) {
-        $message = '<p class="message error">모든 필드를 입력해주세요。</p>';
+        $message = '<p class="message error">すべての項目を入力してください。</p>';
     } elseif ($password !== $confirm_password) {
-        $message = '<p class="message error">비밀번호가 일치하지 않습니다。</p>';
+        $message = '<p class="message error">パスワードが一致していません。</p>';
     } elseif (strlen($password) < 6) { // 최소 비밀번호 길이 설정
-        $message = '<p class="message error">비밀번호는 6자 이상이어야 합니다。</p>';
+        $message = '<p class="message error">パスワードは6文字以上で設定してください。</p>';
     } else {
         // 학번 중복 확인
         $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE student_number = :student_number");
         $stmt->execute([':student_number' => $student_number]);
         if ($stmt->fetchColumn() > 0) {
-            $message = '<p class="message error">이미 존재하는 학번입니다. 다른 학번을 사용해주세요。</p>';
+            $message = '<p class="message error">この学籍番号はすでに使用されています。</p>';
         } else {
             // 비밀번호를 해싱하여 'password' 컬럼에 저장
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -34,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':department' => $department, // department 값 삽입
                     ':password' => $hashed_password
                 ]);
-                $message = '<p class="message success">회원가입이 성공적으로 완료되었습니다! <a href="login.php">로그인</a>해주세요。</p>';
+                $message = '<p class="message success">ユーザ登録が完了しました。 <a href="login.php">ログイン</a>してください。</p>';
             } catch (PDOException $e) {
-                $message = '<p class="message error">회원가입 중 오류가 발생했습니다: ' . htmlspecialchars($e->getMessage()) . '</p>';
+                $message = '<p class="message error">エラーが発生しました。: ' . htmlspecialchars($e->getMessage()) . '</p>';
             }
         }
     }
