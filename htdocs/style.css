@@ -17,10 +17,9 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* --- 주요 변경: main-container에 Flexbox 적용 --- */
 .main-container {
     display: flex;
-    gap: 20px; /* 요소들 사이의 간격 */
+    gap: 20px;
     justify-content: space-around; /* 가로 공간을 고르게 배분 */
     padding: 20px; /* 내부 여백 */
     flex-wrap: wrap; /* 작은 화면에서 요소들을 다음 줄로 넘김 */
@@ -29,18 +28,18 @@ body {
 /* User Info and Authentication Links */
 .user-info {
     text-align: right;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* 기존 20px에서 10px로 조정 */
     font-size: 0.9em;
     color: #555;
-    background-color: #e9ecef;
-    padding: 10px 20px;
-    border-bottom: 1px solid #dee2e6;
+    background-color: #e9ecef; /* #e2f0cb 에서 변경 */
+    padding: 10px 20px; /* 패딩 조정 */
+    border-bottom: 1px solid #dee2e6; /* #c8e6c9 에서 변경 */
 }
 
 .user-info a {
     color: #007bff;
     text-decoration: none;
-    margin-left: 15px;
+    margin-left: 15px; /* 왼쪽 여백 */
 }
 
 .user-info a:hover {
@@ -49,14 +48,14 @@ body {
 
 /* Authentication Container (for login.php, register_user.php, logout.php) */
 .auth-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 60px auto;
+    width: 100%; /* 너비 */
+    max-width: 400px; /* 최대 너비 */
+    margin: 60px auto; /* 중앙 정렬 */
     background: #fff;
     padding: 30px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    text-align: center;
+    text-align: center; /* 텍스트 중앙 정렬 */
 }
 
 .auth-container h1 {
@@ -67,8 +66,8 @@ body {
 }
 
 .auth-container p {
-    margin-bottom: 15px;
-    line-height: 1.5;
+    margin-bottom: 15px; /* 여백 조정 */
+    line-height: 1.5; /* 줄 높이 */
 }
 
 .auth-form label {
@@ -76,24 +75,24 @@ body {
     margin-bottom: 6px;
     color: #555;
     font-weight: bold;
-    text-align: left;
+    text-align: left; /* 라벨 텍스트 왼쪽 정렬 */
 }
 
 .auth-form input[type="text"],
 .auth-form input[type="password"],
 .auth-form input[type="email"],
-.auth-form select {
+.auth-form select { /* select 필드 추가 */
     width: 100%;
     padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    box-sizing: border-box;
+    box-sizing: border-box; /* 패딩과 테두리가 너비에 포함되도록 */
 }
 
 .auth-form button[type="submit"] {
     width: 100%;
-    background-color: #007bff;
+    background-color: #007bff; /* 파란색 */
     color: white;
     padding: 12px;
     border: none;
@@ -101,16 +100,16 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* 하단 여백 */
 }
 
 .auth-form button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* 호버 시 진한 파란색 */
 }
 
 .auth-links {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20px; /* 상단 여백 */
 }
 
 .auth-links p {
@@ -118,30 +117,30 @@ body {
 }
 
 .auth-links a {
-    color: #007bff;
-    text-decoration: none;
+    color: #007bff; /* 파란색 */
+    text-decoration: none; /* 밑줄 제거 */
     font-weight: bold;
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 0 5px;
+    display: inline-block; /* 인라인 블록으로 정렬 용이 */
+    padding: 5px 10px; /* 패딩 */
+    margin: 0 5px; /* 요소 간 간격 */
 }
 
 .auth-links a:hover {
-    text-decoration: underline;
+    text-decoration: underline; /* 호버 시 밑줄 */
 }
 
 /* Headings */
 h1, h2, h3 {
     color: #333;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 20px; /* 상단 여백 */
     margin-bottom: 20px;
 }
 h1 {
-    font-size: 2em;
+    font-size: 2em; /* credits_status.php의 h1과 일치하도록 조정 */
 }
 h2 {
-    font-size: 1.6em;
+    font-size: 1.6em; /* credits_status.php의 h2와 일치하도록 조정 */
     margin-top: 30px;
     margin-bottom: 15px;
     color: #444;
@@ -149,7 +148,7 @@ h2 {
     padding-bottom: 5px;
 }
 h3 {
-    font-size: 1.4em;
+    font-size: 1.4em; /* credits_status.php의 h3과 일치하도록 조정 */
     margin-top: 25px;
     margin-bottom: 10px;
     color: #555;
@@ -161,7 +160,7 @@ h3 {
     margin-bottom: 15px;
     border-radius: 5px;
     text-align: center;
-    font-size: 14px;
+    font-size: 14px; /* login.php의 message와 일치 */
 }
 
 .message.success {
@@ -195,7 +194,7 @@ select, input[type="text"], input[type="password"] {
 
 button {
     padding: 10px 15px;
-    background-color: #28a745;
+    background-color: #28a745; /* 일반 버튼 기본 녹색 */
     color: white;
     border: none;
     border-radius: 5px;
@@ -210,20 +209,20 @@ button:hover {
 
 /* Specific buttons for navigation and actions */
 .view-confirmed-button {
-    display: block;
-    width: 250px;
-    margin: 20px auto;
-    padding: 12px 20px;
-    background-color: #007bff;
+    display: block; /* 블록 요소 */
+    width: 250px; /* 너비 지정 */
+    margin: 20px auto; /* 중앙 정렬 */
+    padding: 12px 20px; /* 패딩 조정 */
+    background-color: #007bff; /* 파란색 */
     color: white;
     text-align: center;
     border-radius: 5px;
-    text-decoration: none;
+    text-decoration: none; /* 링크 스타일 */
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 .view-confirmed-button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* 호버 시 진한 파란색 */
 }
 
 /* Navigation buttons (e.g., in confirmed_timetable.php and credits_status.php) */
@@ -231,34 +230,34 @@ button:hover {
     text-align: center;
     margin-top: 30px;
     margin-bottom: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+    padding-top: 20px; /* credits_status.php에서 추가된 상단 패딩 */
+    border-top: 1px solid #eee; /* credits_status.php에서 추가된 상단 테두리 */
 }
 .navigation-buttons a {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #007bff; /* 파란색으로 통일 (이전에는 녹색도 있었음) */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
     text-decoration: none;
-    margin: 0 8px;
+    margin: 0 8px; /* 버튼 간격 조정 (이전 10px, 5px에서 8px로 통일) */
     transition: background-color 0.3s ease;
 }
 .navigation-buttons a:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* 호버 시 진한 파란색 */
 }
 
 .filter-form {
     margin-bottom: 20px;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
+    display: flex; /* 필터 폼을 flex로 */
+    justify-content: center; /* 내용 중앙 정렬 */
+    gap: 10px; /* 요소 간 간격 */
+    align-items: center; /* 세로 중앙 정렬 */
+    flex-wrap: wrap; /* 줄바꿈 허용 */
 }
 .filter-form label, .filter-form select {
     margin-right: 10px;
@@ -269,8 +268,8 @@ button:hover {
     flex: 1; /* 남은 공간 차지 */
     min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
-    /* border-right: 1px solid #eee; */ /* 메인 컨테이너에 gap이 있으므로 제거 또는 조정 */
-    /* padding-right: 20px; */ /* 메인 컨테이너에 gap이 있으므로 제거 또는 조정 */
+    border-right: 1px solid #eee; /* 오른쪽 테두리 */
+    padding-right: 20px; /* 오른쪽 패딩 */
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
@@ -314,12 +313,12 @@ button:hover {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
-    max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
+    min-width: 45%; /* 조정: 2열 레이아웃을 위한 최소 너비 */
+    max-width: 48%; /* 조정: 2열 레이아웃을 위한 최대 너비 */
 }
 
 #selectedClassInfo {
-    background-color: #e0f7fa;
+    background-color: #e0f7fa; /* 연한 파란색 배경 */
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #b2ebf2;
@@ -341,16 +340,16 @@ button:hover {
     font-weight: bold;
     text-align: right;
     color: #333;
-    padding-right: 10px;
+    padding-right: 10px; /* confirmed_timetable.php에서 추가 */
 }
 
 #confirmTimetableBtn {
-    display: block;
-    width: 80%;
-    max-width: 300px;
-    margin: 20px auto;
-    padding: 15px 25px;
-    background-color: #007bff;
+    display: block; /* 블록 요소 */
+    width: 80%; /* 너비 조정 */
+    max-width: 300px; /* 최대 너비 */
+    margin: 20px auto; /* 중앙 정렬 */
+    padding: 15px 25px; /* 패딩 조정 */
+    background-color: #007bff; /* 파란색 */
     color: white;
     border: none;
     border-radius: 8px;
@@ -360,7 +359,7 @@ button:hover {
 }
 
 #confirmTimetableBtn:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* 호버 시 진한 파란색 */
 }
 
 /* Timetable Table Specifics */
@@ -368,23 +367,18 @@ button:hover {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    table-layout: fixed; /* --- 핵심 수정: 셀 너비를 고정하여 레이아웃이 깨지지 않도록 함 --- */
+    table-layout: fixed; /* Ensures columns are equally sized */
 }
 
 .timetable-table th, .timetable-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    vertical-align: middle;
+    vertical-align: middle; /* 가운데 정렬 */
     font-size: 0.9em;
-    min-width: 60px; /* --- 조정: 셀 최소 너비 (요일 표시가 깨지지 않도록) --- */
-    position: relative;
+    min-width: 80px; /* 셀 최소 너비 */
+    position: relative; /* remove button positioning */
 }
-/* 요일 헤더 너비 강제 조정 (필요시) */
-.timetable-table th:first-child {
-    min-width: 80px; /* '時間' 헤더 너비 */
-}
-
 
 .timetable-table th {
     background-color: #f2f2f2;
@@ -393,45 +387,45 @@ button:hover {
 }
 
 .time-slot {
-    height: 80px;
+    height: 80px; /* Fixed height for time slots */
     background-color: #fdfdfd;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    display: flex; /* flexbox */
+    flex-direction: column; /* 세로 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    position: relative; /* for remove button */
 }
 
 .time-slot.filled-primary {
-    background-color: #e0f7fa;
+    background-color: #e0f7fa; /* 연한 파란색 배경 */
     color: #333;
     font-weight: bold;
 }
 
-.time-slot.filled-secondary {
+.time-slot.filled-secondary { /* 현재는 사용되지 않으나, 추후 활용 가능 */
     background-color: #d6f2ff;
     color: #333;
     font-style: italic;
 }
 
 .remove-button {
-    background-color: #dc3545;
+    background-color: #dc3545; /* 빨간색 */
     color: white;
     border: none;
-    border-radius: 50%;
+    border-radius: 50%; /* 원형 */
     width: 20px;
     height: 20px;
-    line-height: 1;
+    line-height: 1; /* 한 줄 높이 */
     font-size: 0.7em;
     cursor: pointer;
     position: absolute;
-    top: 5px;
-    right: 5px;
-    display: flex;
+    top: 5px; /* 상단에서 5px */
+    right: 5px; /* 오른쪽에서 5px */
+    display: flex; /* flexbox */
     justify-content: center;
     align-items: center;
     padding: 0;
-    z-index: 10;
+    z-index: 10; /* 다른 요소 위에 오도록 */
 }
 
 .remove-button:hover {
@@ -440,7 +434,7 @@ button:hover {
 
 .term-display-in-cell {
     font-size: 0.7em;
-    color: #007bff;
+    color: #007bff; /* 파란색 */
     margin-top: 3px;
 }
 
@@ -449,30 +443,28 @@ button:hover {
     .main-container {
         flex-direction: column;
     }
+    .class-list-section {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding-right: 0;
+        padding-bottom: 20px;
+    }
     .class-list-section, .timetable-section {
         min-width: 90%;
         max-width: 95%;
-        margin-left: auto; /* 중앙 정렬 */
-        margin-right: auto; /* 중앙 정렬 */
-        margin-bottom: 20px; /* 세로 간격 추가 */
-    }
-    .class-list-section {
-        border-right: none; /* 모바일에서는 오른쪽 테두리 제거 */
-        border-bottom: 1px solid #eee; /* 하단 테두리 추가 */
-        padding-bottom: 20px;
     }
 }
 
 /* Disabled button style */
 .disabled-button {
-    background-color: #cccccc !important;
-    cursor: not-allowed !important;
+    background-color: #cccccc !important; /* 회색 배경 */
+    cursor: not-allowed !important; /* 금지 커서 */
 }
 
 /* Credits Status Page Specific Styles (credits_status.php) */
 .credit-status-container {
     width: 100%;
-    max-width: 700px;
+    max-width: 700px; /* credits_status.php에서 조정된 너비 */
     margin: 40px auto;
     background: #fff;
     padding: 30px;
@@ -482,7 +474,7 @@ button:hover {
 .credit-summary p {
     font-size: 1.1em;
     margin-bottom: 10px;
-    padding-left: 10px;
+    padding-left: 10px; /* credits_status.php에서 추가 */
 }
 .credit-summary strong {
     color: #007bff;
@@ -498,24 +490,24 @@ button:hover {
 }
 .credit-details ul li, .promotion-details ul li {
     background: #f9f9f9;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    border-left: 5px solid #28a745;
-    border-radius: 8px;
+    padding: 15px 20px; /* 패딩 증가 */
+    margin-bottom: 10px; /* 마진 증가 */
+    border-left: 5px solid #28a745; /* 기본 녹색 */
+    border-radius: 8px; /* 둥근 모서리 */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* 세로 정렬 */
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: flex-start; /* 왼쪽 정렬 */
     transition: all 0.3s ease;
 }
 .promotion-details ul li {
-    border-left: 5px solid #007bff;
+    border-left: 5px solid #007bff; /* 진급은 파란색 */
 }
 .credit-details ul li.met-requirement, .promotion-details ul li.met-requirement {
-    border-left-color: #28a745;
+    border-left-color: #28a745; /* 조건 충족 시 녹색 */
 }
 .credit-details ul li.not-met-requirement, .promotion-details ul li.not-met-requirement {
-    border-left-color: #dc3545;
+    border-left-color: #dc3545; /* 조건 미충족 시 빨간색 */
 }
 .credit-details ul li span, .promotion-details ul li span {
     font-weight: bold;
@@ -524,21 +516,22 @@ button:hover {
     font-size: 1.1em;
 }
 .credit-details ul li .remaining-credits, .promotion-details ul li .status-text {
-    color: #dc3545;
+    color: #dc3545; /* 남은 학점은 빨간색 */
     font-size: 1.2em;
-    align-self: flex-end;
+    align-self: flex-end; /* 오른쪽 아래 정렬 */
     margin-top: 10px;
 }
 .promotion-details ul li .status-text.ok {
-    color: #28a745;
+    color: #28a745; /* OK는 녹색 */
 }
-.status-text.ng {
+.status-text.ng { /* NG 상태 텍스트 */
     color: #dc3545;
 }
+/* 각 조건 상세 설명 */
 .credit-details ul li div,
 .promotion-details ul li div {
     font-size: 0.95em;
     color: #666;
     margin-top: 5px;
-    width: 100%;
+    width: 100%; /* 전체 너비를 차지하도록 */
 }
