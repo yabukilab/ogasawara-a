@@ -1,10 +1,10 @@
 <?php
-session_start();
+session_start(); // セッションを開始
 
-// 모든 세션 변수 제거
+// 全てのセッション変数を解除
 $_SESSION = array();
 
-// 세션 쿠키 삭제 (있는 경우)
+// セッションクッキーを削除
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000,
@@ -13,10 +13,27 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-// 세션 파괴
+// セッションを破壊
 session_destroy();
 
-// 로그인 페이지 또는 인덱스 페이지로 리다이렉트
-header('Location: index.php');
-exit;
+// ログアウト後のメッセージを表示するHTML
 ?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ログアウト (Logout)</title>
+    <link rel="stylesheet" href="style2.css"> </head>
+<body>
+    <div class="auth-container">
+        <h1>ログアウトしました</h1>
+        <p class="message success">セッションを終了しました。またのご利用をお待ちしております。</p>
+        <div class="auth-links">
+            <p><a href="login.php">ログインページに戻る</a></p>
+            <p><a href="register_user.php">新規ユーザー登録</a></p>
+            <p><a href="index.php">時間割作成トップへ (ゲストとして閲覧)</a></p>
+        </div>
+    </div>
+</body>
+</html>
