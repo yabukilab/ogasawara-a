@@ -273,7 +273,6 @@ button:hover {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    order: 1;
 }
 
 /* Timetable Section (index.php) */
@@ -285,7 +284,6 @@ button:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     min-width: 48%; /* 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
-    order: 2;
 }
 
 #selectedClassInfo {
