@@ -267,23 +267,25 @@ button:hover {
 /* Class List Section (index.php) */
 .class-list-section {
     flex: 1; /* 남은 공간 차지 */
-    min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
+    min-width: 48%; /* 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    order: 1;
 }
 
 /* Timetable Section (index.php) */
 .timetable-section {
-    flex: 2; /* 더 많은 공간 차지 */
+    flex: 1; /* 더 많은 공간 차지 */
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    min-width: 45%; /* 2열 레이아웃을 위한 최소 너비 */
+    min-width: 48%; /* 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 2열 레이아웃을 위한 최대 너비 */
+    order: 2;
 }
 
 #selectedClassInfo {
