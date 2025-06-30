@@ -1,48 +1,44 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 설정 파일 포함
+// db_config.php 파일이 데이터베이스 연결을 설정하고 $db 변수를 제공한다고 가정합니다.
+require_once 'db_config.php';
 
-// 로그인 상태 확인
+// 로그인 상태 확인 및 사용자 정보 가져오기
 $isUserLoggedIn = isset($_SESSION['user_id']);
 $loggedInUserId = $isUserLoggedIn ? $_SESSION['user_id'] : null;
-$loggedInStudentNumber = $isUserLoggedIn ? $_SESSION['student_number'] : 'ゲスト';
-$loggedInDepartment = $isUserLoggedIn ? $_SESSION['department'] : '情報なし';
+$loggedInStudentNumber = $isUserLoggedIn ? $_SESSION['student_number'] : 'ゲスト'; // 학번 또는 이름 등
+$loggedInDepartment = $isUserLoggedIn ? $_SESSION['department'] : '情報なし'; // 학과 정보
 
 // 학년 및 학기 필터 초기값 설정
-// GET 요청으로 grade_filter가 넘어오면 그 값을 사용하고, 없으면 기본값 1학년으로 설정
 $currentSelectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 1;
-// GET 요청으로 term_filter가 넘어오면 그 값을 사용하고, 없으면 기본값 '0' (모두)으로 설정
-$currentSelectedTerm = isset($_GET['term_filter']) ? (string)$_GET['term_filter'] : '0'; // 0은 '全て'를 의미
+$currentSelectedTerm = isset($_GET['term_filter']) ? (string)$_GET['term_filter'] : '0'; // '0'은 '全て'를 의미
 
 $message = '';
 $class_list = [];
-$initialTimetableData = []; // JavaScript로 넘겨줄 초기 시간표 데이터
+$initialTimetableData = []; // JavaScript로 전달할 초기 시간표 데이터
 
 try {
     // 수업 목록 가져오기 (필터 적용)
-    $sql = "SELECT id, name, credit, term, grade FROM class WHERE 1=1";
-    $params = [];
+    $sql_classes = "SELECT id, name, credit, term, grade, category1, category2, category3 FROM class WHERE 1=1";
+    $params_classes = [];
 
-    // 학년 필터 적용
     if ($currentSelectedGrade > 0) {
-        $sql .= " AND grade = :grade";
-        $params[':grade'] = $currentSelectedGrade;
+        $sql_classes .= " AND grade = :grade";
+        $params_classes[':grade'] = $currentSelectedGrade;
     }
 
-    // 학기 필터 적용 ('0'은 모든 학기, 1은 전기, 2는 후기)
     if ($currentSelectedTerm !== '0') {
-        $sql .= " AND term = :term";
-        $params[':term'] = $currentSelectedTerm;
+        $sql_classes .= " AND term = :term";
+        $params_classes[':term'] = $currentSelectedTerm;
     }
 
-    $stmt = $db->prepare($sql);
-    $stmt->execute($params);
-    $class_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_classes = $db->prepare($sql_classes);
+    $stmt_classes->execute($params_classes);
+    $class_list = $stmt_classes->fetchAll(PDO::FETCH_ASSOC);
 
-    // 로그인된 사용자이고, 해당 학년에 저장된 시간표 데이터가 있다면 가져오기
+    // 로그인된 사용자이고, 현재 학년에 해당하는 저장된 시간표 데이터가 있다면 가져오기
     if ($isUserLoggedIn) {
-        // user_timetables와 class 테이블을 조인하여 수업명, 학점 등 상세 정보도 함께 가져옴
-        $stmt = $db->prepare("
+        $sql_timetable = "
             SELECT
                 ut.day,
                 ut.period,
@@ -51,6 +47,8 @@ try {
                 c.credit AS classCredit,
                 c.term AS classTerm,
                 c.grade AS classGrade
+                -- 추가적으로 시간표 칸에 표시할 다른 정보가 있다면 여기 추가
+                -- 예: c.category1 AS classCategory1, c.category2 AS classCategory2
             FROM
                 user_timetables ut
             JOIN
@@ -58,17 +56,16 @@ try {
             WHERE
                 ut.user_id = :user_id AND ut.grade = :grade_filter
             ORDER BY ut.day, ut.period
-        ");
-        $stmt->execute([':user_id' => $loggedInUserId, ':grade_filter' => $currentSelectedGrade]);
-        $initialTimetableData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        ";
+        $stmt_timetable = $db->prepare($sql_timetable);
+        $stmt_timetable->execute([':user_id' => $loggedInUserId, ':grade_filter' => $currentSelectedGrade]);
+        $initialTimetableData = $stmt_timetable->fetchAll(PDO::FETCH_ASSOC);
     }
 
 } catch (PDOException $e) {
     $message = '<p class="message error">データベースエラー: ' . htmlspecialchars($e->getMessage()) . '</p>';
-    error_log("DB Error on index.php: " . $e->getMessage());
+    error_log("DB Error on index.php: " . $e->getMessage()); // 에러 로깅
 }
-
-// PHP 변수를 JavaScript로 전달
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -77,6 +74,7 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>時間割作成 (Timetable Creator)</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="user-info">
@@ -205,7 +203,16 @@ try {
                         </tr>
                     </thead>
                     <tbody>
-                        </tbody>
+                        <?php for ($period = 1; $period <= 10; $period++): ?>
+                            <tr>
+                                <td><?php echo $period; ?></td>
+                                <?php foreach (['月', '火', '水', '木', '金', '土'] as $day): ?>
+                                    <td id="cell-<?php echo $day; ?>-<?php echo $period; ?>" class="time-slot">
+                                        </td>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endfor; ?>
+                    </tbody>
                 </table>
 
                 <?php if ($isUserLoggedIn): ?>
@@ -220,17 +227,19 @@ try {
     </div>
 
     <script>
-        // PHPからJavaScript로 변수 전달
+        // PHP에서 JavaScript로 변수 전달
         const currentSelectedGradeFromPHP = <?php echo json_encode($currentSelectedGrade); ?>;
         const currentSelectedTermFromPHP = <?php echo json_encode($currentSelectedTerm); ?>;
         const isUserLoggedIn = <?php echo json_encode($isUserLoggedIn); ?>;
         const currentLoggedInUserId = <?php echo json_encode($loggedInUserId); ?>;
-        const initialTimetableData = <?php echo json_encode($initialTimetableData); ?>;
+        const initialTimetableData = <?php echo json_encode($initialTimetableData); ?>; // 초기 시간표 데이터
 
-        // 초기화 함수 호출
+        // 초기화 함수 호출은 script.js에 정의되어 있을 것입니다.
+        // DOMContentLoaded를 사용하여 스크립트가 로드된 후 실행되도록 합니다.
         document.addEventListener('DOMContentLoaded', function() {
-            initializeTimetableFromPHP(initialTimetableData);
-            updateFilterDisplay(); // 현재 필터 상태 표시
+            // script.js에 정의된 함수들을 호출
+            initializeTimetableFromPHP(initialTimetableData); // 저장된 시간표를 로드
+            updateFilterDisplay(); // 현재 필터 상태를 표시
         });
     </script>
     <script src="script.js"></script>
