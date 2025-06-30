@@ -48,7 +48,7 @@ if ($is_logged_in) {
     try {
         // SQL 쿼리에서 student_number 대신 user_id 사용
         $stmt = $db->prepare("SELECT ut.day, ut.period, ut.class_id,
-                                      c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
+                                    c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
                                FROM user_timetables ut
                                JOIN class c ON ut.class_id = c.id
                                WHERE ut.user_id = :user_id AND ut.grade = :grade"); // user_id로 변경
@@ -104,27 +104,27 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 요일 정의
         <div class="class-list-section">
             <h2>利用可能な授業一覧</h2>
 
-            <form action="index.php" method="get" id="grade_filter_form" style="display:inline-block;">
-                <label for="grade_filter">学年フィルタ:</label>
-                <select name="grade_filter" id="grade_filter">
-                    <?php
-                    for ($g = 1; $g <= 4; $g++) {
-                        echo "<option value='{$g}'" . ($selectedGrade === $g ? ' selected' : '') . ">{$g}年生</option>";
-                    }
-                    ?>
-                </select>
-            </form>
+            <div class="filter-form">
+                <form action="index.php" method="get" id="grade_filter_form">
+                    <label for="grade_filter">学年フィルタ:</label>
+                    <select name="grade_filter" id="grade_filter">
+                        <?php
+                        for ($g = 1; $g <= 4; $g++) {
+                            echo "<option value='{$g}'" . ($selectedGrade === $g ? ' selected' : '') . ">{$g}年生</option>";
+                        }
+                        ?>
+                    </select>
+                </form>
 
-            <form action="index.php" method="get" id="term_filter_form" style="display:inline-block;">
-                <label for="term_filter">学期フィルタ:</label>
-                <select name="term_filter" id="term_filter">
-                    <option value="0" <?php echo ($selectedTermFilter === '0') ? 'selected' : ''; ?>>全て</option>
-                    <option value="1" <?php echo ($selectedTermFilter === '1') ? 'selected' : ''; ?>>前期</option>
-                    <option value="2" <?php echo ($selectedTermFilter === '2') ? 'selected' : ''; ?>>後期</option>
-                </select>
-            </form>
-
-            <?php if (isset($classFetchError)): ?>
+                <form action="index.php" method="get" id="term_filter_form">
+                    <label for="term_filter">学期フィルタ:</label>
+                    <select name="term_filter" id="term_filter">
+                        <option value="0" <?php echo ($selectedTermFilter === '0') ? 'selected' : ''; ?>>全て</option>
+                        <option value="1" <?php echo ($selectedTermFilter === '1') ? 'selected' : ''; ?>>前期</option>
+                        <option value="2" <?php echo ($selectedTermFilter === '2') ? 'selected' : ''; ?>>後期</option>
+                    </select>
+                </form>
+            </div> <?php if (isset($classFetchError)): ?>
                 <p class="message error"><?php echo $classFetchError; ?></p>
             <?php elseif (empty($classes)): ?>
                 <p>利用可能な授業がありません。</p>
@@ -161,8 +161,7 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 요일 정의
                 <p>選択した授業を時間割に配置してください。</p>
             </div>
 
-            <div style="margin-top: 20px;">
-                <label for="day_select">曜日:</label>
+            <div class="filter-form"> <label for="day_select">曜日:</label>
                 <select id="day_select" <?= !$is_logged_in ? 'disabled' : '' ?>>
                     <?php foreach ($days_of_week as $day_name): ?>
                         <option value="<?= htmlspecialchars($day_name) ?>"><?= htmlspecialchars($day_name) ?></option>
@@ -255,13 +254,18 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 요일 정의
             updateFilterDisplay(); // 초기 로드 시 필터 표시 업데이트
             updateDisplayTotalCredits(); // 초기 로드 후 총 학점 다시 계산 및 표시
 
-            // 필터 드롭다운 변경 시 자동으로 폼 제출
+            // 필터 드롭다운 변경 시 자동으로 フォーム 제출
+            // grade_filter와 term_filter를 함께 전송하도록 수정
             document.getElementById('grade_filter').addEventListener('change', function() {
-                window.location.href = `index.php?grade_filter=${this.value}&term_filter=${document.getElementById('term_filter').value}`;
+                const selectedGrade = this.value;
+                const selectedTerm = document.getElementById('term_filter').value;
+                window.location.href = `index.php?grade_filter=${selectedGrade}&term_filter=${selectedTerm}`;
             });
 
             document.getElementById('term_filter').addEventListener('change', function() {
-                window.location.href = `index.php?grade_filter=${document.getElementById('grade_filter').value}&term_filter=${this.value}`;
+                const selectedGrade = document.getElementById('grade_filter').value;
+                const selectedTerm = this.value;
+                window.location.href = `index.php?grade_filter=${selectedGrade}&term_filter=${selectedTerm}`;
             });
 
             // 로그인 상태에 따라 버튼 활성화/비활성화 (JavaScript에서도 처리)
