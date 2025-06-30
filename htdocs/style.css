@@ -17,13 +17,17 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* ⚠️ 핵심 변경: main-container와 하위 Flexbox 요소들을 명확하게 정의 */
 .main-container {
-    display: flex;
-    gap: 20px;
-    justify-content: space-between; /* space-around 대신 space-between으로 변경 */
+    display: flex; /* Flexbox 활성화 */
+    flex-direction: row; /* 자식 요소들을 가로로 정렬 (기본값이지만 명시) */
+    gap: 20px; /* 자식 요소들 사이의 간격 */
+    justify-content: space-between; /* 요소들을 양 끝에 정렬하고, 남는 공간을 사이에 배분 */
     padding: 20px;
-    flex-wrap: wrap;
-    align-items: flex-start; /* 상단 정렬 추가 */
+    flex-wrap: wrap; /* 필요한 경우 요소들이 다음 줄로 넘어가도록 허용 */
+    align-items: flex-start; /* 자식 요소들을 상단에 정렬 */
+    width: 100%; /* 부모 컨테이너 (.container)의 너비를 꽉 채우도록 설정 */
+    box-sizing: border-box; /* 패딩과 테두리가 너비 계산에 포함되도록 */
 }
 
 /* User Info and Authentication Links */
@@ -53,20 +57,13 @@ body {
 }
 
 .auth-container {
-    max-width: 500px;
-    margin: 100px auto;
-    padding: 30px;
-    background-color: #fff;
+    max-width: 400px; /* index.php의 auth-container 스타일 병합에서 가져옴 */
+    margin: 50px auto; /* index.php의 auth-container 스타일 병합에서 가져옴 */
+    background: #f9f9f9; /* index.php의 auth-container 스타일 병합에서 가져옴 */
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    text-align: center;
-
-    /* index.php의 auth-container 스타일 병합 */
-    max-width: 400px;
-    margin: 50px auto;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* index.php의 auth-container 스타일 병합에서 가져옴 */
+    text-align: center; /* 추가: 중앙 정렬 */
+    padding: 30px; /* 원래 auth-container padding 유지 */
 }
 
 .auth-container h1 {
@@ -85,8 +82,7 @@ body {
     background-color: #007bff;
     color: white;
     border-radius: 5px;
-    margin: 0 10px;
-    margin: 5px;
+    margin: 5px; /* 모든 마진을 5px로 통일 */
     transition: background-color 0.3s ease;
 }
 
@@ -200,7 +196,7 @@ button:hover {
 .filter-form {
     margin-bottom: 20px;
     text-align: center;
-    display: flex;
+    display: flex; /* 필터 폼도 Flexbox 사용 */
     justify-content: center;
     gap: 10px;
     align-items: center;
@@ -218,7 +214,7 @@ button:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     flex: 1 1 45%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 45% */
     min-width: 400px;
-    /* max-width 제거: 이전에 존재했다면 제거합니다. */
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
     /* border-right와 padding-right는 flexbox 사용 시 필요 없을 가능성이 높으므로 제거 */
     /* border-right: none; */
     /* padding-right: 0; */
@@ -262,20 +258,17 @@ button:hover {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     flex: 2 1 50%; /* flex-grow: 2, flex-shrink: 1, flex-basis: 50% */
     min-width: 550px; /* 시간표 테이블이 넓으므로 더 큰 최소 너비 필요 */
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
     /* max-width 제거: 이전에 존재했다면 제거합니다. */
 }
 
 #selectedClassInfo {
-    background-color: #e9f7ef;
-    border: 1px solid #d4edda;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    background-color: #e0f7fa;
+    background-color: #e0f7fa; /* 통일된 파란 계열 배경 */
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid #b2ebf2;
+    border: 1px solid #b2ebf2; /* 파란 계열 테두리 */
     text-align: center;
+    margin-bottom: 20px; /* 아래 요소와의 간격 */
 }
 #selectedClassInfo p {
     margin: 5px 0;
@@ -295,25 +288,22 @@ button:hover {
 }
 
 #confirmTimetableBtn {
-    margin-top: 20px;
-    width: 100%;
-    padding: 15px;
-    font-size: 1.1em;
-    background-color: #28a745;
-    display: block;
-    width: 80%;
-    max-width: 300px;
-    margin: 20px auto;
+    display: block; /* 블록 요소로 변경 */
+    width: 80%; /* 너비 조정 */
+    max-width: 300px; /* 최대 너비 설정 */
+    margin: 20px auto; /* 중앙 정렬 */
     padding: 15px 25px;
-    background-color: #007bff;
+    background-color: #007bff; /* 파란색으로 변경 */
     color: white;
     border-radius: 8px;
     font-size: 1.1em;
+    border: none; /* 테두리 제거 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #confirmTimetableBtn:hover {
-    background-color: #218838;
-    background-color: #0056b3;
+    background-color: #0056b3; /* 호버 시 진한 파란색 */
 }
 
 /* Timetable Table Specifics */
@@ -351,40 +341,29 @@ button:hover {
 }
 
 .time-slot.filled-primary {
-    background-color: #e6f7ff;
+    background-color: #e0f7fa; /* 연한 파란색으로 통일 */
     color: #333;
     font-weight: bold;
     position: relative;
-    background-color: #e0f7fa;
-}
-
-.time-slot.filled-secondary {
-    background-color: #d6f2ff;
-    color: #333;
-    font-style: italic;
 }
 
 .remove-button {
     background-color: #dc3545;
     color: white;
     border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    border-radius: 50%; /* 원형 버튼 */
+    width: 20px; /* 크기 조정 */
+    height: 20px; /* 크기 조정 */
     line-height: 1;
     font-size: 0.7em;
     cursor: pointer;
     position: absolute;
-    top: 2px;
-    right: 2px;
-    display: flex;
+    top: 5px; /* 상단 여백 */
+    right: 5px; /* 우측 여백 */
+    padding: 0; /* 패딩 제거 */
+    display: flex; /* 내부 텍스트 중앙 정렬 */
     justify-content: center;
     align-items: center;
-    padding: 0;
-    top: 5px;
-    right: 5px;
-    padding: 2px 6px;
-    font-size: 0.7em;
     z-index: 10;
 }
 
@@ -394,25 +373,39 @@ button:hover {
 
 .term-display-in-cell {
     font-size: 0.7em;
-    color: #666;
+    color: #007bff; /* 파란색으로 변경 */
     margin-top: 5px;
-    color: #007bff;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .main-container {
-        flex-direction: column;
+        flex-direction: column; /* 모바일에서는 세로 정렬 */
         align-items: center;
+        padding: 10px; /* 모바일에서 패딩 줄이기 */
+        gap: 15px; /* 모바일에서 간격 조정 */
     }
     .class-list-section, .timetable-section {
-        border-right: none;
-        border-bottom: 1px solid #eee;
+        border-right: none; /* 우측 테두리 제거 */
+        border-bottom: 1px solid #eee; /* 하단 테두리 추가 */
         padding-right: 0;
         padding-bottom: 20px;
-        min-width: 90%;
-        max-width: 95%;
+        min-width: 95%; /* 모바일에서 더 넓게 */
+        max-width: 100%; /* 최대 너비 */
         flex: 1 1 auto;
+    }
+    .container {
+        padding: 10px; /* 모바일에서 전체 컨테이너 패딩 줄이기 */
+    }
+    .filter-form {
+        flex-direction: column; /* 필터 폼도 세로 정렬 */
+        align-items: center;
+    }
+    .filter-form label, .filter-form select {
+        width: 100%; /* 모바일에서 100% 너비 */
+        margin-right: 0;
+        margin-bottom: 10px;
+        text-align: center;
     }
 }
 
