@@ -170,7 +170,7 @@ try {
                 </table>
             </div>
 
-            <div class="timetable-section">
+                 <div class="timetable-section">
                 <h2>あなたの時間割</h2>
                 <p id="totalCredits">合計単位数: 0</p>
                 <div class="timetable-controls">

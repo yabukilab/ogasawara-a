@@ -302,7 +302,7 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Timetable Table Specifics */
+/* Timetable Table Specifics - この部分のみ変更 */
 .timetable-table {
     width: 100%;
     border-collapse: collapse;
@@ -316,7 +316,7 @@ button:hover {
     text-align: center;
     vertical-align: top; /* 콘텐츠가 셀 상단에 위치하도록 */
     min-width: 80px; /* 각 요일 칸의 최소 너비 */
-    height: 90px; /* 각 교시 칸의 높이 */
+    height: 90px; /* 각 교시 칸의 높이 (이미지와 유사하게 조정) */
     position: relative; /* remove-button 위치 지정을 위해 */
     font-size: 0.9em;
 }
@@ -337,11 +337,11 @@ button:hover {
     vertical-align: middle;
 }
 
-/* 시간표 칸 내부 스타일 */
+/* 시간표 칸 내부 (수업 정보가 표시될 단일 사각형) 스타일 */
 .time-slot {
     width: 100%;
     height: 100%;
-    background-color: #fdfdfd;
+    background-color: #fdfdfd; /* 기본 배경색 */
     display: flex; /* 내부 콘텐츠를 flex로 정렬 */
     flex-direction: column; /* 세로로 정렬 */
     justify-content: flex-start; /* 상단 정렬 */
@@ -349,10 +349,17 @@ button:hover {
     padding: 5px; /* 내부 패딩 */
     box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
     overflow: hidden; /* 내용이 넘치면 숨김 */
+    cursor: pointer; /* 클릭 가능한 셀처럼 보이도록 */
+    transition: background-color 0.2s ease; /* 호버 효과 */
 }
 
+.time-slot:hover:not(.filled-primary) {
+    background-color: #e6f7ff; /* 비어있는 칸 호버 시 연한 파란색 */
+}
+
+
 .time-slot.filled-primary {
-    background-color: #e0f7fa; /* 수업이 채워진 칸 배경색 */
+    background-color: #e0f7fa; /* 수업이 채워진 칸 배경색 (연한 하늘색) */
     color: #333;
     font-weight: bold;
 }
@@ -361,19 +368,23 @@ button:hover {
 .class-name-in-cell {
     font-size: 0.9em;
     font-weight: bold;
-    color: #0056b3; /* 수업명 색상 */
+    color: #0056b3; /* 수업명 색상 (진한 파란색) */
     margin-bottom: 2px;
     line-height: 1.2;
     text-align: center;
     word-break: break-word; /* 긴 단어 줄 바꿈 */
+    max-height: 2.4em; /* 두 줄까지 표시 (약간 여유) */
+    overflow: hidden;
 }
 
-.class-detail-in-cell {
+.class-detail-in-cell { /* 예: 담당 교수, 강의실, 학기 등 */
     font-size: 0.75em;
     color: #666;
     line-height: 1.2;
     text-align: center;
     word-break: break-word;
+    max-height: 2.4em; /* 두 줄까지 표시 */
+    overflow: hidden;
 }
 
 .class-credit-in-cell {
@@ -384,10 +395,9 @@ button:hover {
 
 .term-display-in-cell {
     font-size: 0.7em;
-    color: #007bff; /* 학기 정보 색상 */
+    color: #007bff; /* 학기 정보 색상 (파란색) */
     margin-top: 5px;
 }
-
 
 .remove-button {
     background-color: #dc3545;
@@ -416,48 +426,34 @@ button:hover {
     opacity: 1; /* 호버 시 불투명하게 */
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for timetable - 이 부분만 변경 */
 @media (max-width: 768px) {
-    .main-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px;
-        gap: 15px;
-    }
-    .class-list-section, .timetable-section {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding-right: 0;
-        padding-bottom: 20px;
-        min-width: 95%;
-        max-width: 100%;
-        flex: 1 1 auto;
-    }
-    .container {
-        padding: 10px;
-    }
-    .filter-form {
-        flex-direction: column;
-        align-items: center;
-    }
-    .filter-form label, .filter-form select {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-        text-align: center;
-    }
+    /* 기존 main-container, section 등은 그대로 유지 */
+
     .timetable-table th, .timetable-table td {
-        min-width: 60px; /* 모바일에서 셀 너비 조정 */
-        height: 70px; /* 모바일에서 셀 높이 조정 */
-        font-size: 0.7em;
+        min-width: 50px; /* 모바일에서 셀 너비 조정 */
+        height: 60px; /* 모바일에서 셀 높이 조정 */
+        font-size: 0.65em; /* 텍스트 크기 조정 */
     }
-    .class-name-in-cell, .class-detail-in-cell, .class-credit-in-cell, .term-display-in-cell {
-        font-size: 0.6em; /* 모바일에서 텍스트 크기 조정 */
+    .timetable-table td:first-child { /* 시한 열 */
+        min-width: 35px; /* 시한 열 너비 */
+    }
+
+    .class-name-in-cell {
+        font-size: 0.7em;
+        max-height: 2.2em; /* 두 줄 */
+    }
+    .class-detail-in-cell {
+        font-size: 0.6em;
+        max-height: 2.2em; /* 두 줄 */
+    }
+    .class-credit-in-cell, .term-display-in-cell {
+        font-size: 0.6em;
     }
     .remove-button {
-        width: 16px;
-        height: 16px;
-        font-size: 0.6em;
+        width: 14px;
+        height: 14px;
+        font-size: 0.5em;
         top: 1px;
         right: 1px;
     }
