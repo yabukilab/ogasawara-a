@@ -1,54 +1,27 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 設定及び getTermName 関数を含む
+require_once 'db_config.php'; // DB 설정 및 getTermName 함수 포함
 
-// ログイン確認 - user_idでログイン状況を確認
+// 로그인 확인 - user_id로 로그인 여부 확인
+// user_id가 세션에 있으면 로그인된 것으로 간주
 $is_logged_in = isset($_SESSION['user_id']);
-$current_user_id = $is_logged_in ? $_SESSION['user_id'] : null;
-$current_student_number = 'ゲスト'; // デフォルトはゲスト
-$current_user_department = '未設定'; // デフォルトは未設定
+$current_student_number = 'ゲスト'; // 기본값은 게스트
+$current_user_id = null; // 기본값은 null
+$current_user_department = '未設定'; // 기본값은 미설정
 
 if ($is_logged_in) {
-    $current_student_number = $_SESSION['student_number']; // student_number もセッションから取得
-    $current_user_department = $_SESSION['department']; // department もセッションから取得
+    $current_user_id = $_SESSION['user_id'];
+    $current_student_number = $_SESSION['student_number']; // student_number도 세션에서 가져옵니다.
+    $current_user_department = $_SESSION['department']; // department도 세션에서 가져옵니다.
+    // department는 login.php에서 이미 세션에 저장하도록 했으므로 여기서 다시 DB 조회할 필요 없음
 }
 
-// ゲストとして閲覧を許可する場合の処理
-// user_idがない場合でも、GETパラメータに 'guest=true' があれば閲覧モードに入る
-$is_guest_mode = !$is_logged_in && isset($_GET['guest']) && $_GET['guest'] == 'true';
+// --- 로그인된 사용자 또는 게스트를 위한 시간표 등록 기능 시작 ---
 
-// ユーザーがログインしておらず、かつゲストモードでもない場合、ログイン/登録を促すメッセージを表示
-if (!$is_logged_in && !$is_guest_mode) {
-    echo '<!DOCTYPE html>
-    <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>授業登録 (Class Registration)</title>
-        <link rel="stylesheet" href="style2.css"> </head>
-    <body>
-        <div class="auth-container">
-            <h1>時間割登録システム</h1>
-            <p>時間割を編集・保存するには、ログインまたは新規ユーザー登録が必要です。</p>
-            <div class="auth-links">
-                <a href="login.php">ログイン</a>
-                <a href="register_user.php">新規ユーザー登録</a>
-            </div>
-            <p style="margin-top: 20px; font-size: 0.9em; color: #666;">
-                <a href="index.php?guest=true" style="color: #007bff; text-decoration: none;">ゲストとして時間割を見る (閲覧のみ)</a>
-            </p>
-        </div>
-    </body>
-    </html>';
-    exit; // ログインしておらず、ゲストモードでもない場合、ここでスクリプト実行を中断
-}
+$selectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 2; // 기본 2학년
+$selectedTermFilter = isset($_GET['term_filter']) ? $_GET['term_filter'] : '0'; // 기본 전체 학기
 
-// ここからログイン済みユーザー、またはゲストモードの場合の処理
-
-$selectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 2; // 基本2年生
-$selectedTermFilter = isset($_GET['term_filter']) ? $_GET['term_filter'] : '0'; // 基本全体学期
-
-// 利用可能な授業リストの取得
+// 이용 가능한 수업 목록 가져오기
 $classes = [];
 try {
     $sql = "SELECT id, grade, term, name, category1, category2, category3, credit FROM class WHERE grade = :grade_filter";
@@ -58,7 +31,7 @@ try {
         $sql .= " AND term = :term_filter";
         $params[':term_filter'] = (int)$selectedTermFilter;
     }
-    $sql .= " ORDER BY name ASC"; // 授業名でソート
+    $sql .= " ORDER BY name ASC"; // 수업명으로 정렬
 
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
@@ -68,35 +41,37 @@ try {
     $classFetchError = "授業リストの読み込みに失敗しました: " . htmlspecialchars($e->getMessage());
 }
 
-// ユーザーごとの確定済み時間割データをロード (DBからロード)
+// 사용자별 확정 시간표 데이터 로드 (JSON 파일 대신 DB에서 로드)
 $currentTimetableData = [];
-// ログイン済みユーザーの場合のみ、個人時間割をロード
+// 로그인된 사용자만 시간표 데이터를 로드하도록 변경
 if ($is_logged_in) {
     try {
+        // SQL 쿼리에서 student_number 대신 user_id 사용
         $stmt = $db->prepare("SELECT ut.day, ut.period, ut.class_id,
                                       c.name as className, c.credit as classCredit, c.term as classTerm, c.grade as classGrade
                                FROM user_timetables ut
                                JOIN class c ON ut.class_id = c.id
-                               WHERE ut.user_id = :user_id AND ut.grade = :grade"); // user_id を使用
+                               WHERE ut.user_id = :user_id AND ut.grade = :grade"); // user_id로 변경
         $stmt->execute([
-            ':user_id' => $current_user_id, // user_id をバインド
+            ':user_id' => $current_user_id, // user_id 바인딩
             ':grade' => $selectedGrade
         ]);
         $currentTimetableData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        error_log("Failed to load user timetable: " . $e->getMessage());
-        $currentTimetableData = [];
+        // 시간표 로드 에러 처리
+        error_log("Failed to load user timetable: " . $e->getMessage()); // 에러 로그
+        $currentTimetableData = []; // 에러 시 빈 배열
     }
 }
 
 
-// 時間帯の定義
+// 시간 시한 정의
 $times = [
     1 => '9:00-10:00', 2 => '10:00-11:00', 3 => '11:00-12:00',
     4 => '13:00-14:00', 5 => '14:00-15:00', 6 => '15:00-16:00',
-    7 => '16:00-17:00', 8 => '17:00-18:00', 9 => '18:00-19:00', 10 => '19:00-20:00'
+    7 => '16:00-17:00', 8 => '17:00-19:00', 9 => '19:00-20:00', 10 => '20:00-21:00'
 ];
-$days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
+$days_of_week = ['月', '火', '水', '木', '金', '土']; // 요일 정의
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -104,7 +79,8 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>授業登録 (Class Registration)</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+    </head>
 <body>
     <div class="user-info">
         ログイン中のユーザー: <?php echo htmlspecialchars($current_student_number); ?> (学科: <?php echo $current_user_department; ?>)
@@ -115,7 +91,7 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
 
     <h1>授業登録</h1>
 
-    <?php if ($is_logged_in): // ログインされている場合のみボタンを表示 ?>
+    <?php if ($is_logged_in): // 로그인된 경우에만 버튼 표시 ?>
         <a href="confirmed_timetable.php?grade_filter=<?= htmlspecialchars($selectedGrade) ?>" class="view-confirmed-button">
             確定済み時間割を見る
         </a>
@@ -128,7 +104,7 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
         <div class="class-list-section">
             <h2>利用可能な授業一覧</h2>
 
-            <form action="index.php" method="get" id="grade_filter_form">
+            <form action="index.php" method="get" id="grade_filter_form" style="display:inline-block;">
                 <label for="grade_filter">学年フィルタ:</label>
                 <select name="grade_filter" id="grade_filter">
                     <?php
@@ -139,7 +115,7 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
                 </select>
             </form>
 
-            <form action="index.php" method="get" id="term_filter_form">
+            <form action="index.php" method="get" id="term_filter_form" style="display:inline-block;">
                 <label for="term_filter">学期フィルタ:</label>
                 <select name="term_filter" id="term_filter">
                     <option value="0" <?php echo ($selectedTermFilter === '0') ? 'selected' : ''; ?>>全て</option>
@@ -216,9 +192,9 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($times as $i => $time_range) { // $iは1から10までの時限
+                    foreach ($times as $i => $time_range) { // $i는 1부터 10까지의 시한
                         echo "<tr>";
-                        echo "<td>" . $i . "限<br><span style='font-size:0.8em; color:#666;'>" . explode('-', $time_range)[0] . "</span></td>"; // 開始時間のみ表示
+                        echo "<td>" . $i . "限<br><span style='font-size:0.8em; color:#666;'>" . explode('-', $time_range)[0] . "</span></td>"; // 시작 시간만 표시
 
                         foreach ($days_of_week as $day_name) {
                             $cellContent = '';
@@ -228,9 +204,9 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
 
                             $foundClass = null;
                             foreach ($currentTimetableData as $classEntry) {
-                                // PHP의 day_of_week는 '月', '火' 등 문자열이고, DB의 day는 인덱스이므로 일치시켜야 합니다.
+                                // PHP의 day_of_week는 '月', '火' 등 문자열이고, DB의 day는 0, 1 등 인덱스이므로 일치시켜야 합니다.
                                 // $days_of_week 배열을 사용하여 매핑
-                                if ($classEntry['day'] === $day_name && (int)$classEntry['period'] === $i) {
+                                if ($days_of_week[$classEntry['day']] === $day_name && (int)$classEntry['period'] === $i) {
                                     $foundClass = $classEntry;
                                     break;
                                 }
@@ -246,12 +222,12 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
                                 $cellDataAttrs .= " data-class-credit='" . htmlspecialchars($foundClass['classCredit']) . "'";
                                 $cellDataAttrs .= " data-class-term='" . htmlspecialchars($foundClass['classTerm']) . "'";
                                 $cellDataAttrs .= " data-class-grade='" . htmlspecialchars($foundClass['classGrade']) . "'";
-                                if ($is_logged_in) { // ログインしている場合のみ削除ボタンを追加
+                                if ($is_logged_in) { // 로그인된 경우에만 삭제 버튼 추가
                                     $cellContent .= "<button class='remove-button' onclick='removeClassFromTimetable(this)'>X</button>";
                                 }
                             }
 
-                            // セルの出力
+                            // 셀 출력
                             echo "<td class='{$cellClasses}' data-day='{$day_name}' data-time='{$i}' {$cellDataAttrs}>{$cellContent}{$termDisplayInCell}</td>";
                         }
                         echo "</tr>";
@@ -265,36 +241,30 @@ $days_of_week = ['月', '火', '水', '木', '金', '土']; // 曜日の定義
     </div>
     <script src="script.js"></script>
     <script>
-        // PHP変数をJavaScriptに渡す
+        // PHP 변수를 JavaScript로 전달
         const currentSelectedGradeFromPHP = <?php echo json_encode($selectedGrade); ?>;
-        const currentSelectedTermFromPHP = <?php echo json_encode($selectedTermFilter); ?>; // 学期フィルター値
-        const currentLoggedInStudentNumber = <?php echo htmlspecialchars(json_encode($current_student_number)); ?>; // ゲストも含む
-        const currentLoggedInUserId = <?php echo json_encode($current_user_id); ?>; // user_id を追加
-        const isUserLoggedIn = <?php echo json_encode($is_logged_in); ?>; // ログイン状態を追加
-        const isGuestMode = <?php echo json_encode($is_guest_mode); ?>; // ゲストモードかどうかを追加
-        const initialTimetableData = <?php echo json_encode($currentTimetableData); ?>; // 初期時間割データ
+        const currentSelectedTermFromPHP = <?php echo json_encode($selectedTermFilter); ?>; // 학기 필터 값
+        const currentLoggedInStudentNumber = <?php echo json_encode($current_student_number); ?>; // 게스트도 포함
+        const currentLoggedInUserId = <?php echo json_encode($current_user_id); ?>; // user_id 추가
+        const isUserLoggedIn = <?php echo json_encode($is_logged_in); ?>; // 로그인 상태 추가
+        const initialTimetableData = <?php echo json_encode($currentTimetableData); ?>; // 초기 시간표 데이터
 
-        // DOMContentLoaded を使用して全ての要素がロードされた後にスクリプトを実行
+        // DOMContentLoaded를 사용하여 모든 요소가 로드된 후 스크립트 실행
         document.addEventListener('DOMContentLoaded', function() {
-            initializeTimetableFromPHP(initialTimetableData); // PHPからロードしたデータで時間割を初期化
-            updateFilterDisplay(); // 初期ロード時にフィルター表示を更新
-            updateDisplayTotalCredits(); // 初期ロード後に合計単位数を再計算し表示
+            initializeTimetableFromPHP(initialTimetableData); // PHP에서 로드한 데이터로 시간표 초기화
+            updateFilterDisplay(); // 초기 로드 시 필터 표시 업데이트
+            updateDisplayTotalCredits(); // 초기 로드 후 총 학점 다시 계산 및 표시
 
-            // フィルタードロップダウン変更時に自動でフォームを送信
+            // 필터 드롭다운 변경 시 자동으로 폼 제출
             document.getElementById('grade_filter').addEventListener('change', function() {
-                // ゲストモードの場合、guest=true パラメータも引き継ぐ
-                const guestParam = isGuestMode ? '&guest=true' : '';
-                window.location.href = `index.php?grade_filter=${this.value}&term_filter=${document.getElementById('term_filter').value}${guestParam}`;
+                window.location.href = `index.php?grade_filter=${this.value}&term_filter=${document.getElementById('term_filter').value}`;
             });
 
             document.getElementById('term_filter').addEventListener('change', function() {
-                // ゲストモードの場合、guest=true パラメータも引き継ぐ
-                const guestParam = isGuestMode ? '&guest=true' : '';
-                window.location.href = `index.php?grade_filter=${document.getElementById('grade_filter').value}&term_filter=${this.value}${guestParam}`;
+                window.location.href = `index.php?grade_filter=${document.getElementById('grade_filter').value}&term_filter=${this.value}`;
             });
 
-            // ログイン状態に応じてボタンを有効/無効化 (JavaScriptで制御)
-            // PHP側で disabled 属性が付与されているが、JSでも再度確認・制御
+            // 로그인 상태에 따라 버튼 활성화/비활성화 (JavaScript에서도 처리)
             if (!isUserLoggedIn) {
                 document.querySelectorAll('.add-button').forEach(button => {
                     button.disabled = true;
