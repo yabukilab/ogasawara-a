@@ -20,9 +20,10 @@ body {
 .main-container {
     display: flex;
     gap: 20px;
-    justify-content: space-around; /* 추가: 가로 공간을 고르게 배분 */
-    padding: 20px; /* 추가: 내부 여백 */
-    flex-wrap: wrap; /* 추가: 작은 화면에서 요소들을 다음 줄로 넘김 */
+    justify-content: space-between; /* space-around 대신 space-between으로 변경 */
+    padding: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start; /* 상단 정렬 추가 */
 }
 
 /* User Info and Authentication Links */
@@ -31,9 +32,9 @@ body {
     margin-bottom: 20px;
     font-size: 0.9em;
     color: #555;
-    background-color: #e2f0cb; /* 추가: 배경색 */
-    padding: 10px; /* 추가: 패딩 */
-    border-bottom: 1px solid #c8e6c9; /* 추가: 하단 테두리 */
+    background-color: #e2f0cb;
+    padding: 10px;
+    border-bottom: 1px solid #c8e6c9;
 }
 
 .user-info a,
@@ -43,7 +44,7 @@ body {
     margin-left: 10px;
 }
 .user-info a {
-    margin-left: 15px; /* 조정: 왼쪽 여백 */
+    margin-left: 15px;
 }
 
 .user-info a:hover,
@@ -53,7 +54,7 @@ body {
 
 .auth-container {
     max-width: 500px;
-    margin: 100px auto; /* 기존 */
+    margin: 100px auto;
     padding: 30px;
     background-color: #fff;
     border-radius: 8px;
@@ -61,11 +62,11 @@ body {
     text-align: center;
 
     /* index.php의 auth-container 스타일 병합 */
-    max-width: 400px; /* 조정 */
-    margin: 50px auto; /* 조정 */
-    background: #f9f9f9; /* 조정 */
-    border-radius: 8px; /* 조정 */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 조정 */
+    max-width: 400px;
+    margin: 50px auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .auth-container h1 {
@@ -75,7 +76,7 @@ body {
 
 .auth-container p {
     margin-bottom: 25px;
-    line-height: 1.5; /* 추가 */
+    line-height: 1.5;
 }
 
 .auth-links a {
@@ -84,8 +85,8 @@ body {
     background-color: #007bff;
     color: white;
     border-radius: 5px;
-    margin: 0 10px; /* 기존 */
-    margin: 5px; /* 추가: margin 조정 */
+    margin: 0 10px;
+    margin: 5px;
     transition: background-color 0.3s ease;
 }
 
@@ -100,7 +101,7 @@ h1, h2, h3 {
     color: #333;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: 20px; /* 추가: h1의 상단 여백 */
+    margin-top: 20px;
 }
 
 /* Messages */
@@ -157,20 +158,20 @@ button:hover {
 
 /* Specific button for "確定済み時間割を見る" and "単位取得状況を確認" */
 .view-confirmed-button {
-    display: block; /* 블록 요소로 변경 */
-    width: 250px; /* 너비 지정 */
-    margin: 20px auto; /* 중앙 정렬 */
-    padding: 12px 20px; /* 패딩 조정 */
-    background-color: #28a745; /* 녹색 */
+    display: block;
+    width: 250px;
+    margin: 20px auto;
+    padding: 12px 20px;
+    background-color: #28a745;
     color: white;
     text-align: center;
     border-radius: 5px;
     text-decoration: none;
-    font-weight: bold; /* 굵게 */
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 .view-confirmed-button:hover {
-    background-color: #218838; /* 호버 시 색상 */
+    background-color: #218838;
 }
 
 
@@ -183,7 +184,7 @@ button:hover {
 .navigation-buttons a {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
@@ -199,11 +200,11 @@ button:hover {
 .filter-form {
     margin-bottom: 20px;
     text-align: center;
-    display: flex; /* 추가: 필터 폼을 flex로 */
-    justify-content: center; /* 추가: 내용 중앙 정렬 */
-    gap: 10px; /* 추가: 요소 간 간격 */
-    align-items: center; /* 추가: 세로 중앙 정렬 */
-    flex-wrap: wrap; /* 추가: 줄바꿈 허용 */
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .filter-form label, .filter-form select {
     margin-right: 10px;
@@ -211,17 +212,18 @@ button:hover {
 
 /* Class List Section */
 .class-list-section {
-    flex: 1;
-    min-width: 400px;
-    border-right: 1px solid #eee;
-    padding-right: 20px;
-    background-color: #fff; /* 추가 */
-    padding: 25px; /* 추가 */
-    border-radius: 8px; /* 추가 */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 추가 */
-    flex:1 1 45%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 45%*/
-    min-width: 400px; /* 조정: 2열 레이아웃을 위한 최소 너비 */
-    max-width: 48%; /* 조정: 2열 레이아웃을 위한 최대 너비 */
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    /* 아래 flex, min-width, max-width를 수정 */
+    flex: 1 1 45%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 45% */
+    min-width: 400px; /* 고정 최소 너비 */
+    /* max-width: 48%; /* 이 줄을 제거하거나 주석 처리 */
+
+    /* 기존 border-right와 padding-right는 flexbox 레이아웃에서 불필요하거나 문제 유발 가능성이 있어 제거 */
+    /* border-right: 1px solid #eee; */
+    /* padding-right: 20px; */
 }
 
 .class-list-section table {
@@ -256,14 +258,14 @@ button:hover {
 
 /* Timetable Section */
 .timetable-section {
-    flex: 2; /* Take up more space */
-    background-color: #fff; /* 추가 */
-    padding: 25px; /* 추가 */
-    border-radius: 8px; /* 추가 */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 추가 */
-    flex: 2 1 50%;
-    min-width: 500px; /* 조정: 2열 레이아웃을 위한 최소 너비 */
-    max-width: 48%; /* 조정: 2열 레이아웃을 위한 최대 너비 */
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    /* 아래 flex, min-width, max-width를 수정 */
+    flex: 2 1 50%; /* flex-grow: 2, flex-shrink: 1, flex-basis: 50% */
+    min-width: 550px; /* 시간표 테이블이 넓으므로 더 큰 최소 너비 필요 */
+    /* max-width: 48%; /* 이 줄을 제거하거나 주석 처리 */
 }
 
 #selectedClassInfo {
@@ -272,15 +274,15 @@ button:hover {
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
-    background-color: #e0f7fa; /* 조정 */
-    padding: 15px; /* 조정 */
-    border-radius: 8px; /* 조정 */
-    border: 1px solid #b2ebf2; /* 조정 */
-    text-align: center; /* 조정 */
+    background-color: #e0f7fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #b2ebf2;
+    text-align: center;
 }
 #selectedClassInfo p {
-    margin: 5px 0; /* 조정 */
-    font-size: 1.1em; /* 조정 */
+    margin: 5px 0;
+    font-size: 1.1em;
 }
 #currentSelectedClassName, #currentSelectedClassCredit {
     font-weight: bold;
@@ -300,21 +302,21 @@ button:hover {
     width: 100%;
     padding: 15px;
     font-size: 1.1em;
-    background-color: #28a745; /* Green */
-    display: block; /* 추가: 블록 요소 */
-    width: 80%; /* 추가: 너비 조정 */
-    max-width: 300px; /* 추가: 최대 너비 */
-    margin: 20px auto; /* 추가: 중앙 정렬 */
-    padding: 15px 25px; /* 추가: 패딩 조정 */
-    background-color: #007bff; /* 추가: 파란색 */
-    color: white; /* 추가: 글자색 흰색 */
-    border-radius: 8px; /* 추가: 둥근 모서리 */
-    font-size: 1.1em; /* 추가: 폰트 사이즈 */
+    background-color: #28a745;
+    display: block;
+    width: 80%;
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 15px 25px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.1em;
 }
 
 #confirmTimetableBtn:hover {
     background-color: #218838;
-    background-color: #0056b3; /* 조정: 호버 시 색상 */
+    background-color: #0056b3;
 }
 
 /* Timetable Table Specifics */
@@ -322,7 +324,7 @@ button:hover {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    table-layout: fixed; /* Ensures columns are equally sized */
+    table-layout: fixed;
 }
 
 .timetable-table th, .timetable-table td {
@@ -330,47 +332,46 @@ button:hover {
     padding: 8px;
     text-align: center;
     vertical-align: middle;
-    min-width: 80px; /* Minimum width for cells */
-    position: relative; /* For positioning term display */
-    vertical-align: middle; /* 조정 */
-    font-size: 0.9em; /* 조정 */
+    min-width: 80px;
+    position: relative;
+    font-size: 0.9em;
 }
 
 .timetable-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-    color: #555; /* 추가 */
+    color: #555;
 }
 
 .time-slot {
-    height: 80px; /* Fixed height for time slots */
+    height: 80px;
     background-color: #fdfdfd;
-    display: flex; /* 추가 */
-    flex-direction: column; /* 추가 */
-    justify-content: center; /* 추가 */
-    align-items: center; /* 추가 */
-    position: relative; /* 추가 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
 
 .time-slot.filled-primary {
-    background-color: #e6f7ff; /* Light blue for filled primary slots */
+    background-color: #e6f7ff;
     color: #333;
     font-weight: bold;
-    position: relative; /* For remove button positioning */
-    background-color: #e0f7fa; /* 조정 */
+    position: relative;
+    background-color: #e0f7fa;
 }
 
 .time-slot.filled-secondary {
-    background-color: #d6f2ff; /* Slightly darker blue for secondary slots */
+    background-color: #d6f2ff;
     color: #333;
     font-style: italic;
 }
 
 .remove-button {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545;
     color: white;
     border: none;
-    border-radius: 50%; /* Make it round */
+    border-radius: 50%;
     width: 20px;
     height: 20px;
     line-height: 1;
@@ -383,12 +384,11 @@ button:hover {
     justify-content: center;
     align-items: center;
     padding: 0;
-    /* index.php의 remove-button 스타일 병합 */
-    top: 5px; /* 조정 */
-    right: 5px; /* 조정 */
-    padding: 2px 6px; /* 조정 */
-    font-size: 0.7em; /* 조정 */
-    z-index: 10; /* 조정 */
+    top: 5px;
+    right: 5px;
+    padding: 2px 6px;
+    font-size: 0.7em;
+    z-index: 10;
 }
 
 .remove-button:hover {
@@ -399,7 +399,7 @@ button:hover {
     font-size: 0.7em;
     color: #666;
     margin-top: 5px;
-    color: #007bff; /* 조정 */
+    color: #007bff;
 }
 
 /* Responsive adjustments */
@@ -421,6 +421,6 @@ button:hover {
 
 /* Disabled button style */
 .disabled-button {
-    background-color: #cccccc !important; /* 회색 배경 */
-    cursor: not-allowed !important; /* 금지 커서 */
+    background-color: #cccccc !important;
+    cursor: not-allowed !important;
 }
