@@ -51,122 +51,22 @@ try {
     $message_type = 'error';
 }
 
-// ユーザーの時間割データ取得
-$user_timetable = [];
-$total_current_credits = 0; // 現在の学期の履修単位数
-
-try {
-    // ユーザーの時間割を class テーブルと結合して詳細情報を取得
-    // term 필터링을 위한 수정: `c.term = :current_term` 대신 `c.term LIKE :current_term_like_pattern` 사용
-    $stmt = $db->prepare("SELECT ut.id as user_timetable_id, c.id as class_id, c.class_name, c.credit, c.day_of_week, c.time_slot, c.term, c.grade
-                           FROM user_timetables ut
-                           JOIN class c ON ut.class_id = c.id
-                           WHERE ut.user_id = :user_id AND c.grade = :grade AND c.term LIKE :current_term_like_pattern");
-
-    // '全て'を選択した場合、termフィルタリングを無효화
-    $term_like_pattern = ($current_term === '全て') ? '%' : $current_term;
-
-    $stmt->execute([
-        ':user_id' => $current_user_id,
-        ':grade' => $current_grade,
-        ':current_term_like_pattern' => $term_like_pattern
-    ]);
-    $user_registered_classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($user_registered_classes as $class) {
-        $user_timetable[] = $class;
-        $total_current_credits += (int)$class['credit'];
-    }
-} catch (PDOException $e) {
-    error_log("時間割情報の読み込みに失敗しました: " . $e->getMessage());
-    $message = "時間割情報の読み込みに失敗しました: " . $e->getMessage(); // エラーメッセージに詳細を追加
-    $message_type = 'error';
-}
+// ユーザーの時間割データ取得 (user_timetables テーブルを使用しないため、常に空)
+// ここでは時間割表示をダミーデータで表示するか、空にするかを選択できます。
+// 現在は空にするため、関連ロジックは削除またはコメントアウトします。
+$user_timetable = []; // user_timetables を使用しないため空にする
+$total_current_credits = 0; // 単位計算も無効化
 
 
-// 時間割への追加処理 (AJAXで呼ばれることを想定、ここでは仮の直接処理)
+// 時間割への追加/削除/確定処理 (すべて無効化または削除)
+// POST リクエストの処理は、user_timetables に依存しないように変更する必要があります。
+// ここでは一旦、機能全体をコメントアウトまたは削除します。
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'add') {
-        $class_id = filter_input(INPUT_POST, 'class_id', FILTER_VALIDATE_INT);
-        $day_of_week = h($_POST['day_of_week']);
-        $time_slot = h($_POST['time_slot']);
-        $term = h($_POST['term']); // 期間情報も取得
-
-        if ($class_id && $day_of_week && $time_slot && $term) {
-            try {
-                // 同じユーザー、同じ時間、同じ曜日に既に登録された授業があるか確認
-                $stmt = $db->prepare("SELECT COUNT(*) FROM user_timetables ut JOIN class c ON ut.class_id = c.id WHERE ut.user_id = :user_id AND c.day_of_week = :day_of_week AND c.time_slot = :time_slot AND c.term = :term AND c.grade = :grade");
-                $stmt->execute([
-                    ':user_id' => $current_user_id,
-                    ':day_of_week' => $day_of_week,
-                    ':time_slot' => $time_slot,
-                    ':term' => $term,
-                    ':grade' => $current_grade // 현재 학년의 시간표에만 추가하도록 제한
-                ]);
-                if ($stmt->fetchColumn() > 0) {
-                    $message = "指定された時間帯には既に授業が登録されています。";
-                    $message_type = 'error';
-                } else {
-                    // user_timetables에 추가
-                    $stmt = $db->prepare("INSERT INTO user_timetables (user_id, class_id, is_confirmed) VALUES (:user_id, :class_id, 0)");
-                    $stmt->execute([':user_id' => $current_user_id, ':class_id' => $class_id]);
-                    $message = "授業が時間割に追加されました！";
-                    $message_type = 'success';
-                    // ページをリロードして最新の時間割を表示
-                    header("Location: index.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-                    exit;
-                }
-            } catch (PDOException $e) {
-                error_log("時間割への追加に失敗しました: " . $e->getMessage());
-                $message = "授業を時間割に追加できませんでした: " . $e->getMessage();
-                $message_type = 'error';
-            }
-        } else {
-            $message = "授業の追加に必要な情報が不足しています。";
-            $message_type = 'error';
-        }
-    } elseif ($_POST['action'] === 'remove') {
-        $user_timetable_id = filter_input(INPUT_POST, 'user_timetable_id', FILTER_VALIDATE_INT);
-
-        if ($user_timetable_id) {
-            try {
-                // user_timetables から削除
-                $stmt = $db->prepare("DELETE FROM user_timetables WHERE id = :id AND user_id = :user_id");
-                $stmt->execute([':id' => $user_timetable_id, ':user_id' => $current_user_id]);
-                $message = "授業が時間割から削除されました。";
-                $message_type = 'success';
-                // ページをリロード
-                header("Location: index.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-                exit;
-            } catch (PDOException $e) {
-                error_log("時間割からの削除に失敗しました: " . $e->getMessage());
-                $message = "授業を時間割から削除できませんでした: " . $e->getMessage();
-                $message_type = 'error';
-            }
-        } else {
-            $message = "削除する授業の情報が不足しています。";
-            $message_type = 'error';
-        }
-    } elseif ($_POST['action'] === 'confirm_timetable') {
-        try {
-            // is_confirmed を 1 に更新
-            // $term_like_pattern 변수를 사용하도록 수정
-            $stmt = $db->prepare("UPDATE user_timetables ut JOIN class c ON ut.class_id = c.id SET ut.is_confirmed = 1 WHERE ut.user_id = :user_id AND ut.is_confirmed = 0 AND c.grade = :grade AND c.term LIKE :term_like_pattern");
-            $stmt->execute([
-                ':user_id' => $current_user_id,
-                ':grade' => $current_grade,
-                ':term_like_pattern' => $term_like_pattern
-            ]);
-            $message = "時間割が確定されました！";
-            $message_type = 'success';
-            header("Location: confirmed_timetable.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-            exit;
-        } catch (PDOException $e) {
-            error_log("時間割の確定に失敗しました: " . $e->getMessage());
-            $message = "時間割を確定できませんでした: " . $e->getMessage();
-            $message_type = 'error';
-        }
-    }
+    $message = "時間割関連の機能は現在無効化されています。";
+    $message_type = 'error';
+    // リダイレクトなしでメッセージを表示するために、ここでは exit; しない
+    // header("Location: index.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
+    // exit;
 }
 
 
@@ -246,14 +146,8 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
                                     <td><?php echo h($class['class_name']); ?></td>
                                     <td><?php echo h($class['credit']); ?></td>
                                     <td>
-                                        <button class="add-button"
-                                                data-class-id="<?php echo h($class['id']); ?>"
-                                                data-class-name="<?php echo h($class['class_name']); ?>"
-                                                data-credit="<?php echo h($class['credit']); ?>"
-                                                data-day-of-week="<?php echo h($class['day_of_week']); ?>"
-                                                data-time-slot="<?php echo h($class['time_slot']); ?>"
-                                                data-term="<?php echo h($class['term']); ?>">選択</button>
-                                    </td>
+                                        <button class="add-button disabled-button" disabled>選択 (現在無効)</button>
+                                        </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -262,7 +156,7 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
             </div>
 
             <div class="timetable-section">
-                <h2>時間割</h2>
+                <h2>時間割 (現在無効)</h2>
 
                 <div id="selectedClassInfo">
                     <p>選択中の授業: <span id="currentSelectedClassName">なし</span></p>
@@ -278,7 +172,7 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
 
 
                     <label for="day_of_week">曜日:</label>
-                    <select name="day_of_week" id="day_of_week">
+                    <select name="day_of_week" id="day_of_week" disabled>
                         <option value="">選択してください</option>
                         <option value="月">月</option>
                         <option value="火">火</option>
@@ -290,7 +184,7 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
                     </select>
 
                     <label for="time_slot">時限:</label>
-                    <select name="time_slot" id="time_slot">
+                    <select name="time_slot" id="time_slot" disabled>
                         <option value="">選択してください</option>
                         <option value="1">1限 (9:00-10:00)</option>
                         <option value="2">2限 (10:10-11:10)</option>
@@ -324,40 +218,19 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
                                 <td><?php echo $i; ?>限</td>
                                 <?php foreach (['月', '火', '水', '木', '金', '土', '日'] as $day): ?>
                                     <td id="cell-<?php echo $day; ?>-<?php echo $i; ?>" class="time-slot">
-                                        <?php
-                                        $class_found = false;
-                                        foreach ($user_timetable as $class_entry) {
-                                            if ($class_entry['day_of_week'] == $day && $class_entry['time_slot'] == $i) {
-                                                echo '<span class="class-name">' . h($class_entry['class_name']) . '</span><br>';
-                                                // 여기에서 $class_entry['term']은 DB에서 가져온 문자열 ('前期', '後期', '通年')이므로
-                                                // db_config.php의 getTermName 함수가 문자열을 처리하도록 수정되었거나,
-                                                // class_entry['term'] 값을 직접 사용하면 됩니다.
-                                                echo '<span class="term-display-in-cell">('. h($class_entry['term']) . ')</span>'; // getTermName($class_entry['term']) 대신 직접 사용
-                                                echo '<form method="post" action="index.php" style="display:inline;">';
-                                                echo '<input type="hidden" name="action" value="remove">';
-                                                echo '<input type="hidden" name="user_timetable_id" value="' . h($class_entry['user_timetable_id']) . '">';
-                                                echo '<input type="hidden" name="grade_filter" value="' . h($current_grade) . '">';
-                                                echo '<input type="hidden" name="term_filter" value="' . h($current_term) . '">';
-                                                echo '<button type="submit" class="remove-button">x</button>';
-                                                echo '</form>';
-                                                $class_found = true;
-                                                break;
-                                            }
-                                        }
-                                        ?>
-                                    </td>
+                                        </td>
                                 <?php endforeach; ?>
                             </tr>
                         <?php endfor; ?>
                     </tbody>
                 </table>
-                <p id="totalCredits">現在の期間の履修単位数: <?php echo h($total_current_credits); ?> 単位</p>
+                <p id="totalCredits">現在の期間の履修単位数: 0 単位 (現在無効)</p>
 
                 <form id="confirmForm" method="post" action="index.php">
                     <input type="hidden" name="action" value="confirm_timetable">
                     <input type="hidden" name="grade_filter" value="<?= $current_grade ?>">
                     <input type="hidden" name="term_filter" value="<?= $current_term ?>">
-                    <button type="submit" id="confirmTimetableBtn">時間割を確定する</button>
+                    <button type="submit" id="confirmTimetableBtn" class="disabled-button" disabled>時間割を確定する</button>
                 </form>
 
             </div>
@@ -365,47 +238,48 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
     </div>
 
     <script>
-        let selectedClassId = null;
-        let selectedClassName = '';
-        let selectedClassCredit = 0;
-        let selectedClassTerm = '';
+        // 時間割選択・追加のJavaScriptも無効化
+        // let selectedClassId = null;
+        // let selectedClassName = '';
+        // let selectedClassCredit = 0;
+        // let selectedClassTerm = '';
 
         document.querySelectorAll('.add-button').forEach(button => {
-            button.addEventListener('click', function() {
-                selectedClassId = this.dataset.classId;
-                selectedClassName = this.dataset.className;
-                selectedClassCredit = this.dataset.credit;
-                selectedClassTerm = this.dataset.term;
+            // button.addEventListener('click', function() {
+            //     selectedClassId = this.dataset.classId;
+            //     selectedClassName = this.dataset.className;
+            //     selectedClassCredit = this.dataset.credit;
+            //     selectedClassTerm = this.dataset.term;
 
-                document.getElementById('currentSelectedClassName').textContent = selectedClassName;
-                document.getElementById('currentSelectedClassCredit').textContent = selectedClassCredit;
+            //     document.getElementById('currentSelectedClassName').textContent = selectedClassName;
+            //     document.getElementById('currentSelectedClassCredit').textContent = selectedClassCredit;
                 
-                document.getElementById('addTimetableBtn').disabled = false;
-                document.getElementById('addTimetableBtn').classList.remove('disabled-button');
+            //     document.getElementById('addTimetableBtn').disabled = false;
+            //     document.getElementById('addTimetableBtn').classList.remove('disabled-button');
 
-                document.getElementById('formClassId').value = selectedClassId;
-                document.getElementById('formTerm').value = selectedClassTerm;
-            });
+            //     document.getElementById('formClassId').value = selectedClassId;
+            //     document.getElementById('formTerm').value = selectedClassTerm;
+            // });
         });
 
-        const dayOfWeekSelect = document.getElementById('day_of_week');
-        const timeSlotSelect = document.getElementById('time_slot');
-        const addTimetableBtn = document.getElementById('addTimetableBtn');
+        // const dayOfWeekSelect = document.getElementById('day_of_week');
+        // const timeSlotSelect = document.getElementById('time_slot');
+        // const addTimetableBtn = document.getElementById('addTimetableBtn');
 
-        function toggleAddButtonState() {
-            if (selectedClassId && dayOfWeekSelect.value !== '' && timeSlotSelect.value !== '') {
-                addTimetableBtn.disabled = false;
-                addTimetableBtn.classList.remove('disabled-button');
-            } else {
-                addTimetableBtn.disabled = true;
-                addTimetableBtn.classList.add('disabled-button');
-            }
-        }
+        // function toggleAddButtonState() {
+        //     if (selectedClassId && dayOfWeekSelect.value !== '' && timeSlotSelect.value !== '') {
+        //         addTimetableBtn.disabled = false;
+        //         addTimetableBtn.classList.remove('disabled-button');
+        //     } else {
+        //         addTimetableBtn.disabled = true;
+        //         addTimetableBtn.classList.add('disabled-button');
+        //     }
+        // }
 
-        dayOfWeekSelect.addEventListener('change', toggleAddButtonState);
-        timeSlotSelect.addEventListener('change', toggleAddButtonState);
+        // dayOfWeekSelect.addEventListener('change', toggleAddButtonState);
+        // timeSlotSelect.addEventListener('change', toggleAddButtonState);
 
-        toggleAddButtonState();
+        // toggleAddButtonState();
     </script>
 </body>
 </html>
