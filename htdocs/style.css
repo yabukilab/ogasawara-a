@@ -219,7 +219,8 @@ button:hover {
     padding: 25px; /* 추가 */
     border-radius: 8px; /* 추가 */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 추가 */
-    min-width: 45%; /* 조정: 2열 레이아웃을 위한 최소 너비 */
+    flex:1 1 45%; /* flex-grow: 1, flex-shrink: 1, flex-basis: 45%*/
+    min-width: 400px; /* 조정: 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 조정: 2열 레이아웃을 위한 최대 너비 */
 }
 
@@ -260,7 +261,8 @@ button:hover {
     padding: 25px; /* 추가 */
     border-radius: 8px; /* 추가 */
     box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 추가 */
-    min-width: 45%; /* 조정: 2열 레이아웃을 위한 최소 너비 */
+    flex: 2 1 50%;
+    min-width: 500px; /* 조정: 2열 레이아웃을 위한 최소 너비 */
     max-width: 48%; /* 조정: 2열 레이아웃을 위한 최대 너비 */
 }
 
@@ -327,7 +329,7 @@ button:hover {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    vertical-align: top;
+    vertical-align: middle;
     min-width: 80px; /* Minimum width for cells */
     position: relative; /* For positioning term display */
     vertical-align: middle; /* 조정 */
@@ -404,17 +406,16 @@ button:hover {
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
+        align-items: center;
     }
-    .class-list-section {
+    .class-list-section, .timetable-section {
         border-right: none;
         border-bottom: 1px solid #eee;
         padding-right: 0;
         padding-bottom: 20px;
-    }
-    /* index.php의 반응형 조정 */
-    .class-list-section, .timetable-section {
         min-width: 90%;
         max-width: 95%;
+        flex: 1 1 auto;
     }
 }
 
