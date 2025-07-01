@@ -12,7 +12,7 @@ function h($var) {
 // 環境変数またはデフォルト値を使用（本番環境では環境変数を設定推奨）
 // デフォルト値は実際のデータベース情報に合わせてください
 // ★あなたの MySQL サーバーのホスト名 (通常は 'localhost' または '127.0.0.1')
-$dbServer = isset($_ENV['MYSQL_SERVER'])     ? $_ENV['MYSQL_SERVER']      : 'localhost';
+$dbServer = isset($_ENV['MYSQL_SERVER'])     ? $_ENV['MYSQL_SERVER']     : 'localhost';
 // ★あなたのデータベースユーザー名
 $dbUser   = isset($_SERVER['MYSQL_USER'])     ? $_SERVER['MYSQL_USER']     : 'testuser';
 // ★あなたのデータベースパスワード

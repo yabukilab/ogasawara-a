@@ -10,8 +10,9 @@ $error = '';
 // HTTPリクエストがPOSTメソッドである場合、つまりログインフォームが送信された場合
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ユーザーからの入力を取得し、h() 関数でサニタイズ（無害化）します。
+    // null合体演算子 (??) を使用して、POSTデータが存在しない場合のUndefined indexエラーを防ぎます。
     $student_number = h($_POST['student_number'] ?? '');
-    $password = $_POST['password'] ?? ''; // パスワードはハッシュ化前に直接処理します。
+    $password = $_POST['password'] ?? ''; // パスワードはハッシュ化前に直接処理するため、h() は適用しません。
 
     // 入力フィールドが空でないかを検証します。
     if (empty($student_number) || empty($password)) {
@@ -32,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // ログイン成功！
                 // セッション変数にユーザー情報を保存します。
                 $_SESSION['student_number'] = $user['student_number']; // 学番をセッションに保存
-                $_SESSION['department'] = $user['department'];     // 学科情報をセッションに保存
-                $_SESSION['user_id'] = $user['id'];               // ユーザーIDをセッションに保存
+                $_SESSION['department'] = $user['department'];       // 学科情報をセッションに保存
+                $_SESSION['user_id'] = $user['id'];                 // ユーザーIDをセッションに保存 (index.php で user_id を使用するため)
 
                 // ログイン成功後、index.php にリダイレクトします。
                 header("Location: index.php");
@@ -57,8 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン (Login)</title>
-    <link rel="stylesheet" href="style2.css">
-</head>
+    <link rel="stylesheet" href="style2.css"> </head>
 <body>
     <div class="auth-container">
         <h1>ログイン</h1>
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <div class="auth-links">
             <p>アカウントをお持ちでないですか？ <a href="register_user.php">新規ユーザー登録</a></p>
-        </div>
+            </div>
     </div>
 </body>
 </html>
