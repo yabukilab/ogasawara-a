@@ -1,259 +1,168 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 設定と h()、getTermName() 関数を含む
+// db_config.php 파일이 데이터베이스 연결을 설정하고 $db 변수를 제공한다고 가정합니다.
+require_once 'db_config.php';
 
-// Debugging: Display all errors
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// 로그인 상태 확인 및 사용자 정보 가져오기
+$isUserLoggedIn = isset($_SESSION['user_id']);
+$loggedInUserId = $isUserLoggedIn ? $_SESSION['user_id'] : null;
+$loggedInStudentNumber = $isUserLoggedIn ? $_SESSION['student_number'] : 'ゲスト'; // 학번 또는 이름 등
+$loggedInDepartment = $isUserLoggedIn ? $_SESSION['department'] : '情報なし'; // 학과 정보
 
-// ログイン確認
-if (!isset($_SESSION['student_number']) || !isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit;
-}
+// 학년 및 학기 필터 초기값 설정
+$currentSelectedGrade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 1;
+$currentSelectedTerm = isset($_GET['term_filter']) ? (string)$_GET['term_filter'] : '0'; // '0'은 '全て'를 의미
 
-$current_student_number = $_SESSION['student_number'];
-$current_user_id = $_SESSION['user_id'];
-$current_user_department = $_SESSION['department']; // 学科情報もセッションから取得
-
-// エラーメッセージと成功メッセージ用変数
 $message = '';
-$message_type = '';
-
-// 現在選択されている学年 (URLパラメータから取得、デフォルトは2年生)
-$current_grade = isset($_GET['grade_filter']) ? (int)$_GET['grade_filter'] : 2;
-// 現在選択されている期間 (URLパラメータから取得、デフォルトは'通年')
-$current_term = isset($_GET['term_filter']) ? $_GET['term_filter'] : '通年';
-
-
-// クラス情報取得
-$classes = [];
-try {
-    $sql = "SELECT id, class_name, grade, term, day_of_week, time_slot, credit, category1, category2 FROM class WHERE grade = :grade";
-    $params = [':grade' => $current_grade];
-
-    if ($current_term !== '全て') {
-        $sql .= " AND term = :term";
-        $params[':term'] = $current_term;
-    }
-    // プロジェクトマネジメント学科の授業のみをフィルター
-    $sql .= " AND department = :department ORDER BY term, day_of_week, time_slot";
-    $params[':department'] = $current_user_department; // 現在ログイン中のユーザーの学科でフィルター
-
-    $stmt = $db->prepare($sql);
-    $stmt->execute($params);
-    $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    error_log("授業情報の読み込みに失敗しました: " . $e->getMessage());
-    $message = "授業情報の読み込みに失敗しました: " . $e->getMessage(); // エラーメッセージに詳細を追加
-    $message_type = 'error';
-}
-
-// ユーザーの時間割データ取得
-$user_timetable = [];
-$total_current_credits = 0; // 現在の学期の履修単位数
+$class_list = [];
+$initialTimetableData = []; // JavaScript로 전달할 초기 시간표 데이터
 
 try {
-    // ユーザーの時間割を class テーブルと結合して詳細情報を取得
-    // term 필터링을 위한 수정: `c.term = :current_term` 대신 `c.term LIKE :current_term_like_pattern` 사용
-    $stmt = $db->prepare("SELECT ut.id as user_timetable_id, c.id as class_id, c.class_name, c.credit, c.day_of_week, c.time_slot, c.term, c.grade
-                           FROM user_timetables ut
-                           JOIN class c ON ut.class_id = c.id
-                           WHERE ut.user_id = :user_id AND c.grade = :grade AND c.term LIKE :current_term_like_pattern");
+    // 수업 목록 가져오기 (필터 적용)
+    $sql_classes = "SELECT id, name, credit, term, grade, category1, category2, category3 FROM class WHERE 1=1";
+    $params_classes = [];
 
-    // '全て'を選択した場合、termフィルタリングを無효화
-    $term_like_pattern = ($current_term === '全て') ? '%' : $current_term;
-
-    $stmt->execute([
-        ':user_id' => $current_user_id,
-        ':grade' => $current_grade,
-        ':current_term_like_pattern' => $term_like_pattern
-    ]);
-    $user_registered_classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    foreach ($user_registered_classes as $class) {
-        $user_timetable[] = $class;
-        $total_current_credits += (int)$class['credit'];
+    if ($currentSelectedGrade > 0) {
+        $sql_classes .= " AND grade = :grade";
+        $params_classes[':grade'] = $currentSelectedGrade;
     }
+
+    if ($currentSelectedTerm !== '0') {
+        $sql_classes .= " AND term = :term";
+        $params_classes[':term'] = $currentSelectedTerm;
+    }
+
+    $stmt_classes = $db->prepare($sql_classes);
+    $stmt_classes->execute($params_classes);
+    $class_list = $stmt_classes->fetchAll(PDO::FETCH_ASSOC);
+
+    // 로그인된 사용자이고, 현재 학년에 해당하는 저장된 시간표 데이터가 있다면 가져오기
+    if ($isUserLoggedIn) {
+        $sql_timetable = "
+            SELECT
+                ut.day,
+                ut.period,
+                c.id AS class_id,
+                c.name AS className,
+                c.credit AS classCredit,
+                c.term AS classTerm,
+                c.grade AS classGrade
+                -- 추가적으로 시간표 칸에 표시할 다른 정보가 있다면 여기 추가
+                -- 예: c.category1 AS classCategory1, c.category2 AS classCategory2
+            FROM
+                user_timetables ut
+            JOIN
+                class c ON ut.class_id = c.id
+            WHERE
+                ut.user_id = :user_id AND ut.grade = :grade_filter
+            ORDER BY ut.day, ut.period
+        ";
+        $stmt_timetable = $db->prepare($sql_timetable);
+        $stmt_timetable->execute([':user_id' => $loggedInUserId, ':grade_filter' => $currentSelectedGrade]);
+        $initialTimetableData = $stmt_timetable->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 } catch (PDOException $e) {
-    error_log("時間割情報の読み込みに失敗しました: " . $e->getMessage());
-    $message = "時間割情報の読み込みに失敗しました: " . $e->getMessage(); // エラーメッセージに詳細を追加
-    $message_type = 'error';
+    $message = '<p class="message error">データベースエラー: ' . htmlspecialchars($e->getMessage()) . '</p>';
+    error_log("DB Error on index.php: " . $e->getMessage()); // 에러 로깅
 }
-
-
-// 時間割への追加処理 (AJAXで呼ばれることを想定、ここでは仮の直接処理)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] === 'add') {
-        $class_id = filter_input(INPUT_POST, 'class_id', FILTER_VALIDATE_INT);
-        $day_of_week = h($_POST['day_of_week']);
-        $time_slot = h($_POST['time_slot']);
-        $term = h($_POST['term']); // 期間情報も取得
-
-        if ($class_id && $day_of_week && $time_slot && $term) {
-            try {
-                // 同じユーザー、同じ時間、同じ曜日に既に登録された授業があるか確認
-                $stmt = $db->prepare("SELECT COUNT(*) FROM user_timetables ut JOIN class c ON ut.class_id = c.id WHERE ut.user_id = :user_id AND c.day_of_week = :day_of_week AND c.time_slot = :time_slot AND c.term = :term AND c.grade = :grade");
-                $stmt->execute([
-                    ':user_id' => $current_user_id,
-                    ':day_of_week' => $day_of_week,
-                    ':time_slot' => $time_slot,
-                    ':term' => $term,
-                    ':grade' => $current_grade // 현재 학년의 시간표에만 추가하도록 제한
-                ]);
-                if ($stmt->fetchColumn() > 0) {
-                    $message = "指定された時間帯には既に授業が登録されています。";
-                    $message_type = 'error';
-                } else {
-                    // user_timetables에 추가
-                    $stmt = $db->prepare("INSERT INTO user_timetables (user_id, class_id, is_confirmed) VALUES (:user_id, :class_id, 0)");
-                    $stmt->execute([':user_id' => $current_user_id, ':class_id' => $class_id]);
-                    $message = "授業が時間割に追加されました！";
-                    $message_type = 'success';
-                    // ページをリロードして最新の時間割を表示
-                    header("Location: index.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-                    exit;
-                }
-            } catch (PDOException $e) {
-                error_log("時間割への追加に失敗しました: " . $e->getMessage());
-                $message = "授業を時間割に追加できませんでした: " . $e->getMessage();
-                $message_type = 'error';
-            }
-        } else {
-            $message = "授業の追加に必要な情報が不足しています。";
-            $message_type = 'error';
-        }
-    } elseif ($_POST['action'] === 'remove') {
-        $user_timetable_id = filter_input(INPUT_POST, 'user_timetable_id', FILTER_VALIDATE_INT);
-
-        if ($user_timetable_id) {
-            try {
-                // user_timetables から削除
-                $stmt = $db->prepare("DELETE FROM user_timetables WHERE id = :id AND user_id = :user_id");
-                $stmt->execute([':id' => $user_timetable_id, ':user_id' => $current_user_id]);
-                $message = "授業が時間割から削除されました。";
-                $message_type = 'success';
-                // ページをリロード
-                header("Location: index.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-                exit;
-            } catch (PDOException $e) {
-                error_log("時間割からの削除に失敗しました: " . $e->getMessage());
-                $message = "授業を時間割から削除できませんでした: " . $e->getMessage();
-                $message_type = 'error';
-            }
-        } else {
-            $message = "削除する授業の情報が不足しています。";
-            $message_type = 'error';
-        }
-    } elseif ($_POST['action'] === 'confirm_timetable') {
-        try {
-            // is_confirmed を 1 に更新
-            // $term_like_pattern 변수를 사용하도록 수정
-            $stmt = $db->prepare("UPDATE user_timetables ut JOIN class c ON ut.class_id = c.id SET ut.is_confirmed = 1 WHERE ut.user_id = :user_id AND ut.is_confirmed = 0 AND c.grade = :grade AND c.term LIKE :term_like_pattern");
-            $stmt->execute([
-                ':user_id' => $current_user_id,
-                ':grade' => $current_grade,
-                ':term_like_pattern' => $term_like_pattern
-            ]);
-            $message = "時間割が確定されました！";
-            $message_type = 'success';
-            header("Location: confirmed_timetable.php?grade_filter={$current_grade}&term_filter={$current_term}&message=" . urlencode($message) . "&message_type=" . $message_type);
-            exit;
-        } catch (PDOException $e) {
-            error_log("時間割の確定に失敗しました: " . $e->getMessage());
-            $message = "時間割を確定できませんでした: " . $e->getMessage();
-            $message_type = 'error';
-        }
-    }
-}
-
-
-// URLパラメータからのメッセージ表示
-if (isset($_GET['message']) && isset($_GET['message_type'])) {
-    $message = h($_GET['message']);
-    $message_type = h($_GET['message_type']);
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>時間割作成 (Timetable Creation)</title>
+    <title>時間割作成 (Timetable Creator)</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="user-info">
-        ログイン中のユーザー: <?php echo htmlspecialchars($current_student_number); ?> (学科: <?php echo htmlspecialchars($current_user_department); ?>)
-        <a href="logout.php">ログアウト</a>
+        <?php if ($isUserLoggedIn): ?>
+            <p>ようこそ、<?php echo htmlspecialchars($loggedInStudentNumber); ?>さん (<?php echo htmlspecialchars($loggedInDepartment); ?>)</p>
+            <a href="logout.php">ログアウト</a>
+        <?php else: ?>
+            <p>ゲストとして閲覧中</p>
+            <a href="login.php">ログイン</a>
+            <a href="register_user.php">新規ユーザー登録</a>
+        <?php endif; ?>
     </div>
 
     <div class="container">
         <h1>時間割作成</h1>
 
-        <?php if (!empty($message)): ?>
-            <p class="message <?php echo $message_type; ?>"><?php echo h($message); ?></p>
-        <?php endif; ?>
+        <?php echo $message; ?>
 
-        <div class="navigation-buttons">
-            <a href="confirmed_timetable.php?grade_filter=<?= $current_grade ?>&term_filter=<?= $current_term ?>">確定済み時間割を見る</a>
-            <a href="credits_status.php">単位取得状況を確認</a>
+        <div class="filter-form">
+            <form action="index.php" method="get" id="filterForm">
+                <label for="grade_filter">学年:</label>
+                <select id="grade_filter" name="grade_filter" onchange="document.getElementById('filterForm').submit();">
+                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                        <option value="<?php echo $i; ?>" <?php echo ($currentSelectedGrade == $i) ? 'selected' : ''; ?>>
+                            <?php echo $i; ?>年生
+                        </option>
+                    <?php endfor; ?>
+                </select>
+
+                <label for="term_filter">学期:</label>
+                <select id="term_filter" name="term_filter" onchange="document.getElementById('filterForm').submit();">
+                    <option value="0" <?php echo ($currentSelectedTerm == '0') ? 'selected' : ''; ?>>全て</option>
+                    <option value="1" <?php echo ($currentSelectedTerm == '1') ? 'selected' : ''; ?>>前期</option>
+                    <option value="2" <?php echo ($currentSelectedTerm == '2') ? 'selected' : ''; ?>>後期</option>
+                </select>
+            </form>
+
+            <div class="current-filters">
+                現在の表示: <span id="displayGrade"></span> <span id="displayTerm"></span>
+            </div>
         </div>
+
 
         <div class="main-container">
             <div class="class-list-section">
-                <h2>利用可能な授業一覧</h2>
-
-                <form method="get" action="index.php" class="filter-form">
-                    <label for="grade_filter">学年:</label>
-                    <select name="grade_filter" id="grade_filter" onchange="this.form.submit()">
-                        <option value="1" <?= $current_grade == 1 ? 'selected' : '' ?>>1年生</option>
-                        <option value="2" <?= $current_grade == 2 ? 'selected' : '' ?>>2年生</option>
-                        <option value="3" <?= $current_grade == 3 ? 'selected' : '' ?>>3年生</option>
-                        <option value="4" <?= $current_grade == 4 ? 'selected' : '' ?>>4年生</option>
-                    </select>
-
-                    <label for="term_filter">期間:</label>
-                    <select name="term_filter" id="term_filter" onchange="this.form.submit()">
-                        <option value="全て" <?= $current_term == '全て' ? 'selected' : '' ?>>全て</option>
-                        <option value="前期" <?= $current_term == '前期' ? 'selected' : '' ?>>前期</option>
-                        <option value="後期" <?= $current_term == '後期' ? 'selected' : '' ?>>後期</option>
-                        <option value="通年" <?= $current_term == '通年' ? 'selected' : '' ?>>通年</option>
-                    </select>
-                </form>
+                <h2>授業選択</h2>
+                <div id="selectedClassInfo">
+                    <p>選択中の授業: <span id="currentSelectedClassName">なし</span></p>
+                    <p>単位: <span id="currentSelectedClassCredit">0</span></p>
+                    <button onclick="addClassToTimetable()">時間割に追加</button>
+                </div>
 
                 <table>
                     <thead>
                         <tr>
                             <th>学年</th>
-                            <th>期間</th>
-                            <th>科目名</th>
+                            <th>学期</th>
+                            <th>授業名</th>
                             <th>単位</th>
-                            <th>選択</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (empty($classes)): ?>
-                            <tr><td colspan="5">利用可能な授業がありません。</td></tr>
+                        <?php if (empty($class_list)): ?>
+                            <tr><td colspan="5">該当する授業がありません。</td></tr>
                         <?php else: ?>
-                            <?php foreach ($classes as $class): ?>
-                                <tr>
-                                    <td><?php echo h($class['grade']); ?>年生</td>
-                                    <td><?php echo h($class['term']); ?></td>
-                                    <td><?php echo h($class['class_name']); ?></td>
-                                    <td><?php echo h($class['credit']); ?></td>
+                            <?php foreach ($class_list as $class): ?>
+                                <tr data-class-id="<?php echo htmlspecialchars($class['id']); ?>"
+                                    data-class-name="<?php echo htmlspecialchars($class['name']); ?>"
+                                    data-class-credit="<?php echo htmlspecialchars($class['credit']); ?>"
+                                    data-class-term="<?php echo htmlspecialchars($class['term']); ?>"
+                                    data-class-grade="<?php echo htmlspecialchars($class['grade']); ?>">
+                                    <td><?php echo htmlspecialchars($class['grade']); ?></td>
                                     <td>
-                                        <button class="add-button"
-                                                data-class-id="<?php echo h($class['id']); ?>"
-                                                data-class-name="<?php echo h($class['class_name']); ?>"
-                                                data-credit="<?php echo h($class['credit']); ?>"
-                                                data-day-of-week="<?php echo h($class['day_of_week']); ?>"
-                                                data-time-slot="<?php echo h($class['time_slot']); ?>"
-                                                data-term="<?php echo h($class['term']); ?>">選択</button>
+                                        <?php
+                                            // 학기 숫자를 문자로 변환
+                                            if ($class['term'] == 1) {
+                                                echo '前期';
+                                            } elseif ($class['term'] == 2) {
+                                                echo '後期';
+                                            } else {
+                                                echo '不明'; // 또는 적절한 기본값
+                                            }
+                                        ?>
                                     </td>
+                                    <td><?php echo htmlspecialchars($class['name']); ?></td>
+                                    <td><?php echo htmlspecialchars($class['credit']); ?></td>
+                                    <td><button class="add-button" onclick="selectClass(this)">選択</button></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -261,151 +170,78 @@ if (isset($_GET['message']) && isset($_GET['message_type'])) {
                 </table>
             </div>
 
-            <div class="timetable-section">
-                <h2>時間割</h2>
-
-                <div id="selectedClassInfo">
-                    <p>選択中の授業: <span id="currentSelectedClassName">なし</span></p>
-                    <p>単位: <span id="currentSelectedClassCredit">0</span></p>
+                 <div class="timetable-section">
+                <h2>あなたの時間割</h2>
+                <p id="totalCredits">合計単位数: 0</p>
+                <div class="timetable-controls">
+                    <label for="day_select">曜日:</label>
+                    <select id="day_select">
+                        <option value="月">月曜日</option>
+                        <option value="火">火曜日</option>
+                        <option value="水">水曜日</option>
+                        <option value="木">木曜日</option>
+                        <option value="金">金曜日</option>
+                        <option value="土">土曜日</option>
+                    </select>
+                    <label for="time_select">時限:</label>
+                    <select id="time_select">
+                        <?php for ($i = 1; $i <= 10; $i++): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?>限</option>
+                        <?php endfor; ?>
+                    </select>
                 </div>
-
-                <form id="addTimetableForm" method="post" action="index.php" style="margin-bottom: 20px;">
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="class_id" id="formClassId">
-                    <input type="hidden" name="term" id="formTerm">
-                    <input type="hidden" name="grade_filter" value="<?= $current_grade ?>">
-                    <input type="hidden" name="term_filter" value="<?= $current_term ?>">
-
-
-                    <label for="day_of_week">曜日:</label>
-                    <select name="day_of_week" id="day_of_week">
-                        <option value="">選択してください</option>
-                        <option value="月">月</option>
-                        <option value="火">火</option>
-                        <option value="水">水</option>
-                        <option value="木">木</option>
-                        <option value="金">金</option>
-                        <option value="土">土</option>
-                        <option value="日">日</option>
-                    </select>
-
-                    <label for="time_slot">時限:</label>
-                    <select name="time_slot" id="time_slot">
-                        <option value="">選択してください</option>
-                        <option value="1">1限 (9:00-10:00)</option>
-                        <option value="2">2限 (10:10-11:10)</option>
-                        <option value="3">3限 (11:20-12:20)</option>
-                        <option value="4">4限 (13:10-14:10)</option>
-                        <option value="5">5限 (14:20-15:20)</option>
-                        <option value="6">6限 (15:30-16:30)</option>
-                        <option value="7">7限 (16:40-17:40)</option>
-                    </select>
-
-                    <button type="submit" id="addTimetableBtn" class="disabled-button" disabled>時間割に追加</button>
-                </form>
-
-                <h3>現在の時間割 (<?= h($current_grade) ?>年生, 期間: <?= h(getTermName($current_term)) ?>)</h3>
-                <table class="timetable-table">
+                <table class="timetable-table" id="timetable">
                     <thead>
                         <tr>
-                            <th>時間</th>
+                            <th>時限</th>
                             <th>月</th>
                             <th>火</th>
                             <th>水</th>
                             <th>木</th>
                             <th>金</th>
                             <th>土</th>
-                            <th>日</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php for ($i = 1; $i <= 7; $i++): ?>
+                        <?php for ($period = 1; $period <= 10; $period++): ?>
                             <tr>
-                                <td><?php echo $i; ?>限</td>
-                                <?php foreach (['月', '火', '水', '木', '金', '土', '日'] as $day): ?>
-                                    <td id="cell-<?php echo $day; ?>-<?php echo $i; ?>" class="time-slot">
-                                        <?php
-                                        $class_found = false;
-                                        foreach ($user_timetable as $class_entry) {
-                                            if ($class_entry['day_of_week'] == $day && $class_entry['time_slot'] == $i) {
-                                                echo '<span class="class-name">' . h($class_entry['class_name']) . '</span><br>';
-                                                // 여기에서 $class_entry['term']은 DB에서 가져온 문자열 ('前期', '後期', '通年')이므로
-                                                // db_config.php의 getTermName 함수가 문자열을 처리하도록 수정되었거나,
-                                                // class_entry['term'] 값을 직접 사용하면 됩니다.
-                                                echo '<span class="term-display-in-cell">('. h($class_entry['term']) . ')</span>'; // getTermName($class_entry['term']) 대신 직접 사용
-                                                echo '<form method="post" action="index.php" style="display:inline;">';
-                                                echo '<input type="hidden" name="action" value="remove">';
-                                                echo '<input type="hidden" name="user_timetable_id" value="' . h($class_entry['user_timetable_id']) . '">';
-                                                echo '<input type="hidden" name="grade_filter" value="' . h($current_grade) . '">';
-                                                echo '<input type="hidden" name="term_filter" value="' . h($current_term) . '">';
-                                                echo '<button type="submit" class="remove-button">x</button>';
-                                                echo '</form>';
-                                                $class_found = true;
-                                                break;
-                                            }
-                                        }
-                                        ?>
-                                    </td>
+                                <td><?php echo $period; ?></td>
+                                <?php foreach (['月', '火', '水', '木', '金', '土'] as $day): ?>
+                                    <td id="cell-<?php echo $day; ?>-<?php echo $period; ?>" class="time-slot">
+                                        </td>
                                 <?php endforeach; ?>
                             </tr>
                         <?php endfor; ?>
                     </tbody>
                 </table>
-                <p id="totalCredits">現在の期間の履修単位数: <?php echo h($total_current_credits); ?> 単位</p>
 
-                <form id="confirmForm" method="post" action="index.php">
-                    <input type="hidden" name="action" value="confirm_timetable">
-                    <input type="hidden" name="grade_filter" value="<?= $current_grade ?>">
-                    <input type="hidden" name="term_filter" value="<?= $current_term ?>">
-                    <button type="submit" id="confirmTimetableBtn">時間割を確定する</button>
-                </form>
-
+                <?php if ($isUserLoggedIn): ?>
+                    <button id="confirmTimetableBtn" onclick="confirmTimetable()">この時間割で登録確定</button>
+                    <a href="confirmed_timetable.php?grade_filter=<?php echo $currentSelectedGrade; ?>" class="view-confirmed-button">確定済み時間割を見る</a>
+                <?php else: ?>
+                    <button id="confirmTimetableBtn" class="disabled-button" disabled>ログインして時間割を保存</button>
+                    <p style="text-align: center; margin-top: 10px;">時間割を保存するには<a href="login.php">ログイン</a>してください。</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 
     <script>
-        let selectedClassId = null;
-        let selectedClassName = '';
-        let selectedClassCredit = 0;
-        let selectedClassTerm = '';
+        // PHP에서 JavaScript로 변수 전달
+        const currentSelectedGradeFromPHP = <?php echo json_encode($currentSelectedGrade); ?>;
+        const currentSelectedTermFromPHP = <?php echo json_encode($currentSelectedTerm); ?>;
+        const isUserLoggedIn = <?php echo json_encode($isUserLoggedIn); ?>;
+        const currentLoggedInUserId = <?php echo json_encode($loggedInUserId); ?>;
+        const initialTimetableData = <?php echo json_encode($initialTimetableData); ?>; // 초기 시간표 데이터
 
-        document.querySelectorAll('.add-button').forEach(button => {
-            button.addEventListener('click', function() {
-                selectedClassId = this.dataset.classId;
-                selectedClassName = this.dataset.className;
-                selectedClassCredit = this.dataset.credit;
-                selectedClassTerm = this.dataset.term;
-
-                document.getElementById('currentSelectedClassName').textContent = selectedClassName;
-                document.getElementById('currentSelectedClassCredit').textContent = selectedClassCredit;
-                
-                document.getElementById('addTimetableBtn').disabled = false;
-                document.getElementById('addTimetableBtn').classList.remove('disabled-button');
-
-                document.getElementById('formClassId').value = selectedClassId;
-                document.getElementById('formTerm').value = selectedClassTerm;
-            });
+        // 초기화 함수 호출은 script.js에 정의되어 있을 것입니다.
+        // DOMContentLoaded를 사용하여 스크립트가 로드된 후 실행되도록 합니다.
+        document.addEventListener('DOMContentLoaded', function() {
+            // script.js에 정의된 함수들을 호출
+            initializeTimetableFromPHP(initialTimetableData); // 저장된 시간표를 로드
+            updateFilterDisplay(); // 현재 필터 상태를 표시
         });
-
-        const dayOfWeekSelect = document.getElementById('day_of_week');
-        const timeSlotSelect = document.getElementById('time_slot');
-        const addTimetableBtn = document.getElementById('addTimetableBtn');
-
-        function toggleAddButtonState() {
-            if (selectedClassId && dayOfWeekSelect.value !== '' && timeSlotSelect.value !== '') {
-                addTimetableBtn.disabled = false;
-                addTimetableBtn.classList.remove('disabled-button');
-            } else {
-                addTimetableBtn.disabled = true;
-                addTimetableBtn.classList.add('disabled-button');
-            }
-        }
-
-        dayOfWeekSelect.addEventListener('change', toggleAddButtonState);
-        timeSlotSelect.addEventListener('change', toggleAddButtonState);
-
-        toggleAddButtonState();
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
