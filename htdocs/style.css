@@ -17,7 +17,7 @@ body {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* main-container와 하위 Flexbox 요소들을 명확하게 정의 */
+/* ⚠️ 핵심 변경: main-container와 하위 Flexbox 요소들을 명확하게 정의 */
 .main-container {
     display: flex; /* Flexbox 활성화 */
     flex-direction: row; /* 자식 요소들을 가로로 정렬 (기본값이지만 명시) */
@@ -90,6 +90,7 @@ body {
     background-color: #0056b3;
     text-decoration: none;
 }
+
 
 /* Headings */
 h1, h2, h3 {
@@ -169,6 +170,7 @@ button:hover {
     background-color: #218838;
 }
 
+
 /* Navigation buttons (e.g., in confirmed_timetable.php) */
 .navigation-buttons {
     margin-top: 20px;
@@ -203,46 +205,16 @@ button:hover {
 .filter-form label, .filter-form select {
     margin-right: 10px;
 }
-
 /* Class List Section */
 .class-list-section {
     background-color: #fff;
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
     flex: 1; /* flex-grow: 1, flex-shrink: 1, flex-basis: 0% - 공간이 남으면 채우고 부족하면 줄임 */
     min-width: 380px; /* 기존 400px에서 약간 줄임, 너무 작으면 내용 깨짐 */
     box-sizing: border-box;
-}
-
-.class-list-section table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-.class-list-section th, .class-list-section td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.class-list-section th {
-    background-color: #f2f2f2;
-}
-
-.class-list-section tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.class-list-section .add-button {
-    background-color: #007bff;
-    padding: 5px 10px;
-    font-size: 0.85em;
-}
-
-.class-list-section .add-button:hover {
-    background-color: #0056b3;
 }
 
 /* Timetable Section */
@@ -251,188 +223,14 @@ button:hover {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
     flex: 2; /* flex-grow: 2, flex-shrink: 1, flex-basis: 0% - 수업 목록보다 2배 더 많은 공간 차지 */
-    min-width: 600px; /* 시간표가 넓어지므로 최소 너비 증가 */
+    min-width: 500px; /* 기존 550px에서 약간 줄임, 너무 작으면 시간표 셀 깨짐 */
     box-sizing: border-box;
 }
 
-#selectedClassInfo {
-    background-color: #e0f7fa;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #b2ebf2;
-    text-align: center;
-    margin-bottom: 20px;
-}
-#selectedClassInfo p {
-    margin: 5px 0;
-    font-size: 1.1em;
-}
-#currentSelectedClassName, #currentSelectedClassCredit,
-#currentSelectedClassDurationFixed { /* 추가된 span들도 스타일 적용 */
-    font-weight: bold;
-    color: #007bff;
-}
 
-#totalCredits {
-    margin-top: 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    text-align: right;
-    color: #333;
-}
-
-#confirmTimetableBtn {
-    display: block;
-    width: 80%;
-    max-width: 300px;
-    margin: 20px auto;
-    padding: 15px 25px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 8px;
-    font-size: 1.1em;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#confirmTimetableBtn:hover {
-    background-color: #0056b3;
-}
-
-/* Timetable Table Specifics (Changed for new layout) */
-.timetable-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    table-layout: fixed; /* 고정 레이아웃으로 칸 너비 일정하게 유지 */
-}
-
-.timetable-table th, .timetable-table td {
-    border: 1px solid #ddd;
-    padding: 0; /* padding을 0으로 설정하고 내부 div에 padding 부여 */
-    text-align: center;
-    vertical-align: top; /* 콘텐츠가 셀 상단에 위치하도록 */
-    font-size: 0.9em;
-}
-
-/* 헤더 셀 (요일/시한) */
-.timetable-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    color: #555;
-    padding: 8px;
-    vertical-align: middle;
-    height: 60px; /* 헤더 높이 */
-}
-
-/* 교시 시간 텍스트 */
-.timetable-table th .period-time-small {
-    font-size: 0.7em;
-    font-weight: normal;
-    color: #777;
-    display: block; /* 줄바꿈 */
-    margin-top: 3px;
-}
-
-
-/* 첫 번째 컬럼 (요일 헤더) 스타일 */
-.timetable-table td:first-child {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    color: #555;
-    padding: 8px;
-    vertical-align: middle;
-    width: 80px; /* 요일 열 너비 고정 */
-}
-
-/* 시간표 칸 내부 (수업 정보가 표시될 단일 사각형) 스타일 */
-/* height는 JavaScript에서 동적으로 설정될 수 있음 (colspan에 따라) */
-.time-slot {
-    width: 100%;
-    height: 90px; /* 기본 칸 높이 */
-    background-color: #fdfdfd; /* 기본 배경색 */
-    display: flex; /* 내부 콘텐츠를 flex로 정렬 */
-    flex-direction: column; /* 세로로 정렬 */
-    justify-content: flex-start; /* 상단 정렬 */
-    align-items: center; /* 가로 중앙 정렬 */
-    padding: 5px; /* 내부 패딩 */
-    box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
-    overflow: hidden; /* 내용이 넘치면 숨김 */
-    cursor: pointer; /* 클릭 가능한 셀처럼 보이도록 */
-    transition: background-color 0.2s ease; /* 호버 효과 */
-    position: relative; /* 삭제 버튼 위치 지정을 위해 추가 */
-}
-
-.time-slot:hover:not(.filled-primary) {
-    background-color: #e6f7ff; /* 비어있는 칸 호버 시 연한 파란색 */
-}
-
-.time-slot.filled-primary {
-    background-color: #e0f7fa; /* 수업이 채워진 칸 배경색 (연한 하늘색) */
-    color: #333;
-    font-weight: bold;
-}
-
-/* 수업 정보 텍스트 스타일 */
-.class-name-in-cell {
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #0056b3; /* 수업명 색상 (진한 파란색) */
-    margin-bottom: 2px;
-    line-height: 1.2;
-    text-align: center;
-    word-break: break-word; /* 긴 단어 줄 바꿈 */
-    max-height: 2.4em; /* 두 줄까지 표시 (약간 여유) */
-    overflow: hidden;
-}
-
-/* 담당 교수, 강의실 정보는 시간표 칸에 표시하지 않음 */
-.class-detail-in-cell {
-    display: none; /* 이 요소를 숨김 */
-}
-
-.class-credit-in-cell {
-    font-size: 0.7em;
-    color: #999;
-    margin-top: 2px;
-}
-
-.term-display-in-cell {
-    font-size: 0.7em;
-    color: #007bff; /* 학기 정보 색상 (파란색) */
-    margin-top: 5px;
-}
-
-.remove-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    line-height: 1;
-    font-size: 0.7em;
-    cursor: pointer;
-    position: absolute;
-    top: 2px; /* 셀 내에서 우측 상단에 위치 */
-    right: 2px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    z-index: 10; /* 다른 콘텐츠 위에 오도록 */
-    opacity: 0.8; /* 평소에는 약간 투명하게 */
-    transition: opacity 0.2s ease;
-}
-
-.remove-button:hover {
-    background-color: #c82333;
-    opacity: 1; /* 호버 시 불투명하게 */
-}
-
-/* Responsive adjustments for overall layout */
+/* Responsive adjustments for overall layout - 이 부분을 더 명확하게 */
 @media (max-width: 992px) { /* 태블릿 가로 또는 작은 데스크탑 */
     .main-container {
         flex-direction: column; /* 너비가 992px 이하일 때는 세로로 정렬 */
@@ -453,12 +251,8 @@ button:hover {
 }
 
 @media (max-width: 768px) { /* 모바일 환경 */
-    body {
-        padding: 10px;
-    }
     .container {
         padding: 10px;
-        margin: 10px auto;
     }
     .main-container {
         padding: 10px;
@@ -480,31 +274,30 @@ button:hover {
         margin-bottom: 5px;
     }
 
-    /* Timetable Table Specifics */
+    /* Timetable Table Specifics - 이 부분은 기존 코드를 그대로 사용 */
     .timetable-table th, .timetable-table td {
-        min-width: 40px; /* 칸 너비를 더 줄임 */
-        height: 50px; /* 칸 높이를 더 줄임 */
-        font-size: 0.6em;
+        min-width: 50px;
+        height: 60px;
+        font-size: 0.65em;
     }
-    .timetable-table th .period-time-small {
-        font-size: 0.6em;
-    }
-    .timetable-table td:first-child { /* 요일 열 */
-        min-width: 40px;
-        width: 40px;
+    .timetable-table td:first-child {
+        min-width: 35px;
     }
     .class-name-in-cell {
-        font-size: 0.6em;
-        max-height: 2em;
+        font-size: 0.7em;
+        max-height: 2.2em;
     }
-    /* class-detail-in-cell은 display: none; 이므로 영향 없음 */
+    .class-detail-in-cell {
+        font-size: 0.6em;
+        max-height: 2.2em;
+    }
     .class-credit-in-cell, .term-display-in-cell {
-        font-size: 0.5em;
+        font-size: 0.6em;
     }
     .remove-button {
-        width: 12px;
-        height: 12px;
-        font-size: 0.4em;
+        width: 14px;
+        height: 14px;
+        font-size: 0.5em;
         top: 1px;
         right: 1px;
     }
