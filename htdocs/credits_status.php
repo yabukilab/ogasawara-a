@@ -1,6 +1,10 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 연결
+require_once 'db_config.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -63,8 +67,14 @@ try {
 
 } catch (PDOException $e) {
     error_log("進級判定エラー: " . $e->getMessage());
-    echo "<p style='color: red;'>データベースエラーが発生しました。</p>";
+
+    // 詳細なエラーをブラウザに表示（開発中のみ推奨）
+    echo "<p style='color: red;'>データベースエラーが発生しました：</p>";
+    echo "<pre style='color: red; background: #eee; padding: 10px; border-radius: 6px;'>";
+    echo htmlspecialchars($e->getMessage());
+    echo "</pre>";
 }
+
 ?>
     </div>
 </body>
