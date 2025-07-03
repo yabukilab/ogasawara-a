@@ -44,23 +44,41 @@ function selectClass(buttonElement) {
 // 3. 時間割に授業追加 (HTMLの "時間割に追加" ボタンクリック時呼び出し)
 function addClassToTimetable() {
     if (!selectedClass) {
-        alert('時間割に追加する授業を選択してください。'); // 시간표에 추가할 수업을 선택해주세요.
+        alert('時間割に追加する授業を選択してください。');
         return;
     }
 
-    const day = document.getElementById('day_select').value;
-    // const period = parseInt(document.getElementById('time_select').value); // ⚠️ 이 줄은 이제 사용하지 않습니다.
+    let day;
+    let targetPeriods = [];
 
-    if (!day) { // 요일이 선택되지 않은 경우 예외 처리
-        alert('曜日を選択してください。'); // 요일을 선택해주세요.
+    // ⚠️ 변경된 부분: 특정 수업 이름에 따라 요일과 시한을 고정
+    if (selectedClass.name === '数学') { // 예시: '数学' 수업인 경우
+        day = '月'; // 월요일
+        targetPeriods = [1, 2]; // 1교시, 2교시
+    } else if (selectedClass.name === '別の授業名') { // 다른 수업에 대한 규칙 추가 가능
+        day = '火'; // 화요일
+        targetPeriods = [3]; // 3교시
+    } else {
+        // 특정 규칙이 없는 수업의 경우, 기존처럼 사용자가 드롭다운에서 선택한 요일과 시한을 사용
+        // (이 경우, 기존 addClassToTimetable 로직과 동일하게 1, 2교시가 기본이 됩니다)
+        // 만약 사용자가 선택한 시한을 반영하고 싶다면, 'time_select' 값을 사용하도록 변경해야 합니다.
+        // 현재는 day_select만 사용하고 targetPeriods는 [1,2]로 고정되어 있습니다.
+
+        day = document.getElementById('day_select').value;
+        // 현재 로직상으로 addClassToTimetable 내부에 targetPeriods = [1, 2]; 가 하드코딩 되어있습니다.
+        // 만약 '特定の授業名'이 아닌 경우에도 사용자가 'time_select'에서 선택한 시한을 따르게 하려면,
+        // 아래와 같이 수정해야 합니다.
+        const selectedPeriod = parseInt(document.getElementById('time_select').value);
+        targetPeriods = [selectedPeriod]; // 사용자가 선택한 하나의 시한
+    }
+
+    if (!day || targetPeriods.length === 0) {
+        alert('授業を追加する曜日または時限が設定されていません。'); // 수업을 추가할 요일 또는 시한이 설정되지 않았습니다.
         return;
     }
 
-    // ⚠️ 변경된 부분: 수업을 추가할 교시를 배열로 정의 (1교시와 2교시)
-    const targetPeriods = [1, 2];
-
-    let hasAddedToAnySlot = false; // 하나라도 성공적으로 추가되었는지 확인하는 플래그
-    let tempTotalCredits = totalCredits; // 임시 학점 변수, 덮어쓰기 고려하여 루프 내에서 처리
+    let hasAddedToAnySlot = false;
+    let tempTotalCredits = totalCredits;
 
     for (const period of targetPeriods) {
         const cellId = `cell-${day}-${period}`;
@@ -68,24 +86,19 @@ function addClassToTimetable() {
 
         if (!targetCell) {
             console.error(`Error: Timetable cell with ID ${cellId} not found.`);
-            // alert(`時間割のセルが見つかりません: ${day}曜日 ${period}時限`); // 특정 교시 셀을 찾지 못한 경우 (선택 사항)
-            continue; // 다음 교시로 넘어감
+            continue;
         }
 
-        // 이미 수업이 있는 경우 처리
         if (currentTimetable[day] && currentTimetable[day][period]) {
             const confirmOverwrite = confirm(`この時限 (${day}曜日 ${period}時限) にはすでに授業があります。上書きしますか？`);
             if (!confirmOverwrite) {
-                continue; // 상위 forEach 루프의 다음 반복으로 넘어감
+                continue;
             }
-            // 기존 수업 학점 감소
             tempTotalCredits -= currentTimetable[day][period].classCredit;
         }
 
-        // 셀 내용 업데이트
-        // 이 부분은 기존 코드와 동일하지만, CSS 클래스 이름 변경 권장 사항을 반영합니다.
-        // 현재 스크린샷과 맞추기 위해 class-detail-in-cell은 비워둡니다.
-        targetCell.classList.add('filled-primary', 'filled-cell-wrapper'); // ⚠️ 새로운 클래스 filled-cell-wrapper 추가
+        // 셀 내용 업데이트 (기존과 동일)
+        targetCell.classList.add('filled-primary', 'filled-cell-wrapper');
         targetCell.innerHTML = `
             <span class="remove-button" onclick="removeClassFromTimetable('${day}', ${period})">X</span>
             <div class="class-name-in-cell">${selectedClass.name}</div>
@@ -105,30 +118,22 @@ function addClassToTimetable() {
             className: selectedClass.name,
             classCredit: selectedClass.credit,
             classTerm: selectedClass.term,
-            classGrade: currentSelectedGradeFromPHP // PHP에서 받아온 현재 선택된 학년 값을 저장
+            classGrade: currentSelectedGradeFromPHP
         };
 
-        // 각 성공적인 추가마다 학점 더하기
         tempTotalCredits += selectedClass.credit;
         hasAddedToAnySlot = true;
     }
 
-    // 모든 타겟 교시에 대해 루프를 돈 후 총 학점 업데이트
-    if (hasAddedToAnySlot) { // 하나라도 수업이 성공적으로 추가되었다면
-        totalCredits = tempTotalCredits; // 임시 변수 값을 최종 반영
+    if (hasAddedToAnySlot) {
+        totalCredits = tempTotalCredits;
         document.getElementById('totalCredits').textContent = `合計単位数: ${totalCredits}`;
-    } else {
-        // 모든 targetPeriods에 추가 실패했을 때 (예: 모두 덮어쓰기 취소)
-        // 경고 메시지는 루프 내부 confirm에서 처리되므로, 여기서는 별도 메시지 불필요
-        // alert('授業を追加できませんでした。');
     }
 
-    // 선택된 수업 정보 초기화
     selectedClass = null;
     document.getElementById('currentSelectedClassName').textContent = 'なし';
     document.getElementById('currentSelectedClassCredit').textContent = '0';
 }
-
 // 4. 時間割から授業削除
 function removeClassFromTimetable(day, period) {
     const cellId = `cell-${day}-${period}`;
