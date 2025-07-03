@@ -3,6 +3,13 @@ session_start();
 // db_config.php ファイルを読み込みます。これにより、$db オブジェクトと h() 関数、getTermName() 関数が利用可能になります。
 require_once 'db.php';
 
+function getTermName($term) {
+    switch ($term) {
+        case 1: return "前期";
+        case 2: return "後期";
+        default: return "不明";
+    }
+}
 // ログイン確認
 // $_SESSION['student_number'] と $_SESSION['user_id'] の両方を確認
 if (!isset($_SESSION['student_number']) || !isset($_SESSION['user_id'])) {
@@ -218,15 +225,6 @@ foreach ($confirmedTimetableData as $entry) {
             </select>
         </form>
     </div>
-    
-        function getTermName($term) {
-            switch ($term) {
-                case 1: return "前期";
-                case 2: return "後期";
-                default: return "不明";
-            }
-        }
-
 
     <?php if (!empty($fetchError)): ?>
         <p class="message error"><?php echo h($fetchError); ?></p>
