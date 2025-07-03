@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 연결
+require_once 'db.php'; // DB 연결
 
 header('Content-Type: application/json');
 

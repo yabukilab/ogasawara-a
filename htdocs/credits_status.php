@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db_config.php';
+require_once 'db.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

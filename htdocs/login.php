@@ -2,7 +2,7 @@
 // セッションを開始します。スクリプトの冒頭で常に呼び出す必要があります。
 session_start();
 // db_config.php ファイルを読み込みます。これにより、$db オブジェクトと h() 関数が利用可能になります。
-require_once 'db_config.php';
+require_once 'db.php';
 
 // エラーメッセージを格納するための変数を初期化します。
 $error = '';

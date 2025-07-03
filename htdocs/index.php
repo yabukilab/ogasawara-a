@@ -1,7 +1,7 @@
 <?php
 session_start();
 // db_config.php 파일이 데이터베이스 연결을 설정하고 $db 변수를 제공한다고 가정합니다.
-require_once 'db_config.php';
+require_once 'db.php';
 
 // 로그인 상태 확인 및 사용자 정보 가져오기
 $isUserLoggedIn = isset($_SESSION['user_id']);

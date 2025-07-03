@@ -1,7 +1,7 @@
 <?php
 session_start();
 // db_config.php ファイルを読み込みます。これにより、$db オブジェクトと h() 関数、getTermName() 関数が利用可能になります。
-require_once 'db_config.php';
+require_once 'db.php';
 
 // ログイン確認
 // $_SESSION['student_number'] と $_SESSION['user_id'] の両方を確認

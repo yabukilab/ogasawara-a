@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'db_config.php'; // DB 설정 파일 포함
+require_once 'db.php'; // DB 설정 파일 포함
 
 $message = '';
 
