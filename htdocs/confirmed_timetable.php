@@ -218,6 +218,15 @@ foreach ($confirmedTimetableData as $entry) {
             </select>
         </form>
     </div>
+    
+        function getTermName($term) {
+            switch ($term) {
+                case 1: return "前期";
+                case 2: return "後期";
+                default: return "不明";
+            }
+        }
+
 
     <?php if (!empty($fetchError)): ?>
         <p class="message error"><?php echo h($fetchError); ?></p>
