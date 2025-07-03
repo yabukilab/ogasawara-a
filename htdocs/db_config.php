@@ -27,3 +27,6 @@ try {
 } catch (PDOException $e) {
   echo "Can't connect to the database: " . h($e->getMessage());
 }
+
+$dbNameCheck = $db->query("SELECT DATABASE()")->fetchColumn();
+echo "<p>実際に接続しているデータベース：<strong>" . h($dbNameCheck) . "</strong></p>";
