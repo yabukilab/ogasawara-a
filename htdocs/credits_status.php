@@ -33,9 +33,9 @@ $userId = $_SESSION['user_id'];
 try {
     // 履修科目（重複除外）とその単位数を取得
     $sql = "
-        SELECT DISTINCT c.class_id, c.credit
+        SELECT DISTINCT class_id, credit
         FROM user_timetables ut
-        JOIN class c ON ut.class_id = c.class_id
+        JOIN class c ON ut.class_id = class_id
         WHERE ut.user_id = :user_id
     ";
     $stmt = $db->prepare($sql);
