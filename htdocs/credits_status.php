@@ -35,7 +35,7 @@ try {
     $sql = "
         SELECT DISTINCT c.class_id, c.credit
         FROM user_timetables ut
-        JOIN classes c ON ut.class_id = c.class_id
+        JOIN class c ON ut.class_id = c.class_id
         WHERE ut.user_id = :user_id
     ";
     $stmt = $db->prepare($sql);
