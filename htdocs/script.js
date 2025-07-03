@@ -44,60 +44,84 @@ function selectClass(buttonElement) {
 // 3. 時間割に授業追加 (HTMLの "時間割に追加" ボタンクリック時呼び出し)
 function addClassToTimetable() {
     if (!selectedClass) {
-        alert('時間割に追加する授業を選択してください。');
+        alert('時間割に追加する授業を選択してください。'); // 시간표에 추가할 수업을 선택해주세요.
         return;
     }
 
     const day = document.getElementById('day_select').value;
-    const period = parseInt(document.getElementById('time_select').value); // int로 변환
+    // const period = parseInt(document.getElementById('time_select').value); // ⚠️ 이 줄은 이제 사용하지 않습니다.
 
-    const cellId = `cell-${day}-${period}`;
-    const targetCell = document.getElementById(cellId);
-
-    if (!targetCell) {
-        console.error(`Error: Timetable cell with ID ${cellId} not found.`);
-        alert('時間割のセルが見つかりません。');
+    if (!day) { // 요일이 선택되지 않은 경우 예외 처리
+        alert('曜日を選択してください。'); // 요일을 선택해주세요.
         return;
     }
 
-    // 이미 수업이 있는 경우 처리
-    if (currentTimetable[day] && currentTimetable[day][period]) {
-        const confirmOverwrite = confirm('この時限にはすでに授業があります。上書きしますか？');
-        if (!confirmOverwrite) {
-            return;
+    // ⚠️ 변경된 부분: 수업을 추가할 교시를 배열로 정의 (1교시와 2교시)
+    const targetPeriods = [1, 2];
+
+    let hasAddedToAnySlot = false; // 하나라도 성공적으로 추가되었는지 확인하는 플래그
+    let tempTotalCredits = totalCredits; // 임시 학점 변수, 덮어쓰기 고려하여 루프 내에서 처리
+
+    for (const period of targetPeriods) {
+        const cellId = `cell-${day}-${period}`;
+        const targetCell = document.getElementById(cellId);
+
+        if (!targetCell) {
+            console.error(`Error: Timetable cell with ID ${cellId} not found.`);
+            // alert(`時間割のセルが見つかりません: ${day}曜日 ${period}時限`); // 특정 교시 셀을 찾지 못한 경우 (선택 사항)
+            continue; // 다음 교시로 넘어감
         }
-        // 기존 수업 학점 감소
-        totalCredits -= currentTimetable[day][period].classCredit;
-    }
 
-    // 셀 내용 업데이트
-    targetCell.classList.add('filled-primary');
-    targetCell.innerHTML = `
-        <span class="remove-button" onclick="removeClassFromTimetable('${day}', ${period})">X</span>
-        <div class="class-name-in-cell">${selectedClass.name}</div>
-        <div class="class-detail-in-cell">
+        // 이미 수업이 있는 경우 처리
+        if (currentTimetable[day] && currentTimetable[day][period]) {
+            const confirmOverwrite = confirm(`この時限 (${day}曜日 ${period}時限) にはすでに授業があります。上書きしますか？`);
+            if (!confirmOverwrite) {
+                continue; // 상위 forEach 루프의 다음 반복으로 넘어감
+            }
+            // 기존 수업 학점 감소
+            tempTotalCredits -= currentTimetable[day][period].classCredit;
+        }
+
+        // 셀 내용 업데이트
+        // 이 부분은 기존 코드와 동일하지만, CSS 클래스 이름 변경 권장 사항을 반영합니다.
+        // 현재 스크린샷과 맞추기 위해 class-detail-in-cell은 비워둡니다.
+        targetCell.classList.add('filled-primary', 'filled-cell-wrapper'); // ⚠️ 새로운 클래스 filled-cell-wrapper 추가
+        targetCell.innerHTML = `
+            <span class="remove-button" onclick="removeClassFromTimetable('${day}', ${period})">X</span>
+            <div class="class-name-in-cell">${selectedClass.name}</div>
+            <div class="class-detail-in-cell"></div>
+            <div class="class-credit-in-cell">${selectedClass.credit}単位</div>
+            <div class="term-display-in-cell">
+                ${selectedClass.term == '1' ? '前期' : (selectedClass.term == '2' ? '後期' : '不明')}
             </div>
-        <div class="class-credit-in-cell">${selectedClass.credit}単位</div>
-        <div class="term-display-in-cell">
-            ${selectedClass.term == '1' ? '前期' : (selectedClass.term == '2' ? '後期' : '不明')}
-        </div>
-    `;
+        `;
 
-    // 총 학점 업데이트
-    totalCredits += selectedClass.credit;
-    document.getElementById('totalCredits').textContent = `合計単位数: ${totalCredits}`;
+        // currentTimetable 객체 업데이트
+        if (!currentTimetable[day]) {
+            currentTimetable[day] = {};
+        }
+        currentTimetable[day][period] = {
+            class_id: selectedClass.id,
+            className: selectedClass.name,
+            classCredit: selectedClass.credit,
+            classTerm: selectedClass.term,
+            classGrade: currentSelectedGradeFromPHP // PHP에서 받아온 현재 선택된 학년 값을 저장
+        };
 
-    // currentTimetable 객체 업데이트
-    if (!currentTimetable[day]) {
-        currentTimetable[day] = {};
+        // 각 성공적인 추가마다 학점 더하기
+        tempTotalCredits += selectedClass.credit;
+        hasAddedToAnySlot = true;
     }
-    currentTimetable[day][period] = {
-        class_id: selectedClass.id,
-        className: selectedClass.name,
-        classCredit: selectedClass.credit,
-        classTerm: selectedClass.term,
-        classGrade: currentSelectedGradeFromPHP // PHP에서 받아온 현재 선택된 학년 값을 저장
-    };
+
+    // 모든 타겟 교시에 대해 루프를 돈 후 총 학점 업데이트
+    if (hasAddedToAnySlot) { // 하나라도 수업이 성공적으로 추가되었다면
+        totalCredits = tempTotalCredits; // 임시 변수 값을 최종 반영
+        document.getElementById('totalCredits').textContent = `合計単位数: ${totalCredits}`;
+    } else {
+        // 모든 targetPeriods에 추가 실패했을 때 (예: 모두 덮어쓰기 취소)
+        // 경고 메시지는 루프 내부 confirm에서 처리되므로, 여기서는 별도 메시지 불필요
+        // alert('授業を追加できませんでした。');
+    }
 
     // 선택된 수업 정보 초기화
     selectedClass = null;
@@ -111,7 +135,7 @@ function removeClassFromTimetable(day, period) {
     const targetCell = document.getElementById(cellId);
 
     if (targetCell && currentTimetable[day] && currentTimetable[day][period]) {
-        const confirmRemove = confirm('この授業を時間割から削除しますか？');
+        const confirmRemove = confirm('この授業を時間割から削除しますか？'); // 이 수업을 시간표에서 삭제하시겠습니까?
         if (!confirmRemove) {
             return;
         }
@@ -122,7 +146,7 @@ function removeClassFromTimetable(day, period) {
 
         // 셀 내용 초기화 및 클래스 제거
         targetCell.innerHTML = '';
-        targetCell.classList.remove('filled-primary');
+        targetCell.classList.remove('filled-primary', 'filled-cell-wrapper'); // ⚠️ filled-cell-wrapper 제거
 
         // currentTimetable 객체에서 제거
         delete currentTimetable[day][period];
@@ -137,25 +161,23 @@ function removeClassFromTimetable(day, period) {
 function initializeTimetableFromPHP(data) {
     if (!data || data.length === 0) {
         console.log("No initial timetable data to load.");
-        // 초기화 시 총 학점 0으로 설정
         totalCredits = 0;
         document.getElementById('totalCredits').textContent = `合計単位数: ${totalCredits}`;
-        // 시간표 칸 모두 비우기 (필터 변경 시 기존 시간표 제거용)
         days.forEach(day => {
             periods.forEach(period => {
                 const cell = document.getElementById(`cell-${day}-${period}`);
                 if (cell) {
                     cell.innerHTML = '';
-                    cell.classList.remove('filled-primary');
+                    cell.classList.remove('filled-primary', 'filled-cell-wrapper'); // ⚠️ filled-cell-wrapper 제거
                 }
             });
         });
-        currentTimetable = {}; // currentTimetable도 초기화
+        currentTimetable = {};
         return;
     }
 
-    totalCredits = 0; // 초기화
-    currentTimetable = {}; // 초기화
+    totalCredits = 0;
+    currentTimetable = {};
 
     data.forEach(item => {
         const day = item.day;
@@ -164,12 +186,11 @@ function initializeTimetableFromPHP(data) {
         const targetCell = document.getElementById(cellId);
 
         if (targetCell) {
-            targetCell.classList.add('filled-primary');
+            targetCell.classList.add('filled-primary', 'filled-cell-wrapper'); // ⚠️ filled-cell-wrapper 추가
             targetCell.innerHTML = `
                 <span class="remove-button" onclick="removeClassFromTimetable('${day}', ${period})">X</span>
                 <div class="class-name-in-cell">${item.className}</div>
-                <div class="class-detail-in-cell">
-                    </div>
+                <div class="class-detail-in-cell"></div>
                 <div class="class-credit-in-cell">${item.classCredit}単位</div>
                 <div class="term-display-in-cell">
                     ${item.classTerm == '1' ? '前期' : (item.classTerm == '2' ? '後期' : '不明')}
@@ -185,7 +206,7 @@ function initializeTimetableFromPHP(data) {
                 className: item.className,
                 classCredit: item.classCredit,
                 classTerm: item.classTerm,
-                classGrade: item.classGrade // DB에서 가져온 학년 값 사용
+                classGrade: item.classGrade
             };
         } else {
             console.warn(`Cell not found for day ${day}, period ${period}.`);
@@ -199,7 +220,7 @@ function initializeTimetableFromPHP(data) {
 // 6. 時間割確定およびサーバー保存
 function confirmTimetable() {
     if (!isUserLoggedIn) {
-        alert('時間割を保存するにはログインが必要です。');
+        alert('時間割を保存するにはログインが必要です。'); // 시간표를 저장하려면 로그인해야 합니다.
         window.location.href = 'login.php'; // ログインページへリダイレクト
         return;
     }
@@ -223,11 +244,11 @@ function confirmTimetable() {
     }
 
     if (timetableToSave.length === 0) {
-        alert('保存する授業がありません。時間割に授業を追加してください。');
+        alert('保存する授業がありません。時間割に授業を追加してください。'); // 저장할 수업이 없습니다. 시간표에 수업을 추가해주세요.
         return;
     }
 
-    if (!confirm(`現在の時間割 (${totalCredits}単位) を保存しますか？`)) {
+    if (!confirm(`現在の時間割 (${totalCredits}単位) を保存しますか？`)) { // 현재 시간표를 저장하시겠습니까?
         return;
     }
 
@@ -246,16 +267,16 @@ function confirmTimetable() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert('時間割が正常に保存されました！');
+            alert('時間割が正常に保存されました！'); // 시간표가 성공적으로 저장되었습니다!
             // 保存後必要であればページをリロードまたはUIを更新
             // window.location.reload();
         } else {
-            alert('時間割の保存に失敗しました: ' + data.message);
+            alert('時間割の保存に失敗しました: ' + data.message); // 시간표 저장에 실패했습니다.
             console.error('Save failed:', data.message);
         }
     })
     .catch(error => {
-        alert('時間割の保存中にエラーが発生しました。');
+        alert('時間割の保存中にエラーが発生しました。'); // 시간표 저장 중 오류가 발생했습니다.
         console.error('Error saving timetable:', error);
     });
 }

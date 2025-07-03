@@ -212,7 +212,6 @@ button:hover {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
     flex: 1 1 380px; /* flex-grow: 1, flex-shrink: 1, flex-basis: 380px */
     min-width: 380px; /* 최소 너비를 380px로 유지 */
     box-sizing: border-box;
@@ -224,13 +223,12 @@ button:hover {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
     flex: 2 1 500px; /* flex-grow: 2, flex-shrink: 1, flex-basis: 500px */
     min-width: 500px; /* 최소 너비를 500px로 유지 */
     box-sizing: border-box;
 }
 
-/* ⚠️ 시간표 테이블 관련 핵심 수정 부분 (이전 답변에서 제공된 내용과 동일하게 유지) */
+/* ⚠️ 시간표 테이블 관련 핵심 수정 부분 */
 .timetable-table {
     width: 100%; /* 부모 너비 100% 사용 */
     border-collapse: collapse; /* 셀 경계선 병합 */
@@ -240,12 +238,12 @@ button:hover {
 /* 모든 헤더 셀과 데이터 셀에 공통 스타일 적용 */
 .timetable-table th, .timetable-table td {
     border: 1px solid #ddd;
-    padding: 5px; /* 패딩을 약간 줄여 공간 확보 */
+    padding: 3px; /* ⚠️ 패딩을 약간 더 줄여 셀 내부 공간 확보 */
     text-align: center; /* 셀 내부 텍스트 가운데 정렬 */
-    vertical-align: top; /* 셀 내부 내용 상단 정렬 (수업 정보가 위에서부터 채워지도록) */
+    vertical-align: middle; /* ⚠️ 셀 내부 내용 수직 중앙 정렬 (정사각형 느낌 강조) */
     position: relative; /* 삭제 버튼 위치 지정을 위해 */
     font-size: 0.8em;
-    height: 80px; /* 모든 셀의 높이를 고정 (내용 길이에 따라 조절) */
+    height: 75px; /* ⚠️ 모든 셀의 높이를 고정 (내용 길이에 따라 조절, 스크린샷에 맞춰 약간 줄임) */
     box-sizing: border-box; /* 패딩과 테두리가 너비/높이에 포함되도록 */
     overflow: hidden; /* 내용이 넘칠 경우 숨김 */
 }
@@ -253,9 +251,10 @@ button:hover {
 /* 첫 번째 열 (시간/時限) 헤더 */
 .timetable-table th:first-child {
     width: 10%; /* 첫 번째 열 너비 고정 */
-    min-width: 60px; /* 최소 너비 확보 */
+    min-width: 55px; /* ⚠️ 최소 너비 약간 줄임 */
     background-color: #f2f2f2;
     font-weight: bold;
+    font-size: 0.9em; /* ⚠️ 시간 텍스트 크기 약간 키움 */
 }
 
 /* 요일 헤더 (月, 火, 水, 木, 金, 土) */
@@ -263,13 +262,15 @@ button:hover {
     width: calc(90% / 6); /* 나머지 90%를 6개 요일 컬럼에 균등 분배 */
     background-color: #f2f2f2;
     font-weight: bold;
+    font-size: 0.9em; /* ⚠️ 요일 텍스트 크기 약간 키움 */
 }
 
 /* 시간표 본문 셀 (수업이 들어갈 칸) */
 .timetable-table td {
     width: calc(90% / 6); /* 요일 컬럼과 동일하게 6개에 균등 분배 */
-    min-width: 80px; /* 셀이 너무 작아지지 않도록 최소 너비 설정 */
-    height: 80px; /* 높이 고정 */
+    min-width: 75px; /* ⚠️ 셀이 너무 작아지지 않도록 최소 너비 설정 (높이와 유사하게 조정) */
+    height: 75px; /* 높이 고정 */
+    /* background-color: #f9f9f9;  비어 있는 셀 배경색 (선택 사항) */
 }
 
 /* JS로 동적으로 추가되는 시간 정보 (예: 1時限 9:00-10:30) */
@@ -279,7 +280,8 @@ button:hover {
     text-align: center;
     vertical-align: middle;
     width: 10%; /* 첫 번째 열 너비와 일치 */
-    min-width: 60px;
+    min-width: 55px; /* ⚠️ 최소 너비 약간 줄임 */
+    font-size: 0.9em; /* ⚠️ 폰트 크기 조정 */
 }
 
 .period-time {
@@ -289,26 +291,36 @@ button:hover {
     margin-top: 3px;
 }
 
-/* 수업이 채워진 셀 스타일 */
+/* 수업이 채워진 셀에 직접 적용될 스타일 (JavaScript에서 filled-cell-wrapper 클래스 추가) */
+.timetable-table td.filled-cell-wrapper {
+    /* 이 셀 자체의 배경색 등은 내부의 .time-slot.filled-primary 가 담당 */
+}
+
+/* 수업 정보를 담는 div의 스타일 */
 .time-slot.filled-primary {
     background-color: #e6ffe6; /* 밝은 녹색 배경 */
     border: 1px solid #a3e6a3;
     font-weight: bold;
     color: #1f7a1f;
     box-shadow: inset 0 0 5px rgba(0, 150, 0, 0.1);
+    width: 100%; /* 부모 td의 너비를 꽉 채움 */
+    height: 100%; /* 부모 td의 높이를 꽉 채움 */
     display: flex; /* 내부 콘텐츠를 flex로 관리 */
     flex-direction: column; /* 세로로 배치 */
     justify-content: center; /* 세로 중앙 정렬 */
     align-items: center; /* 가로 중앙 정렬 */
-    padding: 3px; /* 내부 패딩 조절 */
+    padding: 2px; /* ⚠️ 내부 패딩을 더 줄여 내용 공간 확보 */
+    box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
+    border-radius: 4px; /* 살짝 둥근 모서리 */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
 }
 
 /* 셀 내부 수업 정보 스타일 */
 .class-name-in-cell {
-    font-size: 0.85em; /* 폰트 크기 조정 */
+    font-size: 0.8em; /* ⚠️ 폰트 크기 조정 (약간 줄임) */
     font-weight: bold;
-    line-height: 1.2;
-    max-height: 2.4em; /* 약 2줄 정도 표시 */
+    line-height: 1.1; /* ⚠️ 줄 간격 조정 */
+    max-height: 2.2em; /* ⚠️ 약 2줄 정도 표시 (줄 간격에 따라 조절) */
     overflow: hidden;
     text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
     white-space: normal; /* 텍스트 줄바꿈 허용 */
@@ -318,29 +330,31 @@ button:hover {
     -webkit-box-orient: vertical;
     width: 100%; /* 부모 너비에 맞춤 */
     text-align: center; /* 텍스트 가운데 정렬 */
+    margin-bottom: 2px; /* ⚠️ 아래 요소와의 간격 */
 }
 
 .class-credit-in-cell, .term-display-in-cell {
-    font-size: 0.65em; /* 폰트 크기 조정 */
+    font-size: 0.6em; /* ⚠️ 폰트 크기 조정 (약간 줄임) */
     color: #444;
-    line-height: 1.2;
-    margin-top: 2px;
+    line-height: 1; /* ⚠️ 줄 간격 조정 */
+    margin-top: 0; /* ⚠️ 위 요소와의 간격 없앰 */
     white-space: nowrap; /* 줄바꿈 방지 */
     overflow: hidden;
     text-overflow: ellipsis; /* 넘치면 ... */
+    display: block; /* 각 스팬이 새 줄에 오도록 */
 }
 
 /* 삭제 버튼 스타일 */
 .remove-button {
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 0px; /* ⚠️ 상단에 더 가깝게 */
+    right: 0px; /* ⚠️ 우측에 더 가깝게 */
     background-color: #dc3545; /* 빨간색 */
     color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 0.7em;
+    width: 16px; /* ⚠️ 버튼 크기 약간 줄임 */
+    height: 16px; /* ⚠️ 버튼 크기 약간 줄임 */
+    font-size: 0.6em; /* ⚠️ X 폰트 크기 줄임 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -355,7 +369,7 @@ button:hover {
     opacity: 1;
 }
 
-/* Responsive adjustments for overall layout - 이 부분을 더 명확하게 */
+/* Responsive adjustments for overall layout */
 @media (max-width: 992px) { /* 태블릿 가로 또는 작은 데스크탑 */
     .main-container {
         flex-direction: column; /* 너비가 992px 이하일 때는 세로로 정렬 */
@@ -402,38 +416,37 @@ button:hover {
         margin-bottom: 5px;
     }
 
-    /* Timetable Table Specifics - 이 부분은 기존 코드를 그대로 사용 */
+    /* Timetable Table Specifics - 모바일에서 더욱 세밀하게 조정 */
     .timetable-table th, .timetable-table td {
-        min-width: 50px;
-        height: 60px;
-        font-size: 0.65em;
-        padding: 3px; /* 모바일에서 패딩 조정 */
+        min-width: 45px; /* ⚠️ 모바일에서 셀 너비 더 줄임 */
+        height: 55px; /* ⚠️ 모바일에서 셀 높이 줄임 */
+        font-size: 0.6em; /* ⚠️ 폰트 크기 더 줄임 */
+        padding: 1px; /* ⚠️ 패딩 더 줄임 */
     }
-    .timetable-table th:first-child, .period-header-cell { /* 첫 번째 열 헤더 및 시간 셀 너비 조정 */
-        min-width: 40px;
-        width: 15%; /* 모바일에서 시한 컬럼 너비 비율 조정 */
+    .timetable-table th:first-child, .period-header-cell {
+        min-width: 35px; /* 시한 헤더 너비 줄임 */
+        font-size: 0.7em; /* ⚠️ 모바일에서 시한 폰트 크기 조정 */
     }
-    .timetable-table th:not(:first-child), .timetable-table td { /* 요일 및 수업 셀 너비 조정 */
+    .timetable-table th:not(:first-child), .timetable-table td {
         width: calc(85% / 6); /* 나머지 85%를 6개 요일 컬럼에 균등 분배 */
     }
-    .class-name-in-cell {
-        font-size: 0.7em;
-        max-height: 2.2em;
+
+    .time-slot.filled-primary {
+        padding: 1px; /* ⚠️ 모바일에서 내부 패딩 더 줄임 */
     }
-    /* .class-detail-in-cell 는 원래 제공된 CSS에 없으므로 주석 처리하거나 제거 필요 */
-    /* .class-detail-in-cell {
-        font-size: 0.6em;
-        max-height: 2.2em;
-    } */
+    .class-name-in-cell {
+        font-size: 0.65em; /* ⚠️ 수업명 폰트 크기 (모바일) */
+        max-height: 2.1em; /* ⚠️ 2줄 유지 */
+    }
     .class-credit-in-cell, .term-display-in-cell {
-        font-size: 0.6em;
+        font-size: 0.55em; /* ⚠️ 학점/학기 폰트 크기 (모바일) */
     }
     .remove-button {
         width: 14px;
         height: 14px;
         font-size: 0.5em;
-        top: 1px;
-        right: 1px;
+        top: 0px;
+        right: 0px;
     }
 }
 
