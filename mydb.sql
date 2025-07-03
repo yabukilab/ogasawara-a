@@ -46,6 +46,35 @@ INSERT INTO `class` VALUES (0,0,0,'name','category1','category2','category3',0),
 UNLOCK TABLES;
 
 --
+-- Table structure for table `graduation_requirements`
+--
+
+DROP TABLE IF EXISTS `graduation_requirements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `graduation_requirements` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `department` varchar(50) NOT NULL,
+  `total_required_credits` int(11) NOT NULL,
+  `required_major_credits` int(11) NOT NULL,
+  `required_liberal_arts_credits` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `department` (`department`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `graduation_requirements`
+--
+
+LOCK TABLES `graduation_requirements` WRITE;
+/*!40000 ALTER TABLE `graduation_requirements` DISABLE KEYS */;
+INSERT INTO `graduation_requirements` VALUES (1,'プロジェクトマネジメント学科',124,88,36,'2025-06-27 07:58:21');
+/*!40000 ALTER TABLE `graduation_requirements` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `mytable`
 --
 
@@ -98,6 +127,36 @@ INSERT INTO `productinfo` VALUES (1,'イヤホン',1500,100,'product6.png'),(2,'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `registrations`
+--
+
+DROP TABLE IF EXISTS `registrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `registrations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `class_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `class_id` (`class_id`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `registrations_ibfk_1` FOREIGN KEY (`class_id`) REFERENCES `class` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `registrations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `registrations`
+--
+
+LOCK TABLES `registrations` WRITE;
+/*!40000 ALTER TABLE `registrations` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `table1`
 --
 
@@ -124,6 +183,37 @@ INSERT INTO `table1` VALUES (1,'A',1280,1),(2,'B',2980,0),(3,'C',198,3),(4,'D',3
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_timetables`
+--
+
+DROP TABLE IF EXISTS `user_timetables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_timetables` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `day` varchar(10) NOT NULL,
+  `period` int(2) NOT NULL,
+  `grade` int(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`day`,`period`,`grade`),
+  KEY `class_id` (`class_id`),
+  CONSTRAINT `user_timetables_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_timetables_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `class` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_timetables`
+--
+
+LOCK TABLES `user_timetables` WRITE;
+/*!40000 ALTER TABLE `user_timetables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_timetables` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -134,9 +224,10 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_number` int(7) NOT NULL,
   `department` char(50) NOT NULL,
-  `password` char(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `student_number` (`student_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,6 +236,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,2342701,'プロジェクトマネジメント','$2y$10$9U11MtQyVa9VnLIxfwMJsOzxUK4z30Ga1TR2k68q8o.0w8/7GceZC'),(2,2342055,'プロジェクトマネジメント','$2y$10$KUarhbKD8GcnumWaord/.O1832G5SiEexu75SazwzXoxhc6k9gct6');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -157,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-13 17:18:03
+-- Dump completed on 2025-07-03 14:48:00
