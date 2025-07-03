@@ -16,7 +16,6 @@ $dbName = isset($_SERVER['MYSQL_DB'])       ? $_SERVER['MYSQL_DB']       : 'mydb
 
 $dsn = "mysql:host={$dbServer};dbname={$dbName};charset=utf8";
 
-
 try {
   $db = new PDO($dsn, $dbUser, $dbPass);
   # プリペアドステートメントのエミュレーションを無効にする．
@@ -25,8 +24,4 @@ try {
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
   echo "Can't connect to the database: " . h($e->getMessage());
-  exit;
 }
-
-$dbNameCheck = $db->query("SELECT DATABASE()")->fetchColumn();
-echo "<p>実際に接続しているデータベース：<strong>" . h($dbNameCheck) . "</strong></p>";
