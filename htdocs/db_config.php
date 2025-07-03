@@ -10,8 +10,8 @@ function h($var) {
 }
 
 $dbServer = '127.0.0.1';
-$dbUser   = 'root';     
-$dbPass   = '';            
+$dbUser   = 'testuser';     
+$dbPass   = 'pass';            
 $dbName   = 'mydb';        
 
 
