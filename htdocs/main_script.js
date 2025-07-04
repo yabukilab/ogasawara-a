@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 새로 추가된 학년 선택 드롭다운 (index.php에서 추가됨)
     const timetableGradeSelect = document.getElementById('timetableGradeSelect');
+    // 새로 추가된 학기 선택 드롭다운 (index.php에서 추가됨)
+    const timetableTermSelect = document.getElementById('timetableTermSelect');
 
     let draggedClass = null; // 드래그 중인 수업 데이터를 저장할 변수
 
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 3.5. 時間割保存機能 (timetable_grade 추가) ---
+    // --- 3.5. 時間割保存機能 (timetable_grade, timetable_term 추가) ---
     function saveTimetable() {
         if (currentUserId === null) {
             alert('ログインしていません。ログイン後に時間割を保存できます。');
@@ -172,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const selectedTimetableGrade = timetableGradeSelect.value; // 현재 선택된 학년 가져오기
+        const selectedTimetableTerm = timetableTermSelect.value;   // 새로 추가된 학기 가져오기
 
         const timetableData = [];
         timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
@@ -193,7 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({
                 user_id: currentUserId,
-                timetable_grade: selectedTimetableGrade, // <-- 학년 정보 추가
+                timetable_grade: selectedTimetableGrade,
+                timetable_term: selectedTimetableTerm, // <-- 학기 정보 추가
                 timetable: timetableData
             })
         })
@@ -216,14 +220,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 3.6. 保存された時間割読み込み (timetable_grade 추가) ---
-    function loadTimetable(gradeToLoad = null) { // 파라미터 추가
+    // --- 3.6. 保存された時間割読み込み (timetable_grade, timetable_term 추가) ---
+    function loadTimetable() { // 파라미터 제거, 내부에서 직접 현재 선택된 값 사용
         if (currentUserId === null) {
             console.log("ユーザーがログインしていません。保存された時間割をロードしません。");
             return;
         }
 
-        const targetGrade = gradeToLoad || timetableGradeSelect.value; // 선택된 학년 사용
+        const targetGrade = timetableGradeSelect.value;
+        const targetTerm = timetableTermSelect.value; // 현재 선택된 학기 사용
 
         // 기존 시간표 초기화
         timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
@@ -231,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.classList.remove('filled-primary');
         });
 
-        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}`) // <-- 학년 정보 추가
+        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`) // <-- 학년 및 학기 정보 추가
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -241,16 +246,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.status === 'success') {
                     data.timetable.forEach(entry => {
-                        const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`; // get_timetable.php에서 day로 반환됨
+                        const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
                         const targetCell = timetableTable.querySelector(cellSelector);
 
                         if (targetCell) {
-                            // get_timetable.php에서 class_original_grade를 반환한다고 가정
                             const className = entry.class_name || '不明な授業';
                             const classCredit = entry.class_credit || '?';
                             const classOriginalGrade = entry.class_original_grade || ''; // 수업의 실제 학년
-                            // const classCategory1 = entry.category1 || ''; // 필요시 사용
-                            // const classCategory2 = entry.category2 || ''; // 필요시 사용
 
                             targetCell.innerHTML = `
                                 <span class="class-name-in-cell" data-class-id="${entry.class_id}">${className}</span>
@@ -264,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}, Period ${entry.period}`);
                         }
                     });
-                    console.log(`時間割 (学年: ${targetGrade}) が正常にロードされました。`);
+                    console.log(`時間割 (学年: ${targetGrade}, 学期: ${targetTerm}) が正常にロードされました。`);
                 } else {
                     console.error('時間割のロードに失敗しました:', data.message);
                 }
@@ -297,17 +299,18 @@ document.addEventListener('DOMContentLoaded', function() {
         saveTimetableButton.addEventListener('click', saveTimetable);
     }
 
-    // 학년 선택 변경 시 이벤트 리스너
+    // 학년 또는 학기 선택 변경 시 이벤트 리스너
     if (timetableGradeSelect) {
-        timetableGradeSelect.addEventListener('change', function() {
-            loadTimetable(this.value); // 선택된 학년으로 시간표 다시 로드
-        });
+        timetableGradeSelect.addEventListener('change', loadTimetable); // 학년 변경 시 시간표 로드
+    }
+    if (timetableTermSelect) {
+        timetableTermSelect.addEventListener('change', loadTimetable); // 학기 변경 시 시간표 로드
     }
 
     // 로그인된 사용자일 경우, 저장된 시간표를 자동으로 로드합니다.
-    // 페이지 로드 시 초기 학년 (기본적으로 1학년) 시간표를 로드
+    // 페이지 로드 시 초기 학년/학기 (기본적으로 1학년/전기) 시간표를 로드
     if (currentUserId !== null) {
-        loadTimetable(timetableGradeSelect.value);
+        loadTimetable(); // 이제 loadTimetable은 인수를 받지 않고 내부에서 직접 현재 선택된 값을 가져옵니다.
     } else {
         console.log("ユーザーがログインしていません。時間割の自動ロードは行われません。");
     }
