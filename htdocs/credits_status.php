@@ -1,64 +1,108 @@
 <?php
-session_start(); // 세션 시작
+session_start();
+require_once 'db.php';
 
-// db.php 파일을 포함하여 데이터베이스 연결 및 h() 함수 사용
-// h() 함수는 XSS 방지를 위해 HTML 엔티티로 변환하는 함수입니다.
-// db.php에 다음과 같은 함수가 정의되어 있다고 가정합니다:
-// function h($string) { return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8'); }
-require_once 'db.php'; 
-
-// 현재 로그인된 사용자의 정보 설정
-$loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
-$department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학과 정보
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>単位取得状況 (Credit Status)</title>
-    <link rel="stylesheet" href="style.css">             <link rel="stylesheet" href="credits_status.css">   </head>
+    <title>進級・卒業判定</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { color: #333; }
+        .result { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        ul { margin-top: 10px; }
+        li { margin-bottom: 5px; }
+    </style>
+</head>
 <body>
-    <div class="container">
-        <div class="user-info">
-            <?php if ($loggedIn): ?>
-                <p>ようこそ、<?php echo h($student_number); ?> (<?php echo h($department); ?>) さん！
-                    <a href="logout.php">ログアウト</a>
-                </p>
-            <?php else: ?>
-                <p>ログインしていません。
-                    <a href="login.php">ログイン</a> | 
-                    <a href="register_user.php">新規ユーザー登録</a>
-                </p>
-            <?php endif; ?>
-        </div>
+    <h1>進級・卒業判定</h1>
+    <div class="result">
+<?php
+if (!isset($_SESSION['user_id'])) {
+    echo "<p style='color: red;'>ユーザーがログインしていません。</p>";
+    exit();
+}
 
-        <h1>単位取得状況</h1>
+$userId = $_SESSION['user_id'];
 
-        <div id="credits-status-message" class="message-container">
-            <p>単位取得状況を読み込み中...</p>
-        </div>
+try {
+    // 履修科目（重複除外）とその単位数を取得
+    $sql = "
+        SELECT DISTINCT class_id, credit
+        FROM user_timetables ut
+        JOIN class c ON ut.class_id = c.class_id
+        WHERE ut.user_id = :user_id
+    ";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([':user_id' => $userId]);
+    $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        <div class="credits-summary">
-            <p>総取得単位: <span id="total-credits">0</span>単位</p>
-        </div>
+    $totalCredits = 0;
+    foreach ($classes as $class) {
+        $totalCredits += (int)$class['credit'];
+    }
 
-        <h2>カテゴリー別取得単位</h2>
-        <ul id="category-credits-list">
-          
-          <li>データ読み込み中...</li>
+    // 判定ロジック
+    $gradeStatus = [];
+    $nextGoals = [];
 
-           
-        </ul>
+    if ($totalCredits >= 120) {
+        $gradeStatus[] = "卒業要件達成";
+    } else {
+        if ($totalCredits >= 90) $gradeStatus[] = "4年進級可能";
+        if ($totalCredits >= 60) $gradeStatus[] = "3年進級可能";
+        if ($totalCredits >= 30) $gradeStatus[] = "2年進級可能";
 
-        <a href="index.php" class="back-button">時間割作成に戻る</a>
+        // 不足単位の算出
+        $milestones = [
+            "2年進級" => 30,
+            "3年進級" => 60,
+            "4年進級" => 90,
+            "卒業" => 120
+        ];
+
+        foreach ($milestones as $label => $required) {
+            if ($totalCredits < $required) {
+                $nextGoals[] = "{$label}まであと " . ($required - $totalCredits) . " 単位";
+            }
+        }
+    }
+
+    echo "<p>合計取得単位数：<strong>{$totalCredits}</strong> 単位</p>";
+
+    echo "<p>判定結果：</p><ul>";
+    if (count($gradeStatus) > 0) {
+        foreach ($gradeStatus as $status) {
+            echo "<li>{$status}</li>";
+        }
+    } else {
+        echo "<li>まだ進級・卒業要件を満たしていません。</li>";
+    }
+    echo "</ul>";
+
+    // 不足単位の表示
+    if (count($nextGoals) > 0) {
+        echo "<p>次のステップまでに不足している単位数：</p><ul>";
+        foreach ($nextGoals as $goal) {
+            echo "<li>{$goal}</li>";
+        }
+        echo "</ul>";
+    }
+
+} catch (PDOException $e) {
+    error_log("進級判定エラー: " . $e->getMessage());
+
+    echo "<p style='color: red;'>データベースエラーが発生しました：</p>";
+    echo "<pre style='color: red; background: #eee; padding: 10px; border-radius: 6px;'>";
+    echo htmlspecialchars($e->getMessage());
+    echo "</pre>";
+}
+?>
     </div>
-
-    <?php 
-    $user_id_for_js = isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null';
-    echo "<script> const currentUserIdFromPHP = {$user_id_for_js};</script>";
-    ?>
-    <script src="credits_status.js" defer></script> 
 </body>
 </html>
