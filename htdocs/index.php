@@ -94,12 +94,16 @@ if (!function_exists('h')) {
                             echo "<td class='period-header-cell'>{$period}限<span class='period-time'>";
                             // 시간 표시를 위한 추가 로직 (원하는 형식으로 조정)
                             switch ($period) {
-                                case 1: echo "9:00-10:30"; break;
-                                case 2: echo "10:40-12:10"; break;
-                                case 3: echo "13:00-14:30"; break;
-                                case 4: echo "14:40-16:10"; break;
-                                case 5: echo "16:20-17:50"; break;
-                                case 6: echo "18:00-19:30"; break;
+                                case 1: echo "9:00-10:00"; break;
+                                case 2: echo "10:00-11:00"; break;
+                                case 3: echo "11:00-12:00"; break;
+                                case 4: echo "12:00-13:00"; break;
+                                case 5: echo "13:00-14:00"; break;
+                                case 6: echo "14:00-15:00"; break;
+                                case 7: echo "15:00-16:00"; break;
+                                case 8: echo "16:00-17:00"; break;
+                                case 9: echo "17:00-18:00"; break;
+                                case 10: echo "18:00-19:00"; break;
                             }
                             echo "</span></td>";
                             foreach ($days as $day) {
