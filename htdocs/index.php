@@ -7,9 +7,15 @@ $loggedIn = isset($_SESSION['user_id']);
 $student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
 $department = $_SESSION['department'] ?? '';
 
-// JavaScript에 전달할 사용자 ID 설정
-// currentUserIdFromPHP 변수는 main_script.js에서 사용됩니다.
-$user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
+// PHP에서 h() 함수가 정의되어 있지 않다면 아래 함수를 추가합니다.
+// 보통 db.php 또는 common.php 같은 파일에 포함되어 있습니다.
+if (!function_exists('h')) {
+    function h($str) {
+        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+    }
+}
+
+// 이전의 $user_id_for_js 변수 선언은 제거합니다.
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -19,8 +25,8 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
     <title>時間割作成 (Timetable Creation)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body data-user-id="<?php echo $user_id_for_js; ?>"> 
+    </head>
+<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>"> 
     <div class="container">
         <div class="user-info">
             <?php if ($loggedIn): ?>
@@ -55,7 +61,7 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
                         <option value="">全て</option>
                         <option value="前期">前期</option>
                         <option value="後期">後期</option>
-                        </select>
+                    </select>
 
                     <button type="submit">フィルター</button>
                 </form>
@@ -79,60 +85,30 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="period-header-cell">1限<span class="period-time">9:00-10:30</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="1"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="1"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="1"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="1"></td>
-                            <td class="time-slot" data-day="Friday" data-period="1"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="1"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">2限<span class="period-time">10:40-12:10</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="2"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="2"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="2"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="2"></td>
-                            <td class="time-slot" data-day="Friday" data-period="2"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="2"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">3限<span class="period-time">13:00-14:30</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="3"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="3"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="3"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="3"></td>
-                            <td class="time-slot" data-day="Friday" data-period="3"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="3"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">4限<span class="period-time">14:40-16:10</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="4"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="4"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="4"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="4"></td>
-                            <td class="time-slot" data-day="Friday" data-period="4"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="4"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">5限<span class="period-time">16:20-17:50</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="5"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="5"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="5"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="5"></td>
-                            <td class="time-slot" data-day="Friday" data-period="5"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="5"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">6限<span class="period-time">18:00-19:30</span></td>
-                            <td class="time-slot" data-day="Monday" data-period="6"></td>
-                            <td class="time-slot" data-day="Tuesday" data-period="6"></td>
-                            <td class="time-slot" data-day="Wednesday" data-period="6"></td>
-                            <td class="time-slot" data-day="Thursday" data-period="6"></td>
-                            <td class="time-slot" data-day="Friday" data-period="6"></td>
-                            <td class="time-slot" data-day="Saturday" data-period="6"></td>
-                        </tr>
+                        <?php
+                        $periods = range(1, 6); // 1교시부터 6교시까지
+                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // 영어 요일로 변경
+
+                        foreach ($periods as $period) {
+                            echo "<tr>";
+                            echo "<td class='period-header-cell'>{$period}限<span class='period-time'>";
+                            // 시간 표시를 위한 추가 로직 (원하는 형식으로 조정)
+                            switch ($period) {
+                                case 1: echo "9:00-10:30"; break;
+                                case 2: echo "10:40-12:10"; break;
+                                case 3: echo "13:00-14:30"; break;
+                                case 4: echo "14:40-16:10"; break;
+                                case 5: echo "16:20-17:50"; break;
+                                case 6: echo "18:00-19:30"; break;
+                            }
+                            echo "</span></td>";
+                            foreach ($days as $day) {
+                                // data-day 속성을 영어 요일로 설정
+                                echo "<td class='time-slot' data-day='{$day}' data-period='{$period}'></td>";
+                            }
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
@@ -144,6 +120,6 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
         </div>
     </div>
 
-    <script src="main_script.js"></script> 
+    <script src="main_script.js" defer></script> 
 </body>
 </html>
