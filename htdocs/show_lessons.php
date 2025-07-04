@@ -42,7 +42,7 @@ try {
     // SQL 쿼리 기본 시작
     // **중요: 테이블 이름이 'lessons'인지 'class'인지 정확히 확인하세요.**
     // 이전 대화 스크린샷에서 'lessons' 데이터가 보이는 것으로 보아 'lessons'가 더 유력합니다.
-    $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM lessons"; // 'term' 컬럼도 조회에 포함
+    $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM class"; // 'term' 컬럼도 조회에 포함
 
     // 학년 필터 적용: '全て' (All) 옵션이 선택되지 않았을 때만 필터링합니다.
     if (!empty($gradeFilter) && $gradeFilter !== '全て') {
