@@ -83,7 +83,7 @@ try {
 
     // 正常にデータを取得したことを示す JSON 応答を送信します。
     // JSON_UNESCAPED_UNICODE オプションを追加して、日本語などのユニコード文字が正しく表示されるようにします。
-    echo json_encode(['status' => 'success', 'lessons' => $lessons], JSON_UNESCAPED_UNICODE);
+    echo json_encode(['status' => 'success', 'lessons' => $class], JSON_UNESCAPED_UNICODE);
 
 } catch (PDOException $e) {
     // データベース関連のエラーが発生した場合
