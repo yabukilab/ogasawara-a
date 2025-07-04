@@ -1,10 +1,9 @@
 <?php
-$sql = "
-    SELECT DISTINCT ut.class_id, c.credit
-    FROM user_timetables ut
-    JOIN class c ON ut.class_id = c.id
-    WHERE ut.user_id = :user_id
-";
+if (!isset($_SESSION['student_number'])) {
+    echo "<p style='color: red;'>ユーザーがログインしていません。</p>";
+    exit();
+}
+$userId = $_SESSION['student_number']; // または適切なキーに変更
 ?>
 <!DOCTYPE html>
 <html lang="ja">
