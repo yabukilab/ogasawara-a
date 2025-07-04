@@ -1,14 +1,14 @@
 <?php
 session_start();
-require_once 'db.php'; // データ베이스接続及びh()関数使用をために含む
+require_once 'db.php'; // 데이터베이스 연결 및 h() 함수 사용을 위해 포함
 
-// 現在ログインされたユーザーの情報設定
+// 현재 로그인된 사용자의 정보 설정
 $loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // ゲスト (Guest)
+$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
 $department = $_SESSION['department'] ?? '';
 
-// JavaScriptに伝達するユーザーID設定
-// currentUserIdFromPHP変数はmain_script.jsで使われます。
+// JavaScript에 전달할 사용자 ID 설정
+// currentUserIdFromPHP 변수는 main_script.js에서 사용됩니다.
 $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
 ?>
 <!DOCTYPE html>
@@ -57,13 +57,6 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
                         <option value="後期">後期</option>
                         </select>
 
-                    <label for="facultyFilter">区分 (Category 1):</label>
-                    <select id="facultyFilter" name="faculty">
-                        <option value="">全て</option>
-                        <option value="専門科目">専門科目</option>
-                        <option value="教養科目">教養科目</property>
-                        </select>
-                    
                     <button type="submit">フィルター</button>
                 </form>
                 <div id="lesson-list-container" class="class-list-container">

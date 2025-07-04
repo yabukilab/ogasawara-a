@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const classFilterForm = document.getElementById('classFilterForm');
     const gradeSelect = document.getElementById('gradeFilter');
     const termSelect = document.getElementById('termFilter');
-    const facultySelect = document.getElementById('facultyFilter'); 
+    // const facultySelect = document.getElementById('facultyFilter'); // Category 1 필터 제거: 이 줄을 제거합니다.
 
     // 수업 목록 컨테이너 ID를 'lesson-list-container'로 변경되었음을 전제로 합니다.
     const classListContainer = document.getElementById('lesson-list-container'); 
@@ -43,10 +43,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // 필터 값 가져오기
         const grade = gradeSelect.value;
         const term = termSelect.value;
-        const faculty = facultySelect ? facultySelect.value : ''; // facultySelect가 없을 경우를 대비
+        // const faculty = facultySelect ? facultySelect.value : ''; // Category 1 필터 제거: 이 줄을 제거합니다.
 
         // show_lessons.php로부터 데이터를 비동기로 가져옴
-        fetch(`show_lessons.php?grade=${grade}&term=${term}&faculty=${faculty}`)
+        // fetch URL에서 faculty 파라미터를 제거합니다.
+        fetch(`show_lessons.php?grade=${grade}&term=${term}`)
             .then(response => {
                 // HTTP 응답이 정상인지 확인
                 if (!response.ok) {
@@ -86,8 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="lesson-name">${cls.name}</div>
                             <div class="lesson-details">
                                 <span class="lesson-credit">${cls.credit}単位</span>
-                                <span class="lesson-category">${cls.category1} (${cls.grade}年)</span>
-                            </div>
+                                <span class="lesson-category">${cls.grade}年)</span> </div>
                         `;
                         classListContainer.appendChild(classItem);
                     });
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const className = draggedClass.dataset.name;
                 const classCredit = draggedClass.dataset.credit;
                 const classGrade = draggedClass.dataset.grade;
-                const classCategory1 = draggedClass.dataset.category1;
+                const classCategory1 = draggedClass.dataset.category1; // Category1은 데이터셋에 유지하되 표시만 안함
                 const classCategory2 = draggedClass.dataset.category2;
                 
                 // すでに授業があるセルか確認
@@ -160,8 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.innerHTML = `
                     <span class="class-name-in-cell" data-class-id="${classId}">${className}</span>
                     <span class="class-credit-in-cell">${classCredit}単位</span>
-                    <span class="category-display-in-cell">${classGrade}年 / ${classCategory1} / ${classCategory2}</span>
-                    <button class="remove-button">&times;</button>
+                    <span class="category-display-in-cell">${classGrade}年</span> <button class="remove-button">&times;</button>
                 `;
                 this.classList.add('filled-primary'); // セルが埋まったことを表示
                 // 削除ボタンにイベントリスナー追加
@@ -265,8 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const targetCell = timetableTable.querySelector(cellSelector);
 
                         if (targetCell) {
-                            // get_timetable.phpから授業情報 (name, credit, grade, category1, category2) を一緒に返すと仮定します。
-                            // もし返さない場合、この部分でエラーが発生する可能性があります。(DBから取得するように修正が必要)
+                            // get_timetable.phpから授業情報 (name, credit, grade, category1, category2) を一緒に返すと仮定합니다.
+                            // 만약 반환하지 않는다면, 이 부분에서 오류가 발생할 수 있습니다. (DB에서 가져오도록 수정 필요)
                             const className = entry.class_name || '不明な授業'; // 授業名
                             const classCredit = entry.class_credit || '?'; // 単位
                             const classGrade = entry.grade || ''; // 学年
@@ -276,8 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             targetCell.innerHTML = `
                                 <span class="class-name-in-cell" data-class-id="${entry.class_id}">${className}</span>
                                 <span class="class-credit-in-cell">${classCredit}単位</span>
-                                <span class="category-display-in-cell">${classGrade}年 / ${classCategory1} / ${classCategory2}</span>
-                                <button class="remove-button">&times;</button>
+                                <span class="category-display-in-cell">${classGrade}年</span> <button class="remove-button">&times;</button>
                             `;
                             targetCell.classList.add('filled-primary');
                             targetCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
@@ -305,28 +303,28 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); // フォームのデフォルト送信を防止
             fetchAndDisplayClasses(); // フィルターされた授業リストを読み込み
         });
-        // フィルター変更時に自動的に授業リストを更新したい場合は、以下のコメントを解除してください。
+        // フィルター 변경 시 자동으로 수업 목록을 업데이트하고 싶다면, 다음 주석을 해제하세요.
         // gradeSelect.addEventListener('change', fetchAndDisplayClasses);
         // termSelect.addEventListener('change', fetchAndDisplayClasses);
-        // facultySelect.addEventListener('change', fetchAndDisplayClasses);
+        // facultySelect.addEventListener('change', fetchAndDisplayClasses); // Category 1 필터 제거: 이 줄을 제거합니다.
     }
     
-    // ページロード時に授業リストを一度読み込みます。
+    // 페이지 로드 시 수업 목록을 한 번 로드합니다.
     fetchAndDisplayClasses();
 
-    // ドロップリスナーはページロード時に一度だけ追加すれば良いです。(セルは固定されているため)
+    // 드롭 리스너는 페이지 로드 시 한 번만 추가하면 됩니다. (셀은 고정되어 있으므로)
     addDropListeners();
 
-    // 時間割保存ボタンクリックイベント
+    // 시간표 저장 버튼 클릭 이벤트
     if (saveTimetableButton) {
         saveTimetableButton.addEventListener('click', saveTimetable);
     }
 
-    // ログイン済みユーザーの場合、保存された時間割を自動的に読み込みます。
+    // 로그인된 사용자일 경우, 저장된 시간표를 자동으로 로드합니다.
     if (currentUserId !== null) {
         loadTimetable();
     } else {
-        // このメッセージがmain_script.js:278に該当するはずです。
+        // 이 메시지가 main_script.js:278에 해당할 것입니다.
         console.log("ユーザーがログインしていません。時間割の自動ロードは行われません。");
     }
 }); // DOMContentLoaded 閉じ括弧
