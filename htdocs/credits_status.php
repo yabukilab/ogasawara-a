@@ -54,7 +54,7 @@ try {
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>単位取得確認状況</title>
+<title>単位取得状況</title>
 <style>
     body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
     h1 { color: #333; }
@@ -70,7 +70,7 @@ try {
 </style>
 </head>
 <body>
-    <h1>進級・卒業判定</h1>
+    <h1>単位取得状況</h1>
     <div class="result">
         <p>合計取得単位数：<strong><?= $totalCredits ?></strong> 単位</p>
 
