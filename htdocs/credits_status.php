@@ -54,7 +54,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
 
     <?php 
     $user_id_for_js = isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null';
-    echo "<script>const currentUserIdFromPHP = {$user_id_for_js};</script>";
+    echo "<script> const currentUserIdFromPHP = {$user_id_for_js};</script>";
     ?>
     <script src="credits_status.js" defer></script> 
 </body>
