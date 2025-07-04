@@ -40,9 +40,8 @@ try {
     $types = '';      // PDO bindParam을 위한 타입 문자열 (i: integer, s: string)
 
     // SQL 쿼리 기본 시작
-    // **중요: 테이블 이름이 'lessons'인지 'class'인지 정확히 확인하세요.**
-    // 이전 대화 스크린샷에서 'lessons' 데이터가 보이는 것으로 보아 'lessons'가 더 유력합니다.
-    $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM class"; // 'term' 컬럼도 조회에 포함
+    // 테이블 이름을 'class'로 변경했습니다.
+    $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM class"; 
 
     // 학년 필터 적용: '全て' (All) 옵션이 선택되지 않았을 때만 필터링합니다.
     if (!empty($gradeFilter) && $gradeFilter !== '全て') {
@@ -52,11 +51,19 @@ try {
     }
 
     // 학기 필터 적용: '全て' (All) 옵션이 선택되지 않았을 때만 필터링합니다.
-    // **중요: 데이터베이스의 'term' 컬럼명이 'term'인지, 그리고 값이 '前期' 또는 '後期'와 같은지 확인하세요.**
+    // index.php에서 '前期', '後期' 문자열이 전송되므로, 이를 int 타입에 맞게 변환합니다.
     if (!empty($termFilter) && $termFilter !== '全て') {
         $conditions[] = "term = ?"; // 학기 필터 조건 추가
-        $params[] = $termFilter; // 학기 값은 문자열로 바인딩
-        $types .= 's'; // 타입은 문자열 (string)
+        // '前期'는 1로, '後期'는 2로 매핑 (class 테이블의 term 컬럼이 int 타입이므로)
+        if ($termFilter === '前期') {
+            $params[] = 1; 
+        } elseif ($termFilter === '後期') {
+            $params[] = 2;
+        } else {
+            // 예상치 못한 값이 들어왔을 경우, 이 조건은 무시하거나 에러 로깅 가능
+            // 현재 index.php에서는 '全て', '前期', '後期'만 전송하므로 이 else 블록은 실행되지 않을 것입니다.
+        }
+        $types .= 'i'; // 타입은 정수 (integer)
     }
 
     // category1 필터 적용 (기존 로직 유지): '全て' (All) 옵션이 선택되지 않았을 때만 필터링합니다.
@@ -75,7 +82,6 @@ try {
     $sql .= " ORDER BY name ASC";
 
     // 디버깅을 위해 최종 SQL 쿼리와 파라미터를 서버 에러 로그에 기록합니다.
-    // 이 정보는 문제를 해결하는 데 매우 중요합니다.
     error_log("DEBUG show_lessons.php: SQL Query: " . $sql);
     error_log("DEBUG show_lessons.php: SQL Params: " . print_r($params, true));
     error_log("DEBUG show_lessons.php: SQL Types: " . $types);
