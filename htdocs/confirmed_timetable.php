@@ -54,7 +54,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
             </thead>
             <tbody id="confirmed-timetable-body">
                 <tr>
-                    <td class="period-header-cell">1限<span class="period-time">9:00-10:30</span></td>
+                    <td class="period-header-cell">1限<span class="period-time">9:00-10:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="1"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="1"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="1"></td>
@@ -63,7 +63,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
                     <td class="time-slot" data-day="Saturday" data-period="1"></td>
                 </tr>
                 <tr>
-                    <td class="period-header-cell">2限<span class="period-time">10:40-12:10</span></td>
+                    <td class="period-header-cell">2限<span class="period-time">10:00-11:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="2"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="2"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="2"></td>
@@ -72,7 +72,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
                     <td class="time-slot" data-day="Saturday" data-period="2"></td>
                 </tr>
                  <tr>
-                    <td class="period-header-cell">3限<span class="period-time">13:00-14:30</span></td>
+                    <td class="period-header-cell">3限<span class="period-time">11:00-12:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="3"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="3"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="3"></td>
@@ -81,7 +81,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
                     <td class="time-slot" data-day="Saturday" data-period="3"></td>
                 </tr>
                 <tr>
-                    <td class="period-header-cell">4限<span class="period-time">14:40-16:10</span></td>
+                    <td class="period-header-cell">4限<span class="period-time">12:00-13:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="4"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="4"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="4"></td>
@@ -90,7 +90,7 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
                     <td class="time-slot" data-day="Saturday" data-period="4"></td>
                 </tr>
                 <tr>
-                    <td class="period-header-cell">5限<span class="period-time">16:20-17:50</span></td>
+                    <td class="period-header-cell">5限<span class="period-time">13:00-14:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="5"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="5"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="5"></td>
@@ -99,13 +99,49 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
                     <td class="time-slot" data-day="Saturday" data-period="5"></td>
                 </tr>
                 <tr>
-                    <td class="period-header-cell">6限<span class="period-time">18:00-19:30</span></td>
+                    <td class="period-header-cell">6限<span class="period-time">14:00-15:00</span></td>
                     <td class="time-slot" data-day="Monday" data-period="6"></td>
                     <td class="time-slot" data-day="Tuesday" data-period="6"></td>
                     <td class="time-slot" data-day="Wednesday" data-period="6"></td>
                     <td class="time-slot" data-day="Thursday" data-period="6"></td>
                     <td class="time-slot" data-day="Friday" data-period="6"></td>
                     <td class="time-slot" data-day="Saturday" data-period="6"></td>
+                </tr>
+                <tr>
+                    <td class="period-header-cell">7限<span class="period-time">15:00-16:00</span></td>
+                    <td class="time-slot" data-day="Monday" data-period="7"></td>
+                    <td class="time-slot" data-day="Tuesday" data-period="7"></td>
+                    <td class="time-slot" data-day="Wednesday" data-period="7"></td>
+                    <td class="time-slot" data-day="Thursday" data-period="7"></td>
+                    <td class="time-slot" data-day="Friday" data-period="7"></td>
+                    <td class="time-slot" data-day="Saturday" data-period="7"></td>
+                </tr>
+                <tr>
+                    <td class="period-header-cell">8限<span class="period-time">16:00-17:00</span></td>
+                    <td class="time-slot" data-day="Monday" data-period="8"></td>
+                    <td class="time-slot" data-day="Tuesday" data-period="8"></td>
+                    <td class="time-slot" data-day="Wednesday" data-period="8"></td>
+                    <td class="time-slot" data-day="Thursday" data-period="8"></td>
+                    <td class="time-slot" data-day="Friday" data-period="8"></td>
+                    <td class="time-slot" data-day="Saturday" data-period="8"></td>
+                </tr>
+                <tr>
+                    <td class="period-header-cell">9限<span class="period-time">17:00-18:00</span></td>
+                    <td class="time-slot" data-day="Monday" data-period="9"></td>
+                    <td class="time-slot" data-day="Tuesday" data-period="9"></td>
+                    <td class="time-slot" data-day="Wednesday" data-period="9"></td>
+                    <td class="time-slot" data-day="Thursday" data-period="9"></td>
+                    <td class="time-slot" data-day="Friday" data-period="9"></td>
+                    <td class="time-slot" data-day="Saturday" data-period="9"></td>
+                </tr>
+                <tr>
+                    <td class="period-header-cell">10限<span class="period-time">18:00-19:00</span></td>
+                    <td class="time-slot" data-day="Monday" data-period="10"></td>
+                    <td class="time-slot" data-day="Tuesday" data-period="10"></td>
+                    <td class="time-slot" data-day="Wednesday" data-period="10"></td>
+                    <td class="time-slot" data-day="Thursday" data-period="10"></td>
+                    <td class="time-slot" data-day="Friday" data-period="10"></td>
+                    <td class="time-slot" data-day="Saturday" data-period="10"></td>
                 </tr>
                 </tbody>
         </table>
