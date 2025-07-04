@@ -1,10 +1,10 @@
 <?php
-session_start();
-require_once 'db.php';
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$sql = "
+    SELECT DISTINCT ut.class_id, c.credit
+    FROM user_timetables ut
+    JOIN class c ON ut.class_id = c.id
+    WHERE ut.user_id = :user_id
+";
 ?>
 <!DOCTYPE html>
 <html lang="ja">
