@@ -1,444 +1,372 @@
 /* General Body and Container Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #f4f7f6; /* Light gray background */
     color: #333;
     line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align content to the top */
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 95%; /* Adjust width for better responsiveness */
+    max-width: 1200px; /* Maximum width for larger screens */
+    margin: 20px auto; /* Center container with some top/bottom margin */
 }
 
-/* ⚠️ 핵심 변경: main-container와 하위 Flexbox 요소들을 명확하게 정의 */
-.main-container {
-    display: flex; /* Flexbox 활성화 */
-    flex-direction: row; /* 자식 요소들을 가로로 정렬 (기본값이지만 명시) */
-    gap: 20px; /* 자식 요소들 사이의 간격 */
-    justify-content: space-between; /* 요소들을 양 끝에 정렬하고, 남는 공간을 사이에 배분 */
-    padding: 20px;
-    flex-wrap: wrap; /* 필요한 경우 요소들이 다음 줄로 넘어가도록 허용 */
-    align-items: flex-start; /* 자식 요소들을 상단에 정렬 */
-    width: 100%; /* 부모 컨테이너 (.container)의 너비를 꽉 채우도록 설정 */
-    box-sizing: border-box; /* 패딩과 테두리가 너비 계산에 포함되도록 */
+/* Header and User Info */
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 2em;
 }
 
-/* User Info and Authentication Links */
 .user-info {
     text-align: right;
     margin-bottom: 20px;
     font-size: 0.9em;
     color: #555;
-    background-color: #e2f0cb;
-    padding: 10px;
-    border-bottom: 1px solid #c8e6c9;
 }
 
-.user-info a,
-.auth-links a {
-    color: #007bff;
-    text-decoration: none;
-    margin-left: 10px;
-}
 .user-info a {
-    margin-left: 15px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.user-info a:hover,
-.auth-links a:hover {
+.user-info a:hover {
     text-decoration: underline;
 }
 
-.auth-container {
-    max-width: 400px;
-    margin: 50px auto;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    text-align: center;
-    padding: 30px;
-}
-
-.auth-container h1 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.auth-container p {
-    margin-bottom: 25px;
-    line-height: 1.5;
-}
-
-.auth-links a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    margin: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.auth-links a:hover {
-    background-color: #0056b3;
-    text-decoration: none;
-}
-
-
-/* Headings */
-h1, h2, h3 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-/* Messages */
-.message {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.message.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.message.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* Forms and Filters */
-form {
-    margin-bottom: 15px;
-}
-
-label {
-    margin-right: 10px;
-    font-weight: bold;
-}
-
-select, input[type="text"], input[type="password"] {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-button {
-    padding: 10px 15px;
-    background-color: #28a745; /* Green for general actions */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-/* Specific button for "確定済み時間割を見る" and "単位取得状況を確認" */
-.view-confirmed-button {
-    display: block;
-    width: 250px;
-    margin: 20px auto;
-    padding: 12px 20px;
-    background-color: #28a745;
-    color: white;
-    text-align: center;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
-.view-confirmed-button:hover {
-    background-color: #218838;
-}
-
-
-/* Navigation buttons (e.g., in confirmed_timetable.php) */
-.navigation-buttons {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-.navigation-buttons a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    text-decoration: none;
-    margin-right: 10px;
-}
-.navigation-buttons a:hover {
-    background-color: #218838;
-}
-
-.filter-form {
-    margin-bottom: 20px;
-    text-align: center;
+/* Main Content Layout */
+.main-container {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-.filter-form label, .filter-form select {
-    margin-right: 10px;
+    flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+    gap: 30px; /* Space between sections */
 }
 
-/* Class List Section */
-.class-list-section {
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
-    flex: 1 1 380px; /* flex-grow: 1, flex-shrink: 1, flex-basis: 380px */
-    min-width: 380px; /* 최소 너비를 380px로 유지 */
-    box-sizing: border-box;
-}
-
-/* Timetable Section */
+.class-list-section,
 .timetable-section {
-    background-color: #fff;
-    padding: 25px;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    /* ⚠️ 변경된 부분: flex-basis를 더 유연하게 설정 */
-    flex: 2 1 500px; /* flex-grow: 2, flex-shrink: 1, flex-basis: 500px */
-    min-width: 500px; /* 최소 너비를 500px로 유지 */
-    box-sizing: border-box;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* ⚠️ 시간표 테이블 관련 핵심 수정 부분 (이전 답변에서 제공된 내용과 동일하게 유지) */
+.class-list-section {
+    flex: 1; /* Takes remaining space */
+    min-width: 300px; /* Minimum width before wrapping */
+    max-height: 800px; /* Max height for scrollable list */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.timetable-section {
+    flex: 2.5; /* Takes more space for the timetable */
+    min-width: 600px; /* Minimum width before wrapping */
+}
+
+/* Filter Form */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.filter-form label {
+    font-weight: bold;
+    color: #555;
+    white-space: nowrap; /* Prevents label from wrapping */
+}
+
+.filter-form select,
+.filter-form button {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.filter-form button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-form button:hover {
+    background-color: #2980b9;
+}
+
+/* Class List Display */
+#class-list {
+    margin-top: 15px;
+}
+
+.class-item {
+    background-color: #e8f4f8;
+    border: 1px solid #bee5eb;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: grab; /* Indicates draggable item */
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.class-item:hover {
+    background-color: #d1ecf1;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.class-item.dragging {
+    opacity: 0.5;
+    border: 2px dashed #3498db;
+    background-color: #a0d9e7;
+}
+
+.class-item strong {
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.class-info-small {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Timetable Table */
 .timetable-table {
-    width: 100%; /* 부모 너비 100% 사용 */
-    border-collapse: collapse; /* 셀 경계선 병합 */
-    table-layout: fixed; /* 고정 레이아웃으로 셀 너비 조절 용이 */
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-/* 모든 헤더 셀과 데이터 셀에 공통 스타일 적용 */
-.timetable-table th, .timetable-table td {
-    border: 1px solid #ddd;
-    padding: 5px; /* 패딩을 약간 줄여 공간 확보 */
-    text-align: center; /* 셀 내부 텍스트 가운데 정렬 */
-    vertical-align: top; /* 셀 내부 내용 상단 정렬 (수업 정보가 위에서부터 채워지도록) */
-    position: relative; /* 삭제 버튼 위치 지정을 위해 */
-    font-size: 0.8em;
-    height: 80px; /* 모든 셀의 높이를 고정 (내용 길이에 따라 조절) */
-    box-sizing: border-box; /* 패딩과 테두리가 너비/높이에 포함되도록 */
-    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-}
-
-/* 첫 번째 열 (시간/時限) 헤더 */
-.timetable-table th:first-child {
-    width: 10%; /* 첫 번째 열 너비 고정 */
-    min-width: 60px; /* 최소 너비 확보 */
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-/* 요일 헤더 (月, 火, 水, 木, 金, 土) */
-.timetable-table th:not(:first-child) {
-    width: calc(90% / 6); /* 나머지 90%를 6개 요일 컬럼에 균등 분배 */
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-/* 시간표 본문 셀 (수업이 들어갈 칸) */
+.timetable-table th,
 .timetable-table td {
-    width: calc(90% / 6); /* 요일 컬럼과 동일하게 6개에 균등 분배 */
-    min-width: 80px; /* 셀이 너무 작아지지 않도록 최소 너비 설정 */
-    height: 80px; /* 높이 고정 */
-}
-
-/* JS로 동적으로 추가되는 시간 정보 (예: 1時限 9:00-10:30) */
-.period-header-cell {
-    background-color: #f2f2f2; /* 헤더와 비슷한 배경색 */
-    font-weight: bold;
+    border: 1px solid #ddd;
+    padding: 10px;
     text-align: center;
     vertical-align: middle;
-    width: 10%; /* 첫 번째 열 너비와 일치 */
-    min-width: 60px;
+    height: 80px; /* Fixed height for time slots */
+    font-size: 0.9em;
+    position: relative; /* For positioning remove button */
+}
+
+.timetable-table th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.period-header-cell {
+    background-color: #ecf0f1;
+    color: #333;
+    font-weight: bold;
+    width: 120px; /* Width for period header column */
+    vertical-align: middle;
 }
 
 .period-time {
-    display: block; /* 줄 바꿈 */
+    display: block;
     font-size: 0.7em;
     color: #666;
-    margin-top: 3px;
+    margin-top: 5px;
 }
 
-/* 수업이 채워진 셀 스타일 */
+/* Time Slot Styles */
+.time-slot {
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.time-slot.drag-over {
+    background-color: #c9e6f2; /* Highlight when dragging over */
+    box-shadow: inset 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
 .time-slot.filled-primary {
-    background-color: #e6ffe6; /* 밝은 녹색 배경 */
-    border: 1px solid #a3e6a3;
+    background-color: #d4edda; /* Greenish for filled slots */
+    color: #155724; /* Darker text */
     font-weight: bold;
-    color: #1f7a1f;
-    box-shadow: inset 0 0 5px rgba(0, 150, 0, 0.1);
-    display: flex; /* 내부 콘텐츠를 flex로 관리 */
-    flex-direction: column; /* 세로로 배치 */
-    justify-content: center; /* 세로 중앙 정렬 */
-    align-items: center; /* 가로 중앙 정렬 */
-    padding: 3px; /* 내부 패딩 조절 */
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Space between elements in a filled cell */
 }
 
-/* 셀 내부 수업 정보 스타일 */
 .class-name-in-cell {
-    font-size: 0.85em; /* 폰트 크기 조정 */
+    font-size: 1em;
     font-weight: bold;
-    line-height: 1.2;
-    max-height: 2.4em; /* 약 2줄 정도 표시 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* 내용이 넘치면 ...으로 표시 */
-    white-space: normal; /* 텍스트 줄바꿈 허용 */
-    word-break: break-word; /* 긴 단어 강제 줄바꿈 */
-    display: -webkit-box; /* 웹킷 브라우저에서 여러 줄 자르기 */
-    -webkit-line-clamp: 2; /* 표시할 줄 수 */
-    -webkit-box-orient: vertical;
-    width: 100%; /* 부모 너비에 맞춤 */
-    text-align: center; /* 텍스트 가운데 정렬 */
+    word-break: break-word; /* Prevents long names from overflowing */
 }
 
-.class-credit-in-cell, .term-display-in-cell {
-    font-size: 0.65em; /* 폰트 크기 조정 */
-    color: #444;
-    line-height: 1.2;
-    margin-top: 2px;
-    white-space: nowrap; /* 줄바꿈 방지 */
-    overflow: hidden;
-    text-overflow: ellipsis; /* 넘치면 ... */
+.class-credit-in-cell,
+.category-display-in-cell {
+    font-size: 0.8em;
+    color: #555;
 }
 
-/* 삭제 버튼 스타일 */
+/* Remove Button for Classes in Timetable */
 .remove-button {
     position: absolute;
     top: 2px;
     right: 2px;
-    background-color: #dc3545; /* 빨간색 */
+    background-color: #e74c3c;
     color: white;
+    border: none;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 0.7em;
+    width: 20px;
+    height: 20px;
+    font-size: 1.2em;
+    line-height: 1;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    z-index: 10;
-    opacity: 0.8;
+    padding: 0;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
 .remove-button:hover {
-    background-color: #c82333;
     opacity: 1;
+    background-color: #c0392b;
 }
 
-/* Responsive adjustments for overall layout - 이 부분을 더 명확하게 */
-@media (max-width: 992px) { /* 태블릿 가로 또는 작은 데스크탑 */
+/* Save Timetable Button */
+#saveTimetableBtn {
+    padding: 12px 25px;
+    background-color: #28a745; /* Green color for save */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+    margin-right: 15px; /* Space between save and view buttons */
+}
+
+#saveTimetableBtn:hover {
+    background-color: #218838;
+}
+
+/* View Confirmed Timetable Button and Credits Status Button */
+.view-confirmed-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #6c757d; /* Gray color for view */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.view-confirmed-button:hover {
+    background-color: #5a6268;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
     .main-container {
-        flex-direction: column; /* 너비가 992px 이하일 때는 세로로 정렬 */
-        align-items: center; /* 가운데 정렬 */
-        gap: 15px; /* 세로 간격 */
+        flex-direction: column; /* Stack sections vertically on smaller screens */
+        gap: 20px;
     }
-    .class-list-section, .timetable-section {
-        flex: 1 1 100%; /* 너비를 100%로 설정하여 한 줄에 하나씩만 오도록 */
-        min-width: unset; /* 최소 너비 제한 해제 */
-        width: 100%; /* 부모에 맞춰 늘어나도록 */
-        max-width: 700px; /* 너무 넓어지는 것을 방지하기 위해 최대 너비 설정 (선택 사항) */
-        margin-left: auto; /* 가운데 정렬 */
-        margin-right: auto; /* 가운데 정렬 */
-    }
+
+    .class-list-section,
     .timetable-section {
-        /* 시간표 섹션의 특정 조정이 필요하다면 여기에 추가 */
+        min-width: unset; /* Remove min-width to allow full width */
+        width: 100%;
+        max-height: unset; /* Remove max-height for vertical stacking */
+        overflow-y: visible;
+    }
+
+    .timetable-table {
+        font-size: 0.8em; /* Smaller font for table content */
+    }
+
+    .timetable-table th,
+    .timetable-table td {
+        padding: 8px;
+        height: 70px;
     }
 }
 
-@media (max-width: 768px) { /* 모바일 환경 */
+@media (max-width: 768px) {
     body {
-        padding: 10px; /* body 패딩도 모바일에서 줄임 */
+        padding: 10px;
     }
     .container {
-        padding: 10px;
-    }
-    .main-container {
-        padding: 10px;
-        gap: 10px;
-    }
-    .class-list-section, .timetable-section {
-        padding: 15px; /* 모바일에서 내부 패딩 줄임 */
-        min-width: unset; /* 최소 너비 제한 해제 */
+        padding: 20px;
         width: 100%;
     }
-    .filter-form {
-        flex-direction: column; /* 필터 폼도 세로 정렬 */
-        align-items: flex-start; /* 좌측 정렬 */
-        gap: 5px;
+    h1 {
+        font-size: 1.8em;
     }
-    .filter-form label, .filter-form select, .filter-form button {
-        width: 100%; /* 필터 컨트롤 요소들이 너비 100%를 차지하도록 */
-        margin-right: 0;
-        margin-bottom: 5px;
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-form select,
+    .filter-form button {
+        width: 100%; /* Make filter elements full width */
+    }
+    .user-info {
+        text-align: center;
     }
 
-    /* Timetable Table Specifics - 이 부분은 기존 코드를 그대로 사용 */
-    .timetable-table th, .timetable-table td {
-        min-width: 50px;
+    .period-header-cell {
+        width: 90px;
+    }
+
+    .timetable-table th,
+    .timetable-table td {
+        font-size: 0.75em;
+        padding: 6px;
         height: 60px;
-        font-size: 0.65em;
-        padding: 3px; /* 모바일에서 패딩 조정 */
-    }
-    .timetable-table th:first-child, .period-header-cell { /* 첫 번째 열 헤더 및 시간 셀 너비 조정 */
-        min-width: 40px;
-        width: 15%; /* 모바일에서 시한 컬럼 너비 비율 조정 */
-    }
-    .timetable-table th:not(:first-child), .timetable-table td { /* 요일 및 수업 셀 너비 조정 */
-        width: calc(85% / 6); /* 나머지 85%를 6개 요일 컬럼에 균등 분배 */
-    }
-    .class-name-in-cell {
-        font-size: 0.7em;
-        max-height: 2.2em;
-    }
-    /* .class-detail-in-cell 는 원래 제공된 CSS에 없으므로 주석 처리하거나 제거 필요 */
-    /* .class-detail-in-cell {
-        font-size: 0.6em;
-        max-height: 2.2em;
-    } */
-    .class-credit-in-cell, .term-display-in-cell {
-        font-size: 0.6em;
-    }
-    .remove-button {
-        width: 14px;
-        height: 14px;
-        font-size: 0.5em;
-        top: 1px;
-        right: 1px;
     }
 }
 
-/* Disabled button style */
-.disabled-button {
-    background-color: #cccccc !important;
-    cursor: not-allowed !important;
+@media (max-width: 480px) {
+    .timetable-table th,
+    .timetable-table td {
+        font-size: 0.65em; /* Even smaller font on very small screens */
+        padding: 4px;
+        height: 50px;
+    }
+    .period-header-cell {
+        width: 70px;
+    }
+    .class-item strong {
+        font-size: 1em;
+    }
+    .class-info-small {
+        font-size: 0.75em;
+    }
+    .save-button, .view-button {
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
 }

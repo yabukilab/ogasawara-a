@@ -1,0 +1,240 @@
+/* General Body and Container Styles */
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f7f6; /* Light gray background */
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align content to the top */
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 95%; /* Adjust width for better responsiveness */
+    max-width: 1200px; /* Maximum width for larger screens */
+    margin: 20px auto; /* Center container with some top/bottom margin */
+    text-align: center; /* Center content within the container */
+}
+
+/* Header and User Info */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    display: inline-block; /* To make border-bottom only as wide as text */
+}
+
+.user-info {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.user-info a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user-info a:hover {
+    text-decoration: underline;
+}
+
+/* Messages (Success/Error/Info) */
+.message-container {
+    margin-top: 20px;
+    min-height: 30px; /* To prevent layout shift */
+}
+
+.success-message {
+    color: #28a745; /* Green */
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    color: #dc3545; /* Red */
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.info-message {
+    color: #007bff; /* Blue */
+    background-color: #e0f2ff;
+    border: 1px solid #cce5ff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Confirmed Timetable Table */
+.confirmed-timetable-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.confirmed-timetable-table th,
+.confirmed-timetable-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    height: 90px; /* Fixed height for time slots */
+    font-size: 0.9em;
+    position: relative;
+}
+
+.confirmed-timetable-table th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.period-header-cell {
+    background-color: #ecf0f1;
+    color: #333;
+    font-weight: bold;
+    width: 120px; /* Width for period header column */
+    vertical-align: middle;
+}
+
+.period-time {
+    display: block;
+    font-size: 0.7em;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Time Slot Styles */
+.time-slot {
+    background-color: #f9f9f9;
+}
+
+.time-slot.filled-primary {
+    background-color: #d4edda; /* Greenish for filled slots */
+    color: #155724; /* Darker text */
+    font-weight: bold;
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Space between elements in a filled cell */
+}
+
+.class-name-in-cell {
+    font-size: 1em;
+    font-weight: bold;
+    word-break: break-word; /* Prevents long names from overflowing */
+}
+
+.class-credit-in-cell,
+.category-display-in-cell {
+    font-size: 0.8em;
+    color: #555;
+}
+
+/* Back button style */
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 30px;
+    background-color: #6c757d; /* Gray color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .container {
+        width: 100%;
+    }
+    .confirmed-timetable-table {
+        font-size: 0.8em; /* Smaller font for table content */
+    }
+    .confirmed-timetable-table th,
+    .confirmed-timetable-table td {
+        padding: 8px;
+        height: 80px;
+    }
+    .period-header-cell {
+        width: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 20px;
+        width: 100%;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    .confirmed-timetable-table th,
+    .confirmed-timetable-table td {
+        font-size: 0.75em;
+        padding: 6px;
+        height: 70px;
+    }
+    .period-header-cell {
+        width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    .confirmed-timetable-table th,
+    .confirmed-timetable-table td {
+        font-size: 0.65em; /* Even smaller font on very small screens */
+        padding: 4px;
+        height: 60px;
+    }
+    .period-header-cell {
+        width: 60px;
+    }
+    .class-name-in-cell {
+        font-size: 0.9em;
+    }
+    .class-credit-in-cell,
+    .category-display-in-cell {
+        font-size: 0.75em;
+    }
+    .back-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
