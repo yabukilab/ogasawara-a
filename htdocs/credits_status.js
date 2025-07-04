@@ -3,7 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryCreditsContainer = document.getElementById('category-credits-list');
     const messageContainer = document.getElementById('credits-status-message');
 
-    let currentUserId = null; 
+    const currentUserId =typeof currentUserIdFromPHP !=='undefined' ? currentUserIdFromPHP : null;
+    
+    if (!currentUserId) {
+        console.error("ユーザーIDが設定されていません。単位取得状況をロードできません。");
+        messageContainer.innerHTML = "<p>ユーザー情報を取得できませんでした。ログインし直してください。</p>";
+        return;
+    }
 
     // PHP에서 넘어온 사용자 ID를 확인합니다.
     // credits_status.php 파일에서 currentUserIdFromPHP 변수를 설정해 주어야 합니다.
