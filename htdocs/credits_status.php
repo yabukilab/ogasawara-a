@@ -46,7 +46,16 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
 
         <h2>カテゴリー別取得単位</h2>
         <ul id="category-credits-list">
-            <li>データ読み込み中...</li>
+          <li>必修: <span id="credits-mandatory">0</span>単位</li>
+          <li>選択必修: <span id="credits-required-elective">0</span>単位</li>
+          <li>選択: <span id="credits-elective">0</span>単位</li>
+          <li>教養: <span id="credits-general">0</span>単位</li>
+          <li>実習: <span id="credits-practical">0</span>単位</li>
+          <li>専門: <span id="credits-specialized">0</span>単位</li>
+          <li>卒業研究: <span id="credits-graduation-thesis">0</span>単位</li>
+           <li>データ読み込み中...</li>
+
+           
         </ul>
 
         <a href="index.php" class="back-button">時間割作成に戻る</a>
