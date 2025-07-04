@@ -1,14 +1,14 @@
 <?php
 session_start();
-require_once 'db.php'; // 데이터베이스 연결 및 h() 함수 사용을 위해 포함
+require_once 'db.php'; // データ베이스接続及びh()関数使用をために含む
 
-// 현재 로그인된 사용자의 정보 설정
+// 現在ログインされたユーザーの情報設定
 $loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
+$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // ゲスト (Guest)
 $department = $_SESSION['department'] ?? '';
 
-// JavaScript에 전달할 사용자 ID 설정
-// currentUserIdFromPHP 변수는 main_script.js에서 사용됩니다.
+// JavaScriptに伝達するユーザーID設定
+// currentUserIdFromPHP変数はmain_script.jsで使われます。
 $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
 ?>
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body data-user-id="<?php echo $user_id_for_js; ?>"> 
     <div class="container">
         <div class="user-info">
             <?php if ($loggedIn): ?>
@@ -151,8 +151,6 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
         </div>
     </div>
 
-    <script>
-        const currentUserIdFromPHP = <?php echo $user_id_for_js; ?>;
-    </script>
-    <script src="main_script.js"></script> </body>
+    <script src="main_script.js"></script> 
+</body>
 </html>
