@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // PHP에서 넘어온 사용자 ID를 확인합니다.
     // credits_status.php 파일에서 currentUserIdFromPHP 변수를 설정해 주어야 합니다.
     // 예: <script>const currentUserIdFromPHP = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;</script>
+function initializeUserId() {
     if (typeof window.currentUserIdFromPHP !== 'undefined' && window.currentUserIdFromPHP !== null) {
         currentUserId = window.currentUserIdFromPHP;
     } else {
@@ -17,9 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (totalCreditsElement) totalCreditsElement.textContent = '0';
         console.warn("警告: currentUserIdFromPHPが定義されていないかnullです。単位取得状況をロードできません。");
-        return; 
+        return falce; 
     }
-
+}   
     /**
      * 서버로부터 사용자의 학점 현황을 불러와 표시합니다.
      */
