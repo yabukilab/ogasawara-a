@@ -1,68 +1,98 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ログインフォームのバリデーション
+    // ログインフォームの処理 (Login form processing)
     const loginForm = document.querySelector('.auth-form[action="login.php"]');
     if (loginForm) {
         loginForm.addEventListener('submit', function(event) {
-            // HTMLのinput要素のname属性が "student_number" に対応するように変更
-            const studentNumberInput = loginForm.querySelector('input[name="student_number"]'); 
-            const passwordInput = loginForm.querySelector('input[name="password"]');
+            const studentNumberInput = document.getElementById('student_number');
+            const passwordInput = document.getElementById('password');
+            let isValid = true;
 
-            // 簡単なバリデーション (空値チェック)
-            if (studentNumberInput.value.trim() === '') { 
-                alert('学番を入力してください。'); 
-                studentNumberInput.focus(); 
-                event.preventDefault(); // フォームの送信を阻止
-                return false;
+            // エラーメッセージの表示をクリア (Clear previous error messages)
+            const existingMessages = loginForm.querySelectorAll('.error-message, .success-message');
+            existingMessages.forEach(msg => msg.remove());
+
+            // 学番のバリデーション (Student number validation)
+            if (!studentNumberInput.value.trim()) {
+                displayMessage(loginForm, '学番を入力してください。', 'error');
+                isValid = false;
             }
 
-            if (passwordInput.value.trim() === '') {
-                alert('パスワードを入力してください。');
-                passwordInput.focus();
-                event.preventDefault(); // フォームの送信を阻止
-                return false;
+            // パスワードのバリデーション (Password validation)
+            if (!passwordInput.value) {
+                displayMessage(loginForm, 'パスワードを入力してください。', 'error');
+                isValid = false;
             }
-            // 必要に応じて、さらに高度なバリデーションロジックをここに追加できます。
+
+            if (!isValid) {
+                event.preventDefault(); // フォームの送信を停止 (Stop form submission)
+            }
         });
     }
 
-    // 新規ユーザー登録フォームのバリデーション (register_user.phpで使用)
-    // この部分は register_user.php で必要に応じて使用します。
+    // 新規ユーザー登録フォームの処理 (New user registration form processing)
     const registerForm = document.querySelector('.auth-form[action="register_user.php"]');
     if (registerForm) {
         registerForm.addEventListener('submit', function(event) {
-            const studentNumberInput = registerForm.querySelector('input[name="student_number"]'); // 学番
-            const emailInput = registerForm.querySelector('input[name="email"]');
-            const passwordInput = registerForm.querySelector('input[name="password"]');
-            const confirmPasswordInput = registerForm.querySelector('input[name="confirm_password"]');
+            const studentNumberInput = document.getElementById('student_number');
+            const departmentInput = document.getElementById('department');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            let isValid = true;
 
-            if (studentNumberInput.value.trim() === '') {
-                alert('学番を入力してください。');
-                studentNumberInput.focus();
-                event.preventDefault();
-                return false;
+            // エラーメッセージの表示をクリア (Clear previous error messages)
+            const existingMessages = registerForm.querySelectorAll('.error-message, .success-message');
+            existingMessages.forEach(msg => msg.remove());
+
+            // 学番のバリデーション (Student number validation)
+            if (!studentNumberInput.value.trim()) {
+                displayMessage(registerForm, '学番を入力してください。', 'error');
+                isValid = false;
             }
 
-            if (emailInput.value.trim() === '' || !emailInput.value.includes('@')) {
-                alert('有効なメールアドレスを入力してください。');
-                emailInput.focus();
-                event.preventDefault();
-                return false;
+            // 学科のバリデーション (Department validation)
+            if (!departmentInput.value.trim()) {
+                displayMessage(registerForm, '学科を入力してください。', 'error');
+                isValid = false;
             }
 
-            if (passwordInput.value.trim() === '') {
-                alert('パスワードを入力してください。');
-                passwordInput.focus();
-                event.preventDefault();
-                return false;
+            // パスワードのバリデーション (Password validation)
+            if (!passwordInput.value) {
+                displayMessage(registerForm, 'パスワードを入力してください。', 'error');
+                isValid = false;
+            } else if (passwordInput.value.length < 6) {
+                displayMessage(registerForm, 'パスワードは最低6文字以上である必要があります。', 'error');
+                isValid = false;
             }
 
+            // パスワード確認のバリデーション (Confirm password validation)
             if (passwordInput.value !== confirmPasswordInput.value) {
-                alert('パスワードが一致しません。');
-                confirmPasswordInput.focus();
-                event.preventDefault();
-                return false;
+                displayMessage(registerForm, 'パスワードが一致しません。', 'error');
+                isValid = false;
             }
-            // 必要に応じて、さらに高度なバリデーションロジックをここに追加できます。
+
+            if (!isValid) {
+                event.preventDefault(); // フォームの送信を停止 (Stop form submission)
+            }
         });
+    }
+
+    /**
+     * メッセージをフォームの下に表示するヘルパー関数 (Helper function to display messages below the form)
+     * @param {HTMLElement} formElement - メッセージを表示するフォーム要素 (The form element to display the message under)
+     * @param {string} messageText - 表示するメッセージテキスト (The message text to display)
+     * @param {string} type - 'success' または 'error' (Type of message: 'success' or 'error')
+     */
+    function displayMessage(formElement, messageText, type) {
+        const messageP = document.createElement('p');
+        messageP.className = `message ${type}-message`;
+        messageP.textContent = messageText;
+        // フォーム内のh1タグの直後にメッセージを追加 (Add message directly after the h1 tag within the form)
+        const h1 = formElement.querySelector('h1');
+        if (h1) {
+            h1.parentNode.insertBefore(messageP, h1.nextSibling);
+        } else {
+            // h1タグが見つからない場合は、フォームの最初の子要素として追加 (If h1 not found, add as first child of the form)
+            formElement.prepend(messageP);
+        }
     }
 });
