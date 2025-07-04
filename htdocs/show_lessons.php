@@ -61,7 +61,7 @@ try {
     // デバッグのため最終的な SQL クエリとパラメーターをサーバーのエラーログに記録します。
     error_log("DEBUG show_lessons.php: SQL Query: " . $sql);
     error_log("DEBUG show_lessons.php: SQL Params: " . print_r($params, true));
-    error_log("DEBUG show_lessons.php: SQL Param Types: " . print_r($param_types, true)); // param_types 로그 추가
+    error_log("DEBUG show_lessons.php: SQL Param Types: " . print_r($param_types, true));
 
     // データベース接続オブジェクトは db.php で $db 変数に割り当てられているため、$db->prepare($sql) を使用します。
     $stmt = $db->prepare($sql);
@@ -69,9 +69,6 @@ try {
     // パラメーターがある場合、動的にタイプに合わせてバインドします。
     if (!empty($params)) {
         for ($i = 0; $i < count($params); $i++) {
-            // bindParam は 1-based インデックスを使用します。
-            // また、値を参照で渡す必要があります。
-            // $params[$i] が直接 bindParam に渡されるため、適切に参照されることに注意してください。
             $stmt->bindParam($i + 1, $params[$i], $param_types[$i]);
         }
     }
