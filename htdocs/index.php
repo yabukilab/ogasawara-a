@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // 세션 시작
 require_once 'db.php'; // 데이터베이스 연결 및 h() 함수 사용을 위해 포함
 
 // 현재 로그인된 사용자의 정보 설정
@@ -73,12 +73,18 @@ if (!function_exists('h')) {
             <div class="timetable-section">
                 <h2>私の時間割</h2>
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
-                    <h3>表示する時間割の学年を選択:</h3>
+                    <h3>表示する時間割を選択:</h3>
+                    <label for="timetableGradeSelect">学年:</label>
                     <select id="timetableGradeSelect">
                         <option value="1">1年生</option>
                         <option value="2">2年生</option>
                         <option value="3">3年生</option>
                         <option value="4">4年生</option>
+                    </select>
+                    <label for="timetableTermSelect" style="margin-left: 10px;">学期:</label>
+                    <select id="timetableTermSelect">
+                        <option value="前期">前期</option>
+                        <option value="後期">後期</option>
                     </select>
                 </div>
 
@@ -96,7 +102,7 @@ if (!function_exists('h')) {
                     </thead>
                     <tbody>
                         <?php
-                        $periods = range(1, 6); // 1교시부터 6교시까지
+                        $periods = range(1, 10); // 1교시부터 10교시까지
                         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // 영어 요일로 변경
 
                         foreach ($periods as $period) {
