@@ -42,9 +42,23 @@ try {
     $stmt = $db->prepare($sql);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
-    $timetable = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $timetable_data_for_js = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $timetable_data_for_js[] = [
+            'class_id' => $row['class_id'],
+            'day_of_week' => $row['day'], // ★★★ 여기가 핵심 수정 부분입니다! 'day' 컬럼의 값을 'day_of_week' 키로 변경
+            'period' => $row['period'],
+            'grade' => $row['grade'],
+            'class_name' => $row['class_name'],
+            'class_credit' => $row['class_credit'],
+            'category1' => $row['category1'],
+            'category2' => $row['category2'],
+            'category3' => $row['category3']
+        ];
+    }
 
-    echo json_encode(['status' => 'success', 'timetable' => $timetable]);
+    echo json_encode(['status' => 'success', 'timetable' => $timetable_data_for_js]);
 
 } catch (PDOException $e) {
     // 데이터베이스 오류 발생 시
