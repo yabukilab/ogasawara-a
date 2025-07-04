@@ -88,8 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         classItem.innerHTML = `
                             <div class="lesson-name">${cls.name}</div>
                             <div class="lesson-details">
-                                <span class="lesson-credit">${cls.credit}単位</span>
-                                <span class="lesson-category">${cls.grade}年)</span> </div>
+                                <span class="lesson-credit">${cls.credit}単位</span> </div>
                         `;
                         classListContainer.appendChild(classItem);
                     });
