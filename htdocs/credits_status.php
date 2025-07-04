@@ -127,5 +127,10 @@ try {
 }
 ?>
     </div>
+    <div style="margin-top: 30px;">
+        <a href="index.php" style="display: inline-block; padding: 10px 20px; background-color: #4da6ff; color: white; text-decoration: none; border-radius: 6px;">
+            時間割に戻る
+        </a>
+    </div>
 </body>
 </html>
