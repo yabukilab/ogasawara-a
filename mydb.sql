@@ -192,6 +192,7 @@ DROP TABLE IF EXISTS `user_timetables`;
 CREATE TABLE `user_timetables` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
+  `timetable_grade` int(1) DEFAULT 1,
   `class_id` int(11) NOT NULL,
   `day` varchar(10) NOT NULL,
   `period` int(2) NOT NULL,
@@ -248,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-04 16:21:41
+-- Dump completed on 2025-07-04 19:49:39
