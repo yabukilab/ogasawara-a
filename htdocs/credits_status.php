@@ -54,7 +54,7 @@ try {
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>進級・卒業判定</title>
+<title>単位取得確認状況</title>
 <style>
     body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
     h1 { color: #333; }
