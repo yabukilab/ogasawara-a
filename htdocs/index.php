@@ -26,7 +26,7 @@ if (!function_exists('h')) {
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
-<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>"> 
+<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>">
     <div class="container">
         <div class="user-info">
             <?php if ($loggedIn): ?>
@@ -35,14 +35,14 @@ if (!function_exists('h')) {
                 </p>
             <?php else: ?>
                 <p>ログインしていません。
-                    <a href="login.php">ログイン</a> | 
+                    <a href="login.php">ログイン</a> |
                     <a href="register_user.php">新規ユーザー登録</a>
                 </p>
             <?php endif; ?>
         </div>
 
         <h1>時間割作成</h1>
-        
+
         <div class="main-container">
             <div class="class-list-section">
                 <h2>授業リスト</h2>
@@ -72,6 +72,16 @@ if (!function_exists('h')) {
 
             <div class="timetable-section">
                 <h2>私の時間割</h2>
+                <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
+                    <h3>表示する時間割の学年を選択:</h3>
+                    <select id="timetableGradeSelect">
+                        <option value="1">1年生</option>
+                        <option value="2">2年生</option>
+                        <option value="3">3年生</option>
+                        <option value="4">4年生</option>
+                    </select>
+                </div>
+
                 <table id="timetable-table" class="timetable-table">
                     <thead>
                         <tr>
@@ -124,6 +134,6 @@ if (!function_exists('h')) {
         </div>
     </div>
 
-    <script src="main_script.js" defer></script> 
+    <script src="main_script.js" defer></script>
 </body>
 </html>
