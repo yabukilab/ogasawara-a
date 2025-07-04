@@ -1,58 +1,16 @@
 <?php
-session_start();
-require_once 'db.php'; // DB接続とh()関数
+session_start(); // 세션 시작
 
+// db.php 파일을 포함하여 데이터베이스 연결 및 h() 함수 사용
+// h() 함수는 XSS 방지를 위해 HTML 엔티티로 변환하는 함수입니다.
+// db.php에 다음과 같은 함수가 정의되어 있다고 가정합니다:
+// function h($string) { return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8'); }
+require_once 'db.php'; 
+
+// 현재 로그인된 사용자의 정보 설정
 $loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト';
-$department = $_SESSION['department'] ?? '';
-$user_id = $_SESSION['user_id'] ?? null;
-
-$categoryCredits = [];
-$totalCredits = 0;
-$judgement_message = '判定情報を取得できませんでした．';
-
-if ($loggedIn && $user_id) {
-    try {
-        // 総取得単位
-        $stmt = $db->prepare("
-            SELECT SUM(c.credit) AS total_credits
-            FROM user_timetables ut
-            JOIN classes c ON ut.class_id = c.id
-            WHERE ut.user_id = ?
-        ");
-        $stmt->execute([$user_id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $totalCredits = (int)($result['total_credits'] ?? 0);
-
-        // 分類ごとの単位集計（category1）
-        $stmt = $db->prepare("
-            SELECT c.category1, SUM(c.credit) AS category_total
-            FROM user_timetables ut
-            JOIN classes c ON ut.class_id = c.id
-            WHERE ut.user_id = ?
-            GROUP BY c.category1
-        ");
-        $stmt->execute([$user_id]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            $categoryCredits[$row['category1']] = (int)$row['category_total'];
-        }
-
-        // 判定メッセージ
-        if ($totalCredits >= 124) {
-            $judgement_message = "🎓 現在の取得単位数は {$totalCredits} 単位です．卒業可能です！";
-        } elseif ($totalCredits >= 30) {
-            $remaining = 124 - $totalCredits;
-            $judgement_message = "✅ 現在の取得単位数は {$totalCredits} 単位です．進級可能ですが，卒業にはあと {$remaining} 単位必要です．";
-        } else {
-            $needed = 30 - $totalCredits;
-            $judgement_message = "⚠️ 現在の取得単位数は {$totalCredits} 単位です．進級にはあと {$needed} 単位必要です．";
-        }
-
-    } catch (PDOException $e) {
-        $judgement_message = 'データベースエラーが発生しました．';
-    }
-}
+$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
+$department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학과 정보
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -60,9 +18,7 @@ if ($loggedIn && $user_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>単位取得状況 (Credit Status)</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="credits_status.css">
-</head>
+    <link rel="stylesheet" href="style.css">             <link rel="stylesheet" href="credits_status.css">   </head>
 <body>
     <div class="container">
         <div class="user-info">
@@ -81,27 +37,28 @@ if ($loggedIn && $user_id) {
         <h1>単位取得状況</h1>
 
         <div id="credits-status-message" class="message-container">
-            <p><?php echo h($judgement_message); ?></p>
+            <p>単位取得状況を読み込み中...</p>
         </div>
 
         <div class="credits-summary">
-            <p>総取得単位: <strong><?php echo $totalCredits; ?> 単位</strong></p>
-            <?php if (!empty($categoryCredits)): ?>
-                <ul>
-                    <?php foreach ($categoryCredits as $category => $credits): ?>
-                        <li><?php echo h($category); ?>：<?php echo h($credits); ?> 単位</li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
+            <p>総取得単位: <span id="total-credits">0</span>単位</p>
         </div>
+
+        <h2>カテゴリー別取得単位</h2>
+        <ul id="category-credits-list">
+          
+          <li>データ読み込み中...</li>
+
+           
+        </ul>
 
         <a href="index.php" class="back-button">時間割作成に戻る</a>
     </div>
 
     <?php 
-    $user_id_for_js = $loggedIn ? json_encode($user_id) : 'null';
+    $user_id_for_js = isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null';
     echo "<script> const currentUserIdFromPHP = {$user_id_for_js};</script>";
     ?>
-    <script src="credits_status.js" defer></script>
+    <script src="credits_status.js" defer></script> 
 </body>
 </html>
