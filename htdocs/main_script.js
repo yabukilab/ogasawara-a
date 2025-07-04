@@ -2,9 +2,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // DOM 요소 선택
     const classFilterForm = document.getElementById('classFilterForm');
     const gradeSelect = document.getElementById('gradeFilter');
-    const termSelect = document.getElementById('termFilter');
-    const facultySelect = document.getElementById('facultyFilter'); // 이 셀렉트는 현재 사용하지 않거나, category1/2/3 중 하나로 대체해야 합니다.
-    const classListContainer = document.getElementById('class-list');
+    // termSelect와 facultySelect는 현재 show_lessons.php가 term/faculty 컬럼을 직접 받지 않으므로
+    // category1 등을 필터링하는 용도로 사용하려면 show_lessons.php의 SQL 쿼리를 수정해야 합니다.
+    // 여기서는 일단 기존대로 두지만, 필터링이 작동하지 않으면 이 부분을 고려해야 합니다.
+    const termSelect = document.getElementById('termFilter'); 
+    const facultySelect = document.getElementById('facultyFilter'); 
+
+    // 수업 목록이 표시될 컨테이너의 ID를 'class-list'에서 'lesson-list-container'로 변경합니다.
+    // 이전에 `index.php`에서 `id="lesson-list-container"`를 사용하도록 제안했었기 때문입니다.
+    const classListContainer = document.getElementById('lesson-list-container'); 
+
     const timetableTable = document.getElementById('timetable-table');
     const saveTimetableButton = document.getElementById('saveTimetableBtn');
 
@@ -13,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof window.currentUserIdFromPHP !== 'undefined' && window.currentUserIdFromPHP !== null) {
         currentUserId = window.currentUserIdFromPHP;
     } else {
-        console.warn("警告: currentUserIdFromPHPが定義されていません。ゲーストモードで動作します。");
+        console.warn("警告: currentUserIdFromPHPが定義されていません。ゲストモードで動作します。");
     }
 
     let draggedClass = null;
@@ -21,14 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 1. 수업 목록 필터링 및 불러오기 ---
     function fetchAndDisplayClasses() {
         const grade = gradeSelect.value;
-        const term = termSelect.value;
-        const faculty = facultySelect ? facultySelect.value : ''; // facultySelect가 존재하면 값 가져옴
+        const term = termSelect.value; // 현재 show_lessons.php는 'term' 필터를 직접 받지 않습니다.
+        const faculty = facultySelect ? facultySelect.value : ''; // 현재 show_lessons.php는 'faculty' 필터를 직접 받지 않습니다.
 
         // show_lessons.php로부터 수업 데이터를 가져옵니다.
-        // 현재 show_lessons.php는 category1, category2, category3를 반환하므로,
-        // faculty 필터를 category1 등으로 매핑하거나, 여기서 사용하지 않아야 합니다.
-        // 여기서는 일단 show_lessons.php가 term과 faculty 필터를 받을 수 있다고 가정하고 그대로 둡니다.
-        // (단, 실제 DB 컬럼명이 다르므로 show_lessons.php에서 category1 등과 연결 필요)
+        // show_lessons.php가 grade 필터만 처리하고 있다고 가정합니다.
+        // term과 faculty 필터를 적용하려면 show_lessons.php를 추가 수정해야 합니다.
         fetch(`show_lessons.php?grade=${grade}&term=${term}&faculty=${faculty}`)
             .then(response => {
                 if (!response.ok) {
@@ -36,60 +41,71 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return response.json();
             })
-            .then(classes => {
-                classListContainer.innerHTML = '';
-                if (classes.length === 0) {
-                    classListContainer.innerHTML = '<p>該当する授業が見つかりません。</p>';
-                    return;
-                }
-                classes.forEach(cls => {
-                    const classItem = document.createElement('div');
-                    classItem.classList.add('class-item');
-                    classItem.setAttribute('draggable', true);
-                    classItem.dataset.id = cls.id;
-                    classItem.dataset.name = cls.name;
-                    classItem.dataset.credit = cls.credit;
-                    
-                    // --- 변경 사항 시작: 데이터셋 이름과 값 매핑 ---
-                    // 'term' 컬럼이 DB에 'term'으로 있다면 그대로 사용, 없다면 다른 category 등으로 매핑 필요.
-                    // 현재 `class` 테이블 구조에는 `term` 대신 `category1`, `category2`, `category3` 등이 있습니다.
-                    // 어떤 컬럼이 학기 정보를 담고 있는지 명확하지 않으므로, 임시로 `category1`을 사용하거나,
-                    // 실제 학기 정보를 담고 있는 컬럼명(예: `semester` 등)으로 바꿔야 합니다.
-                    // 지금은 `term` 필터는 있지만, `cls.term`은 `show_lessons.php`가 반환하지 않는다고 가정하고
-                    // `category1`을 예시로 표시해봅니다.
-                    classItem.dataset.grade = cls.grade; // DB 컬럼명과 일치
-                    classItem.dataset.category1 = cls.category1; // category1 추가
-                    classItem.dataset.category2 = cls.category2; // category2 추가
-                    classItem.dataset.category3 = cls.category3; // category3 추가
-                    // --- 변경 사항 끝 ---
+            .then(data => { // 응답 객체 이름을 'data'로 변경하여 status, lessons를 바로 접근
+                classListContainer.innerHTML = ''; // 기존 수업 목록을 비웁니다.
+                
+                // 서버 응답의 status를 확인합니다.
+                if (data.status === 'success') {
+                    const classes = data.lessons; // 실제 수업 데이터는 data.lessons 안에 있습니다.
 
-                    // 수업 항목 표시 내용 변경:
-                    // `term`과 `faculty` 대신 실제 `class` 테이블 컬럼을 사용합니다.
-                    // 학기 정보로 `category1`을 사용한다고 가정하고, `faculty`는 `category2`로 표시해봅니다.
-                    classItem.innerHTML = `
-                        <strong>${cls.name}</strong> (${cls.credit}単位)<br>
-                        <span class="class-info-small">${cls.grade}年 / ${cls.category1} / ${cls.category2}</span>
-                    `;
-                    classListContainer.appendChild(classItem);
-                });
-                addDragListeners();
+                    if (classes.length === 0) {
+                        classListContainer.innerHTML = '<p>該当する授業が見つかりません。</p>';
+                        return;
+                    }
+
+                    classes.forEach(cls => {
+                        const classItem = document.createElement('div');
+                        classItem.classList.add('class-item', 'draggable'); // 'draggable' 클래스 추가
+                        classItem.setAttribute('draggable', true);
+                        
+                        // 데이터셋 속성 할당: JSON 응답의 키와 정확히 일치시켜야 합니다.
+                        classItem.dataset.id = cls.id;
+                        classItem.dataset.name = cls.name;
+                        classItem.dataset.credit = cls.credit;
+                        classItem.dataset.grade = cls.grade;
+                        classItem.dataset.category1 = cls.category1;
+                        classItem.dataset.category2 = cls.category2;
+                        classItem.dataset.category3 = cls.category3;
+
+                        // 수업 항목 표시 내용 변경:
+                        // JSON 응답의 키 (name, credit, grade, category1, category2)를 사용합니다.
+                        classItem.innerHTML = `
+                            <div class="lesson-name">${cls.name}</div>
+                            <div class="lesson-details">
+                                <span class="lesson-credit">${cls.credit}単位</span>
+                                <span class="lesson-category">${cls.category1} (${cls.grade}年)</span>
+                            </div>
+                        `;
+                        classListContainer.appendChild(classItem);
+                    });
+                    addDragListeners(); // 드래그 리스너는 수업 항목 추가 후 호출
+                } else {
+                    // status가 'error'인 경우 메시지 표시
+                    console.error('授業データの読み込みに失敗しました:', data.message);
+                    classListContainer.innerHTML = `<p class="message error">${data.message}</p>`;
+                }
             })
             .catch(error => {
-                console.error('授業データの取得に失敗しました:', error);
-                classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。</p>';
+                console.error('授業データの取得中にネットワークエラーが発生しました:', error);
+                classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。ネットワーク接続を確認してください。</p>';
             });
     }
 
     if (classFilterForm) {
         classFilterForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            event.preventDefault(); // フォームのデフォルト送信を防止
             fetchAndDisplayClasses();
         });
+        // ページロード時にもフィルターを適用하여 수업을 불러오도록 추가
+        // gradeSelect.addEventListener('change', fetchAndDisplayClasses);
+        // termSelect.addEventListener('change', fetchAndDisplayClasses);
+        // facultySelect.addEventListener('change', fetchAndDisplayClasses);
     }
-
+    
+    // 페이지 로드 시 수업 목록을 한 번 불러옵니다.
     fetchAndDisplayClasses();
 
-    // --- 2. 드래ッグ 앤 ドロップ機能 (로직 변경 없음) ---
+    // --- 2. 드래ッグ 앤 ドロップ機能 ---
     function addDragListeners() {
         const classItems = document.querySelectorAll('.class-item');
         classItems.forEach(item => {
@@ -125,12 +141,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const classId = draggedClass.dataset.id;
                 const className = draggedClass.dataset.name;
                 const classCredit = draggedClass.dataset.credit;
-                const classGrade = draggedClass.dataset.grade; // 'grade'는 일치
-                
-                // --- 변경 사항 시작: category1, category2를 가져오도록 변경 ---
+                const classGrade = draggedClass.dataset.grade;
                 const classCategory1 = draggedClass.dataset.category1;
                 const classCategory2 = draggedClass.dataset.category2;
-                // --- 변경 사항 끝 ---
+                // classCategory3도 필요하다면 여기서 가져와 사용할 수 있습니다.
 
                 if (this.classList.contains('filled-primary')) {
                     alert('この時間枠にはすでに授業があります。');
@@ -151,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addDropListeners();
 
-    // --- 3. 시간표에서 수업 삭제 (로직 변경 없음) ---
+    // --- 3. 시간표에서 수업 삭제 ---
     function removeClassFromTimetable(event) {
         const cell = event.target.closest('.time-slot');
         if (cell) {
@@ -160,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // --- 4. 시간표 저장 기능 (로직 변경 없음 - 서버로 보내는 데이터 구조는 동일) ---
+    // --- 4. 시간표 저장 기능 ---
     if (saveTimetableButton) {
         saveTimetableButton.addEventListener('click', function() {
             if (currentUserId === null) {
@@ -212,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 5. 저장된 시간표 불러오기 (로직 변경 - 표시되는 정보 반영) ---
+    // --- 5. 저장된 시간표 불러오기 ---
     function loadTimetable() {
         if (currentUserId === null) {
             console.log("ユーザーがログインしていません。保存された時間割をロードしません。");
@@ -228,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 if (data.status === 'success') {
+                    // 기존 시간표 초기화
                     timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
                         cell.innerHTML = '';
                         cell.classList.remove('filled-primary');
