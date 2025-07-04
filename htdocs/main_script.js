@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // 이 경고 메시지가 main_script.js:20에 해당할 것입니다.
         console.warn("警告: currentUserIdFromPHPが定義されていません。ゲストモードで動作します。(via data attribute)");
     }
+
+    console.log("DEBUG: main_script.js - currentUserId의 최종 값:", currentUserId, "타입:", typeof currentUserId);
     // =========================================================
 
-
+    
     // =========================================================
     // 2. DOM 요소 선택
     //    모든 DOM 요소 선택은 이 'DOMContentLoaded' 블록 안에서 이루어져야 합니다.
