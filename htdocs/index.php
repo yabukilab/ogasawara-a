@@ -154,6 +154,5 @@ $user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
     <script>
         const currentUserIdFromPHP = <?php echo $user_id_for_js; ?>;
     </script>
-    <script src="main_script.js" defer></script> 
-</body>
+    <script src="main_script.js"></script> </body>
 </html>
