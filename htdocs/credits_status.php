@@ -46,7 +46,10 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
 
         <h2>カテゴリー別取得単位</h2>
         <ul id="category-credits-list">
-            <li>データ読み込み中...</li>
+          
+          <li>データ読み込み中...</li>
+
+           
         </ul>
 
         <a href="index.php" class="back-button">時間割作成に戻る</a>
