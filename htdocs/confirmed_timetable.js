@@ -2,12 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const timetableTableBody = document.getElementById('confirmed-timetable-body');
     const messageContainer = document.getElementById('confirmed-timetable-message');
 
-    let currentUserId = null; 
+    const currentUserId =typeof currentUserIdFromPHP !=='undefined' ? currentUserIdFromPHP : null;
+    
+    if (!currentUserId) {
+        console.error("ユーザーIDが設定されていません。単位取得状況をロードできません。");
+        messageContainer.innerHTML = "<p>ユーザー情報を取得できませんでした。ログインし直してください。</p>";
+        return;
+    }
 
     // PHP에서 넘어온 사용자 ID를 전역 변수로 가져옵니다. (confirmed_timetable.php에서 설정해야 함)
     // 예: <script>const currentUserIdFromPHP = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;</script>
     // ユーザーIDの取得処理を関数にまとめる
-function initializeUserId() {
+   function initializeUserId() {
     if (typeof window.currentUserIdFromPHP !== 'undefined' && window.currentUserIdFromPHP !== null) {
         currentUserId = window.currentUserIdFromPHP;
     } else {
@@ -16,9 +22,9 @@ function initializeUserId() {
             messageContainer.innerHTML = '<p class="error-message">ログインしていません。ログイン後に確定済み時間割を確認できます。</p>';
         }
         console.warn("警告: currentUserIdFromPHPが定義されていないかnullです。確定済み時間割をロードできません。");
-        return falce; 
+        return false; 
     }
-}
+  }
     /**
      * 서버로부터 사용자의 확정된 시간표를 가져와 표시합니다.
      */
@@ -27,7 +33,7 @@ function initializeUserId() {
             console.error("ユーザーIDが設定されていません。確定済み時間割をロードできません。");
             return;
         }
-
+    
         // get_timetable.php에 AJAX 요청을 보내 저장된 시간표를 가져옵니다.
         // 이 파일은 사용자 시간표 데이터를 가져오기 위해 이미 수정된 get_timetable.php를 재사용합니다.
         fetch(`get_timetable.php?user_id=${currentUserId}`)
