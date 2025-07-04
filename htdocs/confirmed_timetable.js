@@ -16,7 +16,7 @@ function initializeUserId() {
             messageContainer.innerHTML = '<p class="error-message">ログインしていません。ログイン後に確定済み時間割を確認できます。</p>';
         }
         console.warn("警告: currentUserIdFromPHPが定義されていないかnullです。確定済み時間割をロードできません。");
-        return falce; 
+        return false; 
     }
 }
     /**
@@ -27,7 +27,7 @@ function initializeUserId() {
             console.error("ユーザーIDが設定されていません。確定済み時間割をロードできません。");
             return;
         }
-
+    
         // get_timetable.php에 AJAX 요청을 보내 저장된 시간표를 가져옵니다.
         // 이 파일은 사용자 시간표 데이터를 가져오기 위해 이미 수정된 get_timetable.php를 재사용합니다.
         fetch(`get_timetable.php?user_id=${currentUserId}`)
