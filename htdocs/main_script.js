@@ -2,14 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // DOM 요소 선택
     const classFilterForm = document.getElementById('classFilterForm');
     const gradeSelect = document.getElementById('gradeFilter');
-    // termSelect와 facultySelect는 현재 show_lessons.php가 term/faculty 컬럼을 직접 받지 않으므로
-    // category1 등을 필터링하는 용도로 사용하려면 show_lessons.php의 SQL 쿼리를 수정해야 합니다.
-    // 여기서는 일단 기존대로 두지만, 필터링이 작동하지 않으면 이 부분을 고려해야 합니다.
-    const termSelect = document.getElementById('termFilter'); 
+    const termSelect = document.getElementById('termFilter');
     const facultySelect = document.getElementById('facultyFilter'); 
 
-    // 수업 목록이 표시될 컨테이너의 ID를 'class-list'에서 'lesson-list-container'로 변경합니다.
-    // 이전에 `index.php`에서 `id="lesson-list-container"`를 사용하도록 제안했었기 때문입니다.
+    // 수업 목록 컨테이너 ID를 'lesson-list-container'로 변경
     const classListContainer = document.getElementById('lesson-list-container'); 
 
     const timetableTable = document.getElementById('timetable-table');
@@ -17,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 시간표 저장 로직
     let currentUserId = null;
+    // window.currentUserIdFromPHP는 index.php에서 설정됩니다.
     if (typeof window.currentUserIdFromPHP !== 'undefined' && window.currentUserIdFromPHP !== null) {
         currentUserId = window.currentUserIdFromPHP;
     } else {
@@ -28,12 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 1. 수업 목록 필터링 및 불러오기 ---
     function fetchAndDisplayClasses() {
         const grade = gradeSelect.value;
-        const term = termSelect.value; // 현재 show_lessons.php는 'term' 필터를 직접 받지 않습니다.
-        const faculty = facultySelect ? facultySelect.value : ''; // 현재 show_lessons.php는 'faculty' 필터를 직접 받지 않습니다.
+        const term = termSelect.value;
+        const faculty = facultySelect ? facultySelect.value : ''; 
 
-        // show_lessons.php로부터 수업 데이터를 가져옵니다.
-        // show_lessons.php가 grade 필터만 처리하고 있다고 가정합니다.
-        // term과 faculty 필터를 적용하려면 show_lessons.php를 추가 수정해야 합니다.
         fetch(`show_lessons.php?grade=${grade}&term=${term}&faculty=${faculty}`)
             .then(response => {
                 if (!response.ok) {
@@ -41,10 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return response.json();
             })
-            .then(data => { // 응답 객체 이름을 'data'로 변경하여 status, lessons를 바로 접근
+            .then(data => { 
                 classListContainer.innerHTML = ''; // 기존 수업 목록을 비웁니다.
                 
-                // 서버 응답의 status를 확인합니다.
                 if (data.status === 'success') {
                     const classes = data.lessons; // 실제 수업 데이터는 data.lessons 안에 있습니다.
 
@@ -55,10 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     classes.forEach(cls => {
                         const classItem = document.createElement('div');
-                        classItem.classList.add('class-item', 'draggable'); // 'draggable' 클래스 추가
+                        classItem.classList.add('class-item', 'draggable'); 
                         classItem.setAttribute('draggable', true);
                         
-                        // 데이터셋 속성 할당: JSON 응답의 키와 정확히 일치시켜야 합니다.
+                        // 데이터셋 속성 할당: JSON 응답의 키와 정확히 일치시킵니다.
                         classItem.dataset.id = cls.id;
                         classItem.dataset.name = cls.name;
                         classItem.dataset.credit = cls.credit;
@@ -67,8 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         classItem.dataset.category2 = cls.category2;
                         classItem.dataset.category3 = cls.category3;
 
-                        // 수업 항목 표시 내용 변경:
-                        // JSON 응답의 키 (name, credit, grade, category1, category2)를 사용합니다.
+                        // 수업 항목 표시 내용 변경
                         classItem.innerHTML = `
                             <div class="lesson-name">${cls.name}</div>
                             <div class="lesson-details">
@@ -80,7 +72,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     addDragListeners(); // 드래그 리스너는 수업 항목 추가 후 호출
                 } else {
-                    // status가 'error'인 경우 메시지 표시
                     console.error('授業データの読み込みに失敗しました:', data.message);
                     classListContainer.innerHTML = `<p class="message error">${data.message}</p>`;
                 }
@@ -96,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); // フォームのデフォルト送信を防止
             fetchAndDisplayClasses();
         });
-        // ページロード時にもフィルターを適用하여 수업을 불러오도록 추가
+        // 필터 변경 시 자동으로 수업 목록을 업데이트하고 싶다면 아래 주석을 해제하세요.
         // gradeSelect.addEventListener('change', fetchAndDisplayClasses);
         // termSelect.addEventListener('change', fetchAndDisplayClasses);
         // facultySelect.addEventListener('change', fetchAndDisplayClasses);
@@ -144,8 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const classGrade = draggedClass.dataset.grade;
                 const classCategory1 = draggedClass.dataset.category1;
                 const classCategory2 = draggedClass.dataset.category2;
-                // classCategory3도 필요하다면 여기서 가져와 사용할 수 있습니다.
-
+                
                 if (this.classList.contains('filled-primary')) {
                     alert('この時間枠にはすでに授業があります。');
                     return;
@@ -186,7 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const timetableData = [];
             timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
                 const classId = cell.querySelector('.class-name-in-cell').dataset.classId;
-                const day = cell.dataset.day;
+                // data-day 속성이 이제 영어 요일로 설정되어 있습니다.
+                const day = cell.dataset.day; 
                 const period = cell.dataset.period;
 
                 timetableData.push({
@@ -249,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
 
                     data.timetable.forEach(entry => {
+                        // 셀 선택 시 data-day 속성이 영어 요일로 변경되었으므로 셀렉터도 이에 맞춰 수정
                         const cellSelector = `.time-slot[data-day="${entry.day_of_week}"][data-period="${entry.period}"]`;
                         const targetCell = timetableTable.querySelector(cellSelector);
 
@@ -257,8 +249,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             const className = entry.class_name || '不明な授業';
                             const classCredit = entry.class_credit || '?';
                             const classGrade = entry.grade || '';
-                            const classCategory1 = entry.category1 || ''; // category1 추가
-                            const classCategory2 = entry.category2 || ''; // category2 추가
+                            const classCategory1 = entry.category1 || ''; 
+                            const classCategory2 = entry.category2 || ''; 
 
                             targetCell.innerHTML = `
                                 <span class="class-name-in-cell" data-class-id="${entry.class_id}">${className}</span>

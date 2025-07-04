@@ -6,6 +6,10 @@ require_once 'db.php'; // 데이터베이스 연결 및 h() 함수 사용을 위
 $loggedIn = isset($_SESSION['user_id']);
 $student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
 $department = $_SESSION['department'] ?? '';
+
+// JavaScript에 전달할 사용자 ID 설정
+// currentUserIdFromPHP 변수는 main_script.js에서 사용됩니다.
+$user_id_for_js = $loggedIn ? json_encode($_SESSION['user_id']) : 'null';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -13,7 +17,9 @@ $department = $_SESSION['department'] ?? '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>時間割作成 (Timetable Creation)</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <body>
     <div class="container">
         <div class="user-info">
@@ -51,7 +57,7 @@ $department = $_SESSION['department'] ?? '';
                         <option value="後期">後期</option>
                         </select>
 
-                    <label for="facultyFilter">学部 (Category 1):</label>
+                    <label for="facultyFilter">区分 (Category 1):</label>
                     <select id="facultyFilter" name="faculty">
                         <option value="">全て</option>
                         <option value="専門科目">専門科目</option>
@@ -60,7 +66,7 @@ $department = $_SESSION['department'] ?? '';
                     
                     <button type="submit">フィルター</button>
                 </form>
-                <div id="class-list">
+                <div id="lesson-list-container" class="class-list-container">
                     <p>授業を読み込み中...</p>
                 </div>
             </div>
@@ -98,7 +104,7 @@ $department = $_SESSION['department'] ?? '';
                             <td class="time-slot" data-day="Friday" data-period="2"></td>
                             <td class="time-slot" data-day="Saturday" data-period="2"></td>
                         </tr>
-                         <tr>
+                        <tr>
                             <td class="period-header-cell">3限<span class="period-time">13:00-14:30</span></td>
                             <td class="time-slot" data-day="Monday" data-period="3"></td>
                             <td class="time-slot" data-day="Tuesday" data-period="3"></td>
@@ -134,7 +140,7 @@ $department = $_SESSION['department'] ?? '';
                             <td class="time-slot" data-day="Friday" data-period="6"></td>
                             <td class="time-slot" data-day="Saturday" data-period="6"></td>
                         </tr>
-                        </tbody>
+                    </tbody>
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="saveTimetableBtn">時間割を保存</button>
@@ -145,10 +151,9 @@ $department = $_SESSION['department'] ?? '';
         </div>
     </div>
 
-    <?php 
-    $user_id_for_js = isset($_SESSION['user_id']) ? json_encode($_SESSION['user_id']) : 'null';
-    echo "<script>const currentUserIdFromPHP = {$user_id_for_js};</script>";
-    ?>
+    <script>
+        const currentUserIdFromPHP = <?php echo $user_id_for_js; ?>;
+    </script>
     <script src="main_script.js" defer></script> 
 </body>
 </html>
