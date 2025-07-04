@@ -2,7 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const timetableTableBody = document.getElementById('confirmed-timetable-body');
     const messageContainer = document.getElementById('confirmed-timetable-message');
 
-    let currentUserId = null; 
+    const currentUserId =typeof currentUserIdFromPHP !=='undefined' ? currentUserIdFromPHP : null;
+    
+    if (!currentUserId) {
+        console.error("ユーザーIDが設定されていません。単位取得状況をロードできません。");
+        messageContainer.innerHTML = "<p>ユーザー情報を取得できませんでした。ログインし直してください。</p>";
+        return;
+    }
 
     // PHP에서 넘어온 사용자 ID를 전역 변수로 가져옵니다. (confirmed_timetable.php에서 설정해야 함)
     // 예: <script>const currentUserIdFromPHP = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;</script>
