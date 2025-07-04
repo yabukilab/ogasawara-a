@@ -62,3 +62,4 @@ $department = $_SESSION['department'] ?? ''; // 사용자의 소속 학부/학�
     <script src="credits_status.js" defer></script> 
 </body>
 </html>
+
