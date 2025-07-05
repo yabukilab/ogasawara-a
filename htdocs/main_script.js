@@ -138,16 +138,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (!draggedClass) return;
 
+                // =====================================================================
+                // ***** 하나의 셀에 하나의 수업만 드롭되도록 강제하는 로직 추가/수정 *****
+                // 이 셀에 이미 .class-item-in-cell 클래스를 가진 자식 요소가 있는지 확인
+                if (this.querySelector('.class-item-in-cell')) {
+                    alert('この時間枠にはすでに授業があります。新しい授業を追加する前に、既存の授業を削除してください。');
+                    return; // 이미 수업이 있으면 추가하지 않고 함수 종료
+                }
+                // =====================================================================
+
                 const classId = draggedClass.dataset.id;
                 const className = draggedClass.dataset.name;
                 const classCredit = parseInt(draggedClass.dataset.credit, 10); // 학점을 숫자로 변환
                 const classGrade = draggedClass.dataset.grade;
                 // const classCategory2 = draggedClass.dataset.category2; // 필요하면 사용
 
-                if (this.querySelector('.class-item-in-cell')) {
-                    alert('この時間枠にはすでに授業があります。新しい授業を追加する前に、既存の授業を削除してください。');
-                    return; // 이미 수업이 있으면 추가하지 않고 종료
-                }
                 // 새로운 수업 아이템 요소 생성
                 const classItemInCell = document.createElement('div');
                 classItemInCell.classList.add('class-item-in-cell');
@@ -156,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 중요: 셀의 data-day와 data-period를 직접 읽어와서 classItemInCell에 저장
                 // 이렇게 하면 나중에 saveTimetable 함수에서 이 값을 정확하게 읽을 수 있습니다.
                 classItemInCell.dataset.classId = classId;
-                classItemInCell.dataset.day = this.dataset.day;     // <-- 셀의 data-day 값을 가져옴
+                classItemInCell.dataset.day = this.dataset.day;    // <-- 셀의 data-day 값을 가져옴
                 classItemInCell.dataset.period = this.dataset.period; // <-- 셀의 data-period 값을 가져옴
 
                 classItemInCell.innerHTML = `
@@ -310,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             classItemInCell.classList.add('class-item-in-cell');
                             // 로드 시에도 data-day와 data-period를 class-item-in-cell에 저장하여 일관성 유지
                             classItemInCell.dataset.classId = entry.class_id;
-                            classItemInCell.dataset.day = entry.day;     // DB에서 가져온 요일 저장
+                            classItemInCell.dataset.day = entry.day;    // DB에서 가져온 요일 저장
                             classItemInCell.dataset.period = entry.period; // DB에서 가져온 교시 저장
 
                             classItemInCell.innerHTML = `
@@ -341,6 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('時間割のロード中にエラーが発生しました:', error);
+                // alert('時間割のロード中にエラーが発生しました。ネットワーク接続を確認してください。'); // 너무 자주 뜨지 않도록 경고 대신 콘솔 출력
             });
     }
 
