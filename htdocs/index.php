@@ -103,8 +103,8 @@ if (!function_exists('h')) {
                             <th>土曜日</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <tbody>
+                    <tbody>
+                            <tr>
                                 <td class='period-header-cell'>
                                     1限<span class='period-time'>9:00-10:00</span>
                                 </td>
@@ -214,7 +214,7 @@ if (!function_exists('h')) {
                                 <td class='time-slot' data-day='金' data-period='10'></td>
                                 <td class='time-slot' data-day='土' data-period='10'></td>
                             </tr>
-                        </tbody>
+                    </tbody>
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="saveTimetableBtn">時間割を保存</button>
