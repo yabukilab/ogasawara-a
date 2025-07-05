@@ -103,37 +103,118 @@ if (!function_exists('h')) {
                             <th>土曜日</th>
                         </tr>
                     </thead>
-                    <body>
-                        <?php
-                        $periods = range(1, 10); // 1교시부터 10교시까지
-                        // 요일 데이터를 일본어로 변경
-                        $days = ['月', '火', '水', '木', '金', '土']; 
-
-                        foreach ($periods as $period) {
-                            echo "<tr>";
-                            echo "<td class='period-header-cell'>{$period}限<span class='period-time'>";
-                            // 시간 표시를 위한 추가 로직 (원하는 형식으로 조정)
-                            switch ($period) {
-                                case 1: echo "9:00-10:00"; break;
-                                case 2: echo "10:00-11:00"; break;
-                                case 3: echo "11:00-12:00"; break;
-                                case 4: echo "12:00-13:00"; break;
-                                case 5: echo "13:00-14:00"; break;
-                                case 6: echo "14:00-15:00"; break;
-                                case 7: echo "15:00-16:00"; break;
-                                case 8: echo "16:00-17:00"; break;
-                                case 9: echo "17:00-18:00"; break;
-                                case 10: echo "18:00-19:00"; break;
-                            }
-                            echo "</span></td>";
-                            foreach ($days as $day) {
-                                // data-day 속성을 일본어 요일로 설정
-                                echo "<td class='time-slot' data-day='{$day}' data-period='{$period}'></td>";
-                            }
-                            echo "</tr>";
-                        }
-                        ?>
-                    </body>
+                    <tr>
+                        <tbody>
+                                <td class='period-header-cell'>
+                                    1限<span class='period-time'>9:00-10:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='1'></td>
+                                <td class='time-slot' data-day='火' data-period='1'></td>
+                                <td class='time-slot' data-day='水' data-period='1'></td>
+                                <td class='time-slot' data-day='木' data-period='1'></td>
+                                <td class='time-slot' data-day='金' data-period='1'></td>
+                                <td class='time-slot' data-day='土' data-period='1'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    2限<span class='period-time'>10:00-11:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='2'></td>
+                                <td class='time-slot' data-day='火' data-period='2'></td>
+                                <td class='time-slot' data-day='水' data-period='2'></td>
+                                <td class='time-slot' data-day='木' data-period='2'></td>
+                                <td class='time-slot' data-day='金' data-period='2'></td>
+                                <td class='time-slot' data-day='土' data-period='2'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    3限<span class='period-time'>11:00-12:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='3'></td>
+                                <td class='time-slot' data-day='火' data-period='3'></td>
+                                <td class='time-slot' data-day='水' data-period='3'></td>
+                                <td class='time-slot' data-day='木' data-period='3'></td>
+                                <td class='time-slot' data-day='金' data-period='3'></td>
+                                <td class='time-slot' data-day='土' data-period='3'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    4限<span class='period-time'>12:00-13:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='4'></td>
+                                <td class='time-slot' data-day='火' data-period='4'></td>
+                                <td class='time-slot' data-day='水' data-period='4'></td>
+                                <td class='time-slot' data-day='木' data-period='4'></td>
+                                <td class='time-slot' data-day='金' data-period='4'></td>
+                                <td class='time-slot' data-day='土' data-period='4'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    5限<span class='period-time'>13:00-14:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='5'></td>
+                                <td class='time-slot' data-day='火' data-period='5'></td>
+                                <td class='time-slot' data-day='水' data-period='5'></td>
+                                <td class='time-slot' data-day='木' data-period='5'></td>
+                                <td class='time-slot' data-day='金' data-period='5'></td>
+                                <td class='time-slot' data-day='土' data-period='5'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    6限<span class='period-time'>14:00-15:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='6'></td>
+                                <td class='time-slot' data-day='火' data-period='6'></td>
+                                <td class='time-slot' data-day='水' data-period='6'></td>
+                                <td class='time-slot' data-day='木' data-period='6'></td>
+                                <td class='time-slot' data-day='金' data-period='6'></td>
+                                <td class='time-slot' data-day='土' data-period='6'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    7限<span class='period-time'>15:00-16:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='7'></td>
+                                <td class='time-slot' data-day='火' data-period='7'></td>
+                                <td class='time-slot' data-day='水' data-period='7'></td>
+                                <td class='time-slot' data-day='木' data-period='7'></td>
+                                <td class='time-slot' data-day='金' data-period='7'></td>
+                                <td class='time-slot' data-day='土' data-period='7'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    8限<span class='period-time'>16:00-17:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='8'></td>
+                                <td class='time-slot' data-day='火' data-period='8'></td>
+                                <td class='time-slot' data-day='水' data-period='8'></td>
+                                <td class='time-slot' data-day='木' data-period='8'></td>
+                                <td class='time-slot' data-day='金' data-period='8'></td>
+                                <td class='time-slot' data-day='土' data-period='8'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    9限<span class='period-time'>17:00-18:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='9'></td>
+                                <td class='time-slot' data-day='火' data-period='9'></td>
+                                <td class='time-slot' data-day='水' data-period='9'></td>
+                                <td class='time-slot' data-day='木' data-period='9'></td>
+                                <td class='time-slot' data-day='金' data-period='9'></td>
+                                <td class='time-slot' data-day='土' data-period='9'></td>
+                            </tr>
+                            <tr>
+                                <td class='period-header-cell'>
+                                    10限<span class='period-time'>18:00-19:00</span>
+                                </td>
+                                <td class='time-slot' data-day='月' data-period='10'></td>
+                                <td class='time-slot' data-day='火' data-period='10'></td>
+                                <td class='time-slot' data-day='水' data-period='10'></td>
+                                <td class='time-slot' data-day='木' data-period='10'></td>
+                                <td class='time-slot' data-day='金' data-period='10'></td>
+                                <td class='time-slot' data-day='土' data-period='10'></td>
+                            </tr>
+                        </tbody>
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="saveTimetableBtn">時間割を保存</button>
