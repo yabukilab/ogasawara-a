@@ -113,7 +113,7 @@ h1 {
 }
 
 /* Class List Display */
-#class-list {
+#lesson-list-container { /* id가 class-list가 아니라 lesson-list-container 임을 확인 */
     margin-top: 15px;
 }
 
@@ -126,6 +126,11 @@ h1 {
     cursor: grab; /* Indicates draggable item */
     transition: all 0.2s ease-in-out;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    /* Flexbox for inner content, if needed for complex class item layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Align text to the start */
 }
 
 .class-item:hover {
@@ -140,12 +145,13 @@ h1 {
     background-color: #a0d9e7;
 }
 
-.class-item strong {
+.lesson-name { /* class-item strong 대신 lesson-name 사용 */
     color: #2c3e50;
     font-size: 1.1em;
+    font-weight: bold;
 }
 
-.class-info-small {
+.lesson-details { /* class-info-small 대신 lesson-details 사용 */
     font-size: 0.85em;
     color: #666;
 }
@@ -160,7 +166,7 @@ h1 {
 .timetable-table th,
 .timetable-table td {
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 5px; /* 패딩을 약간 줄여서 공간 확보 */
     text-align: center;
     vertical-align: middle;
     height: 80px; /* Fixed height for time slots */
@@ -194,6 +200,12 @@ h1 {
 .time-slot {
     background-color: #f9f9f9;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    /* 핵심: 수업이 있든 없든 항상 flexbox를 사용 */
+    display: flex; /* 추가 */
+    flex-direction: column; /* 추가 */
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center; /* 가운데 정렬 */
+    overflow: hidden; /* 셀을 넘어서는 내용 숨기기 */
 }
 
 .time-slot.drag-over {
@@ -207,37 +219,60 @@ h1 {
     font-weight: bold;
     border-color: #28a745;
     box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px; /* Space between elements in a filled cell */
+    /* display, flex-direction은 이미 .time-slot에 있으므로 제거 */
+    gap: 5px; /* 수업 요소들 사이의 간격 */
+}
+
+/* Class Item inside Timetable Cell */
+.class-item-in-cell {
+    background-color: #d1e7dd; /* 연한 녹색 계열 */
+    border: 1px solid #28a745; /* 진한 녹색 테두리 */
+    padding: 3px;
+    font-size: 0.8em;
+    border-radius: 3px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
+    width: 100%; /* 부모 셀에 꽉 차게 */
+    height: 100%; /* 부모 셀에 꽉 차게 */
+    display: flex; /* flex 컨테이너로 설정 */
+    flex-direction: column; /* 세로 방향으로 아이템 정렬 */
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    position: relative; /* 버튼 위치 지정을 위해 */
 }
 
 .class-name-in-cell {
     font-size: 1em;
     font-weight: bold;
-    word-break: break-word; /* Prevents long names from overflowing */
+    word-break: break-word;
+    white-space: normal; /* 이름이 길 경우 여러 줄로 표시되도록 */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .class-credit-in-cell,
 .category-display-in-cell {
     font-size: 0.8em;
     color: #555;
+    white-space: nowrap;
 }
+
 
 /* Remove Button for Classes in Timetable */
 .remove-button {
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: -5px; /* 약간 위로 올림 */
+    right: -5px; /* 약간 오른쪽으로 뺌 */
     background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 50%;
     width: 20px;
     height: 20px;
-    font-size: 1.2em;
+    font-size: 1.1em; /* 폰트 크기 조정 */
     line-height: 1;
     cursor: pointer;
     display: flex;
@@ -246,6 +281,7 @@ h1 {
     padding: 0;
     opacity: 0.7;
     transition: opacity 0.2s ease, background-color 0.2s ease;
+    z-index: 10; /* 다른 요소 위에 표시되도록 */
 }
 
 .remove-button:hover {
@@ -285,6 +321,48 @@ h1 {
 
 .view-confirmed-button:hover {
     background-color: #5a6268;
+}
+
+/* Total Credit Display */
+#total-credit-display {
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center; /* 중앙 정렬 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+/* Timetable Selection (Dropdowns for loading specific timetables) */
+.timetable-selection {
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 10px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap; /* 반응형을 위해 추가 */
+}
+
+.timetable-selection h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.timetable-selection label {
+    font-weight: bold;
+    color: #555;
+}
+
+.timetable-selection select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.95em;
+    background-color: #fdfdfd;
 }
 
 
@@ -347,6 +425,14 @@ h1 {
         padding: 6px;
         height: 60px;
     }
+    .timetable-selection { /* 반응형 조정 */
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .timetable-selection select {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -359,14 +445,18 @@ h1 {
     .period-header-cell {
         width: 70px;
     }
-    .class-item strong {
+    .class-item .lesson-name { /* class-item strong 대신 lesson-name 사용 */
         font-size: 1em;
     }
-    .class-info-small {
+    .class-item .lesson-details { /* class-info-small 대신 lesson-details 사용 */
         font-size: 0.75em;
     }
-    .save-button, .view-button {
+    #saveTimetableBtn, .view-confirmed-button { /* save-button, view-button 대신 실제 ID와 클래스 사용 */
         font-size: 0.9em;
         padding: 8px 15px;
+    }
+    .view-confirmed-button {
+        margin-left: 0; /* 작은 화면에서 좌측 마진 제거 */
+        margin-top: 10px; /* 버튼 간 세로 간격 추가 */
     }
 }

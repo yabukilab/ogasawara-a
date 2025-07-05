@@ -144,11 +144,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const classGrade = draggedClass.dataset.grade;
                 // const classCategory2 = draggedClass.dataset.category2; // 필요하면 사용
 
-                if (this.classList.contains('filled-primary')) {
-                    alert('この時間枠にはすでに授業があります。');
-                    return;
+                if (this.querySelector('.class-item-in-cell')) {
+                    alert('この時間枠にはすでに授業があります。新しい授業を追加する前に、既存の授業を削除してください。');
+                    return; // 이미 수업이 있으면 추가하지 않고 종료
                 }
-
                 // 새로운 수업 아이템 요소 생성
                 const classItemInCell = document.createElement('div');
                 classItemInCell.classList.add('class-item-in-cell');
