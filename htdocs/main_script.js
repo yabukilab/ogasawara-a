@@ -37,6 +37,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let draggedClass = null; // 드래그 중인 수업 데이터를 저장할 변수
 
+    // --- 추가: 총 학점 관리 변수 및 표시 DOM 요소 ---
+    let totalCredit = 0;
+    const currentTotalCreditSpan = document.getElementById('current-total-credit'); // 추가된 HTML 요소
+    // --- 추가 끝 ---
+
     // =========================================================
     // 3. 함수 정의
     // =========================================================
@@ -133,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const classId = draggedClass.dataset.id;
                 const className = draggedClass.dataset.name;
-                const classCredit = draggedClass.dataset.credit;
+                const classCredit = parseInt(draggedClass.dataset.credit, 10); // 학점을 숫자로 변환
                 const classGrade = draggedClass.dataset.grade;
                 const classCategory1 = draggedClass.dataset.category1;
                 const classCategory2 = draggedClass.dataset.category2;
@@ -143,6 +148,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
+                // --- 수정: 시간표 셀에 학점을 표시할 때 총 학점 업데이트 ---
                 this.innerHTML = `
                     <span class="class-name-in-cell" data-class-id="${classId}">${className}</span>
                     <span class="class-credit-in-cell">${classCredit}単位</span>
@@ -150,16 +156,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 this.classList.add('filled-primary');
                 this.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
+
+                // --- 추가: 총 학점에 현재 수업의 학점을 더하고 표시 ---
+                totalCredit += classCredit;
+                updateAndDisplayTotalCredit();
+                // --- 추가 끝 ---
             });
         });
     }
 
-    addDropListeners();
+    // addDropListeners(); // DOMContentLoaded 안에서 호출되므로, 여기는 괜찮습니다. (아래 4. 이벤트 리스너 등록 부분에서 호출됨)
 
     // --- 3.4. 時間割から授業削除 ---
     function removeClassFromTimetable(event) {
         const cell = event.target.closest('.time-slot');
         if (cell) {
+            // --- 추가: 삭제되는 수업의 학점을 총 학점에서 빼기 ---
+            const removedCreditSpan = cell.querySelector('.class-credit-in-cell');
+            if (removedCreditSpan) {
+                const removedCreditText = removedCreditSpan.textContent; // "2単位"와 같은 텍스트
+                const removedCredit = parseInt(removedCreditText.replace('単位', ''), 10); // 숫자만 추출
+                if (!isNaN(removedCredit)) { // 유효한 숫자인지 확인
+                    totalCredit -= removedCredit;
+                    updateAndDisplayTotalCredit();
+                }
+            }
+            // --- 추가 끝 ---
+
             cell.innerHTML = '';
             cell.classList.remove('filled-primary');
         }
@@ -174,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const selectedTimetableGrade = timetableGradeSelect.value; // 현재 선택된 학년 가져오기
-        const selectedTimetableTerm = timetableTermSelect.value;   // 새로 추가된 학기 가져오기
+        const selectedTimetableTerm = timetableTermSelect.value;   // 새로 추가된 학기 가져오기
 
         const timetableData = [];
         timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
@@ -230,6 +253,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetGrade = timetableGradeSelect.value;
         const targetTerm = timetableTermSelect.value; // 현재 선택된 학기 사용
 
+        // --- 수정: 시간표 로드 전에 총 학점 초기화 ---
+        totalCredit = 0; // 로드 전에 초기화
+        updateAndDisplayTotalCredit(); // 초기화된 값 바로 반영
+        // --- 수정 끝 ---
+
         // 기존 시간표 초기화
         timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
             cell.innerHTML = '';
@@ -251,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         if (targetCell) {
                             const className = entry.class_name || '不明な授業';
-                            const classCredit = entry.class_credit || '?';
+                            const classCredit = parseInt(entry.class_credit, 10) || 0; // 학점을 숫자로 변환
                             const classOriginalGrade = entry.class_original_grade || ''; // 수업의 실제 학년
 
                             targetCell.innerHTML = `
@@ -262,10 +290,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             `;
                             targetCell.classList.add('filled-primary');
                             targetCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
+
+                            // --- 추가: 로드된 수업의 학점을 총 학점에 더하기 ---
+                            totalCredit += classCredit;
+                            // --- 추가 끝 ---
                         } else {
                             console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}, Period ${entry.period}`);
                         }
                     });
+                    // --- 추가: 모든 수업 로드 후 총 학점 최종 업데이트 ---
+                    updateAndDisplayTotalCredit();
+                    // --- 추가 끝 ---
                     console.log(`時間割 (学年: ${targetGrade}, 学期: ${targetTerm}) が正常にロードされました。`);
                 } else {
                     console.error('時間割のロードに失敗しました:', data.message);
@@ -276,8 +311,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    // --- 헬퍼 함수: 총 학점 업데이트 및 표시 ---
+    function updateAndDisplayTotalCredit() {
+        if (currentTotalCreditSpan) {
+            currentTotalCreditSpan.textContent = totalCredit;
+        }
+    }
+    // --- 헬퍼 함수 끝 ---
+
     // =========================================================
-    // 4. イベントリスナー登録と初期実行
+    // 4. 이벤트리스너 등록과 초기 실행
     // =========================================================
 
     // フィルターフォーム送信イベント
@@ -314,4 +357,10 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.log("ユーザーがログインしていません。時間割の自動ロードは行われません。");
     }
+
+    // 초기 로드 시 총 학점 표시 (필요시)
+    // loadTimetable()이 이미 호출되므로, 그 안에서 초기화 및 표시가 이루어질 것입니다.
+    // 만약 로그인하지 않은 상태에서 빈 시간표가 먼저 보인다면, 여기서 한 번 더 호출할 수 있습니다.
+    updateAndDisplayTotalCredit();
+
 }); // DOMContentLoaded 閉じ括弧
