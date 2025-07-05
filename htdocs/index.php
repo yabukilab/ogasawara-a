@@ -73,7 +73,7 @@ if (!function_exists('h')) {
             <div class="timetable-section">
                 <h2>私の時間割</h2>
                 <div id="total-credit-display" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
-                 登録合計単位数: <span id="current-total-credit">0</span>単位
+                   登録合計単位数: <span id="current-total-credit">0</span>単位
                 </div>
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
                     <h3>表示する時間割を選択:</h3>
@@ -106,7 +106,8 @@ if (!function_exists('h')) {
                     <tbody>
                         <?php
                         $periods = range(1, 10); // 1교시부터 10교시까지
-                        $days = ['月', '火', '水', '木', '金', '土']; // 日本語で変更
+                        // 요일 데이터를 일본어로 변경
+                        $days = ['月', '火', '水', '木', '金', '土']; 
 
                         foreach ($periods as $period) {
                             echo "<tr>";
@@ -126,7 +127,7 @@ if (!function_exists('h')) {
                             }
                             echo "</span></td>";
                             foreach ($days as $day) {
-                                // data-day 속성을 영어 요일로 설정
+                                // data-day 속성을 일본어 요일로 설정
                                 echo "<td class='time-slot' data-day='{$day}' data-period='{$period}'></td>";
                             }
                             echo "</tr>";

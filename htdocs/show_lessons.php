@@ -19,17 +19,18 @@ try {
     // '?? '' ' 構文を使用して値がなければ空文字列で初期化します。
     $gradeFilter = $_GET['grade'] ?? '';
     $termFilter = $_GET['term'] ?? '';
-    $category1_filter = $_GET['category1'] ?? '';
+    // $category1_filter = $_GET['category1'] ?? ''; // category1 필터 제거
 
     $conditions = []; // SQL WHERE 節の条件を保存する配列
     $params = [];     // PDO バインドするパラメーター値を保存する配列
-    $param_types = []; // 各パラメーターの PDO::PARAM_* タイプを保存する配列
+    $param_types = []; // 각パラメーターの PDO::PARAM_* タイプを保存する配列
 
     // SQL クエリの基本開始
     $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM class";
 
     // 学年フィルター適用: '全て' (All) オプションが選択されていない場合のみフィルターします。
-    if (!empty($gradeFilter) && $gradeFilter !== '全て') {
+    // '全て' 옵션은 value="" 이므로 !empty($gradeFilter) 로 체크
+    if (!empty($gradeFilter)) {
         $conditions[] = "grade = ?"; // 学年フィルター条件追加
         $params[] = (int)$gradeFilter; // 学年値は整数型にキャスト
         $param_types[] = PDO::PARAM_INT; // タイプは整数
@@ -37,18 +38,19 @@ try {
 
     // 学期フィルター適用: '全て' (All) オプションが選択されていない場合のみフィルターします。
     // class テーブルの term カラムが VARCHAR(20) なので、文字列として比較します。
-    if (!empty($termFilter) && $termFilter !== '全て') {
+    // '全て' 옵션은 value="" 이므로 !empty($termFilter) 로 체크
+    if (!empty($termFilter)) {
         $conditions[] = "term = ?"; // 学期フィルター条件追加
         $params[] = $termFilter; // 学期値は文字列としてそのままバインド
         $param_types[] = PDO::PARAM_STR; // タイプは文字列
     }
 
-    // category1 フィルター適用: '全て' (All) オプションが選択されていない場合のみフィルターします。
-    if (!empty($category1_filter) && $category1_filter !== '全て') {
-        $conditions[] = "category1 = ?"; // カテゴリー1 フィルター条件追加
-        $params[] = $category1_filter; // カテゴリー1 値は文字列としてバインド
-        $param_types[] = PDO::PARAM_STR; // タイプは文字列
-    }
+    // category1 フィルター 제거 (주석 처리 또는 삭제)
+    // if (!empty($category1_filter)) {
+    //     $conditions[] = "category1 = ?"; // カテゴリー1 フィルター条件追加
+    //     $params[] = $category1_filter; // カテゴリー1 値は文字列としてバインド
+    //     $param_types[] = PDO::PARAM_STR; // タイプは文字列
+    // }
 
     // 全ての条件を AND で結合して WHERE 節を構成します。
     if (!empty($conditions)) {
