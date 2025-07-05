@@ -103,7 +103,7 @@ if (!function_exists('h')) {
                             <th>土曜日</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <body>
                         <?php
                         $periods = range(1, 10); // 1교시부터 10교시까지
                         // 요일 데이터를 일본어로 변경
@@ -133,7 +133,7 @@ if (!function_exists('h')) {
                             echo "</tr>";
                         }
                         ?>
-                    </tbody>
+                    </body>
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="saveTimetableBtn">時間割を保存</button>
