@@ -72,6 +72,9 @@ if (!function_exists('h')) {
 
             <div class="timetable-section">
                 <h2>私の時間割</h2>
+                <div id="total-credit-display" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
+                 登録合計単位数: <span id="current-total-credit">0</span>単位
+                </div>
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
                     <h3>表示する時間割を選択:</h3>
                     <label for="timetableGradeSelect">学年:</label>
