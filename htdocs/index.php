@@ -106,7 +106,7 @@ if (!function_exists('h')) {
                     <tbody>
                         <?php
                         $periods = range(1, 10); // 1교시부터 10교시까지
-                        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // 영어 요일로 변경
+                        $days = ['月', '火', '水', '木', '金', '土']; // 日本語で変更
 
                         foreach ($periods as $period) {
                             echo "<tr>";
