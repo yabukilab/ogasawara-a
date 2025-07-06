@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // 曜日文字列を数字に変換する関数
+    // 曜日文字列を数字に変換する関数（日曜なし）
     function dayStringToNumber(dayStr) {
         const map = {
             "月曜日": 1,
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             "水曜日": 3,
             "木曜日": 4,
             "金曜日": 5,
-            "土曜日": 6,
+            "土曜日": 6
         };
         return map[dayStr] || 0;
     }
@@ -90,11 +90,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         const dayNumber = dayStringToNumber(entry.day);
                         console.log(`探すセル: day=${entry.day}(${dayNumber}), period=${entry.period}`);
 
-                        const cellSelector = `.time-slot[data-day="${dayNumber}"][data-period="${entry.period}"]`;
-                        const targetCell = timetableTableBody.querySelector(cellSelector);
+                        // tbodyではなくテーブル全体から検索に変更
+                        const targetCell = confirmedTimetableTable.querySelector(`.time-slot[data-day="${dayNumber}"][data-period="${entry.period}"]`);
 
                         if (!targetCell) {
                             console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}(${dayNumber}), Period ${entry.period}`);
+
+                            // デバッグ用：候補セルをログに出す
+                            const candidates = confirmedTimetableTable.querySelectorAll(`.time-slot[data-day="${dayNumber}"]`);
+                            console.log(`候補セル数: ${candidates.length}`);
+                            candidates.forEach((cell, i) => {
+                                console.log(`候補${i}: data-period=${cell.getAttribute('data-period')}`);
+                            });
+
                             return;
                         }
 
