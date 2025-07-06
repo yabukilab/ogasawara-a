@@ -8,9 +8,9 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     /* ↓ フレックス削除、または column 明示 */
-    /* display: flex;
-    justify-content: center;
-    align-items: flex-start; */
+    /* display: flex; /* 기존 주석 처리 유지 */
+    /* justify-content: center; */
+    /* align-items: flex-start; */
 }
 
 .container {
@@ -162,6 +162,7 @@ h1 {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: fixed; /* 셀 너비를 고정하여 균일하게 만듦 */
 }
 
 .timetable-table th,
@@ -221,20 +222,17 @@ h1 {
     border-color: #28a745;
     box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
     /* display, flex-direction은 이미 .time-slot에 있으므로 제거 */
-    gap: 5px; /* 수업 요소들 사이의 간격 */
+    gap: 5px; /* 수업 요소들 사이의 간격 (flexbox에 의해 적용) */
 }
 
 /* Class Item inside Timetable Cell */
 .class-item-in-cell {
-    background-color: #d1e7dd; /* 연한 녹색 계열 */
-    border: 1px solid #28a745; /* 진한 녹색 테두리 */
-    padding: 3px;
+    background-color: #c9f0c9; /* 연한 녹색 계열 */
+    border: 1px solid #88cc88; /* 진한 녹색 테두리 */
+    padding: 3px; /* 기존 파일의 패딩 유지 */
     font-size: 0.8em;
     border-radius: 3px;
     text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
     width: 100%; /* 부모 셀에 꽉 차게 */
     height: 100%; /* 부모 셀에 꽉 차게 */
@@ -243,30 +241,41 @@ h1 {
     justify-content: center; /* 세로 중앙 정렬 */
     align-items: center; /* 가로 중앙 정렬 */
     position: relative; /* 버튼 위치 지정을 위해 */
+
+    /* 텍스트 오버플로우 처리 개선 */
+    overflow: hidden; /* 컨테이너 자체에서 넘치는 내용 숨김 */
 }
 
 .class-name-in-cell {
     font-size: 1em;
     font-weight: bold;
-    word-break: break-word;
+    word-break: break-word; /* 긴 단어 잘림 방지 */
     white-space: normal; /* 이름이 길 경우 여러 줄로 표시되도록 */
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트 ...으로 표시 */
+    display: -webkit-box; /* 웹킷 브라우저에서 여러 줄 말줄임표 */
+    -webkit-line-clamp: 2; /* 두 줄까지 표시하고 넘치면 ... */
+    -webkit-box-orient: vertical; /* 세로 방향으로 정렬 */
+    line-height: 1.2em; /* 줄 높이 */
+    max-height: 2.4em; /* 최대 높이 (2줄 * 1.2em) */
+    flex-grow: 1; /* 남은 공간을 채우도록 성장 */
 }
 
 .class-credit-in-cell,
 .category-display-in-cell {
     font-size: 0.8em;
     color: #555;
-    white-space: nowrap;
+    white-space: nowrap; /* 학점/학년은 한 줄에 표시 */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
 /* Remove Button for Classes in Timetable */
 .remove-button {
     position: absolute;
-    top: -5px; /* 약간 위로 올림 */
-    right: -5px; /* 약간 오른쪽으로 뺌 */
+    top: -5px; /* 기존 위치 유지 */
+    right: -5px; /* 기존 위치 유지 */
     background-color: #e74c3c;
     color: white;
     border: none;
