@@ -9,12 +9,17 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn("警告: currentUserIdが定義されていません。ゲストモードで動作します。");
     }
 
+    // --- 여기부터 추가된 console.log 부분입니다 ---
+    console.log("main_script.js - userId from data attribute:", userIdFromDataAttribute);
+    console.log("main_script.js - parsed currentUserId:", currentUserId);
+    // --- 추가된 console.log 부분 끝 ---
+
     const classFilterForm = document.getElementById('classFilterForm');
     const gradeSelect = document.getElementById('gradeFilter');
     const termSelect = document.getElementById('termFilter');
     const classListContainer = document.getElementById('lesson-list-container');
-    const timetableTable = document.getElementById('timetable-table');
-    const saveTimetableButton = document.getElementById('saveTimetableBtn');
+    const timetableTable = document.getElementById('timetable-table'); // 이 요소가 HTML에 있는지 확인 필요
+    const saveTimetableButton = document.getElementById('saveTimetableBtn'); // 이 요소가 HTML에 있는지 확인 필요
     const timetableGradeSelect = document.getElementById('timetableGradeSelect');
     const timetableTermSelect = document.getElementById('timetableTermSelect');
 
@@ -215,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === 'success') {
                     alert('時間割を保存しました');
-                    loadTimetable();
+                    loadTimetable(); // 저장 후 시간표 다시 로드
                 } else {
                     alert('時間割の保存に失敗しました: ' + data.message);
                 }
@@ -302,8 +307,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    fetchAndDisplayClasses();
-    addDropListeners();
+    fetchAndDisplayClasses(); // 초기 수업 목록 로드
+    addDropListeners(); // 드롭 리스너 추가
 
     if (saveTimetableButton) {
         saveTimetableButton.addEventListener('click', saveTimetable);
@@ -314,12 +319,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (timetableTermSelect) {
-            timetableTermSelect.addEventListener('change', loadTimetable);
+        timetableTermSelect.addEventListener('change', loadTimetable);
     }
 
+    // 페이지 로드 시, user_id가 있는 경우 시간표 로드 시도
     if (currentUserId !== null) {
         loadTimetable();
     }
 
-    updateAndDisplayTotalCredit();
+    updateAndDisplayTotalCredit(); // 초기 학점 표시 (아마 0으로 시작)
 });
