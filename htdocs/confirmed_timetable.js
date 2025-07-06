@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // =========================================================
-    // 1. 전역 변수 초기화 및 로그인 사용자 ID 설정
+    // ユーザーID取得
     let currentUserId = null;
     const bodyElement = document.body;
     const userIdFromDataAttribute = bodyElement.dataset.userId;
@@ -21,10 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     console.log("DEBUG: confirmed_timetable.js - currentUserId:", currentUserId, "type:", typeof currentUserId);
-    // =========================================================
 
-    // =========================================================
-    // 2. DOM 요소 선택
+    // DOM要素取得
     const confirmedTimetableTable = document.getElementById('confirmed-timetable-table');
     const timetableTableBody = confirmedTimetableTable ? confirmedTimetableTable.querySelector('tbody') : null;
     const messageContainer = document.getElementById('confirmed-timetable-message');
@@ -38,9 +35,19 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    /**
-     * 시간표 가져오기 및 표시
-     */
+    // 曜日文字列を数字に変換する関数
+    function dayStringToNumber(dayStr) {
+        const map = {
+            "月曜日": 1,
+            "火曜日": 2,
+            "水曜日": 3,
+            "木曜日": 4,
+            "金曜日": 5,
+            "土曜日": 6,
+        };
+        return map[dayStr] || 0;
+    }
+
     function fetchConfirmedTimetable() {
         const targetGrade = confirmedTimetableGradeSelect ? confirmedTimetableGradeSelect.value : '1';
         const targetTerm = confirmedTimetableTermSelect ? confirmedTimetableTermSelect.value : '前期';
@@ -80,17 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
 
                     data.timetable.forEach(entry => {
-                        // entry.day と entry.periodの値をデバッグ出力
-                        console.log(`探すセル: day=${entry.day}, period=${entry.period}`);
+                        const dayNumber = dayStringToNumber(entry.day);
+                        console.log(`探すセル: day=${entry.day}(${dayNumber}), period=${entry.period}`);
 
-                        // ここはHTML構造に合わせて変更してください
-                        // 例: data-dayとdata-periodが数字なら問題なし
-                        const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
+                        const cellSelector = `.time-slot[data-day="${dayNumber}"][data-period="${entry.period}"]`;
                         const targetCell = timetableTableBody.querySelector(cellSelector);
 
                         if (!targetCell) {
-                            console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}, Period ${entry.period}`);
-                            return; // 見つからなければスキップ
+                            console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}(${dayNumber}), Period ${entry.period}`);
+                            return;
                         }
 
                         const className = entry.class_name || '不明な授業';
@@ -125,7 +130,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // 学年・学期変更時のイベント登録
     if (confirmedTimetableGradeSelect) {
         confirmedTimetableGradeSelect.addEventListener('change', fetchConfirmedTimetable);
     }
@@ -133,6 +137,5 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmedTimetableTermSelect.addEventListener('change', fetchConfirmedTimetable);
     }
 
-    // 初期ロード時に時間割を取得表示
     fetchConfirmedTimetable();
 });
