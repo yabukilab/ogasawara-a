@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let currentUserId = null;
     const bodyElement = document.body;
     const userIdFromDataAttribute = bodyElement.dataset.userId;
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userIdFromDataAttribute !== 'null' && userIdFromDataAttribute !== undefined) {
         currentUserId = parseInt(userIdFromDataAttribute, 10);
     } else {
-        console.warn("警告: currentUserIdFromPHPが定義されていません。ゲストモードで動作します。");
+        console.warn("警告: currentUserIdが定義されていません。ゲストモードで動作します。");
     }
 
     const classFilterForm = document.getElementById('classFilterForm');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let draggedClass = null;
     let totalCredit = 0;
-    const countedClassIds = new Set(); // 重複単位防止セット
+    const countedClassIds = new Set(); // 重複防止用セット
     const currentTotalCreditSpan = document.getElementById('current-total-credit');
 
     function fetchAndDisplayClasses() {
@@ -33,12 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 classListContainer.innerHTML = '';
                 if (data.status === 'success') {
                     const classes = data.lessons;
-
                     if (classes.length === 0) {
                         classListContainer.innerHTML = '<p>該当する授業が見つかりません。</p>';
                         return;
                     }
-
                     classes.forEach(cls => {
                         const classItem = document.createElement('div');
                         classItem.classList.add('class-item', 'draggable');
@@ -62,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     classListContainer.innerHTML = `<p class="message error">${data.message}</p>`;
                 }
             })
-            .catch(error => {
+            .catch(() => {
                 classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。</p>';
             });
     }
@@ -70,13 +68,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function addDragListeners() {
         const classItems = document.querySelectorAll('.class-item');
         classItems.forEach(item => {
-            item.addEventListener('dragstart', function(e) {
+            item.addEventListener('dragstart', function (e) {
                 draggedClass = this;
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', this.dataset.id);
                 this.classList.add('dragging');
             });
-            item.addEventListener('dragend', function() {
+            item.addEventListener('dragend', function () {
                 this.classList.remove('dragging');
             });
         });
@@ -85,21 +83,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function addDropListeners() {
         const timeSlots = timetableTable.querySelectorAll('.time-slot');
         timeSlots.forEach(slot => {
-            slot.addEventListener('dragover', function(e) {
+            slot.addEventListener('dragover', function (e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
                 this.classList.add('drag-over');
             });
 
-            slot.addEventListener('dragleave', function() {
+            slot.addEventListener('dragleave', function () {
                 this.classList.remove('drag-over');
             });
 
-            slot.addEventListener('drop', function(e) {
+            slot.addEventListener('drop', function (e) {
                 e.preventDefault();
                 this.classList.remove('drag-over');
-
                 if (!draggedClass) return;
+
                 if (this.querySelector('.class-item-in-cell')) {
                     alert('この時間枠にはすでに授業があります。');
                     return;
@@ -128,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
 
-                // 重複を防いで単位加算
                 if (!countedClassIds.has(classId)) {
                     totalCredit += classCredit;
                     countedClassIds.add(classId);
@@ -144,17 +141,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (classItemInCell && cell) {
             const removedCreditSpan = classItemInCell.querySelector('.class-credit-in-cell');
-            if (removedCreditSpan) {
-                const removedCredit = parseInt(removedCreditSpan.textContent.replace('単位', ''), 10);
-                const classId = classItemInCell.dataset.classId;
+            const classId = classItemInCell.dataset.classId;
+            const removedCredit = parseInt(removedCreditSpan.textContent.replace('単位', ''), 10);
 
-                const remaining = document.querySelectorAll(`.class-item-in-cell[data-class-id="${classId}"]`);
-                if (remaining.length === 1) {
-                    totalCredit -= removedCredit;
-                    countedClassIds.delete(classId);
-                }
-                updateAndDisplayTotalCredit();
+            // 同じ授業が他に残っていなければ減算
+            const remaining = document.querySelectorAll(`.class-item-in-cell[data-class-id="${classId}"]`);
+            if (remaining.length === 1) {
+                totalCredit -= removedCredit;
+                countedClassIds.delete(classId);
             }
+            updateAndDisplayTotalCredit();
+
             classItemInCell.remove();
             if (!cell.querySelector('.class-item-in-cell')) {
                 cell.classList.remove('filled-primary');
@@ -174,20 +171,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const timetableData = [];
         timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => {
-            const classId = itemInCell.dataset.classId;
-            const day = itemInCell.dataset.day;
-            const period = itemInCell.dataset.period;
-
             timetableData.push({
-                class_id: classId,
-                day_of_week: day,
-                period: period
+                class_id: itemInCell.dataset.classId,
+                day_of_week: itemInCell.dataset.day,
+                period: itemInCell.dataset.period
             });
         });
 
         fetch('save_timetable.php', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user_id: currentUserId,
                 timetable_grade: selectedTimetableGrade,
@@ -195,18 +188,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 timetable: timetableData
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('保存成功');
-                loadTimetable();
-            } else {
-                alert('保存失敗: ' + data.message);
-            }
-        })
-        .catch(error => {
-            alert('保存中にエラーが発生しました');
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('保存しました');
+                    loadTimetable();
+                } else {
+                    alert('保存に失敗しました: ' + data.message);
+                }
+            })
+            .catch(() => {
+                alert('保存中にエラーが発生しました。');
+            });
     }
 
     function loadTimetable() {
@@ -216,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetTerm = timetableTermSelect.value;
 
         totalCredit = 0;
-        countedClassIds.clear(); // セットも初期化
+        countedClassIds.clear(); // 重複記録もリセット
         updateAndDisplayTotalCredit();
 
         timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => itemInCell.remove());
@@ -269,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (classFilterForm) {
-        classFilterForm.addEventListener('submit', function(e) {
+        classFilterForm.addEventListener('submit', function (e) {
             e.preventDefault();
             fetchAndDisplayClasses();
         });
