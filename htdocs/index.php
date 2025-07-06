@@ -16,6 +16,9 @@ if (!function_exists('h')) {
 }
 
 // 이전의 $user_id_for_js 변수 선언은 제거합니다.
+
+// 디버깅을 위한 세션 값 출력 (페이지 상단에 나타남)
+echo "<p style='color: red; font-weight: bold;'>디버그: 세션 user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -25,8 +28,8 @@ if (!function_exists('h')) {
     <title>時間割作成 (Timetable Creation)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    </head>
-<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>">
+</head>
+<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>" data-test-id="<?php echo $_SESSION['user_id'] ?? 'NO_SESSION_ID'; ?>">
     <div class="container">
         <div class="user-info">
             <?php if ($loggedIn): ?>
@@ -73,7 +76,7 @@ if (!function_exists('h')) {
             <div class="timetable-section">
                 <h2>私の時間割</h2>
                 <div id="total-credit-display" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
-                   登録合計単位数: <span id="current-total-credit">0</span>単位
+                    登録合計単位数: <span id="current-total-credit">0</span>単位
                 </div>
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
                     <h3>表示する時間割を選択:</h3>
@@ -104,97 +107,97 @@ if (!function_exists('h')) {
                         </tr>
                     </thead>
                     <tbody>
-                       <tr>
-                           <td class="period-header-cell">1限<br><span class="period-time">9:00-10:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="1"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="1"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="1"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="1"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="1"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="1"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">2限<br><span class="period-time">10:00-11:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="2"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="2"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="2"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="2"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="2"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="2"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">3限<br><span class="period-time">11:00-12:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="3"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="3"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="3"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="3"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="3"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="3"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">4限<br><span class="period-time">12:00-13:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="4"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="4"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="4"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="4"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="4"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="4"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">5限<br><span class="period-time">13:00-14:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="5"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="5"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="5"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="5"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="5"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="5"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">6限<br><span class="period-time">14:00-15:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="6"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="6"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="6"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="6"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="6"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="6"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">7限<br><span class="period-time">15:00-16:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="7"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="7"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="7"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="7"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="7"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="7"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">8限<br><span class="period-time">16:00-17:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="8"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="8"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="8"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="8"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="8"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="8"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">9限<br><span class="period-time">17:00-18:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="9"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="9"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="9"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="9"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="9"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="9"></td>
-                       </tr>
-                       <tr>
-                           <td class="period-header-cell">10限<br><span class="period-time">18:00-19:00</span></td>
-                           <td class="time-slot" data-day="月曜日" data-period="10"></td>
-                           <td class="time-slot" data-day="火曜日" data-period="10"></td>
-                           <td class="time-slot" data-day="水曜日" data-period="10"></td>
-                           <td class="time-slot" data-day="木曜日" data-period="10"></td>
-                           <td class="time-slot" data-day="金曜日" data-period="10"></td>
-                           <td class="time-slot" data-day="土曜日" data-period="10"></td>
-                       </tr>
-                   </tbody>
+                        <tr>
+                            <td class="period-header-cell">1限<br><span class="period-time">9:00-10:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="1"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="1"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="1"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="1"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="1"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="1"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">2限<br><span class="period-time">10:00-11:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="2"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="2"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="2"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="2"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="2"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="2"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">3限<br><span class="period-time">11:00-12:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="3"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="3"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="3"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="3"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="3"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="3"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">4限<br><span class="period-time">12:00-13:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="4"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="4"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="4"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="4"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="4"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="4"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">5限<br><span class="period-time">13:00-14:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="5"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="5"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="5"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="5"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="5"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="5"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">6限<br><span class="period-time">14:00-15:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="6"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="6"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="6"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="6"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="6"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="6"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">7限<br><span class="period-time">15:00-16:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="7"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="7"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="7"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="7"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="7"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="7"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">8限<br><span class="period-time">16:00-17:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="8"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="8"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="8"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="8"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="8"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="8"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">9限<br><span class="period-time">17:00-18:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="9"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="9"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="9"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="9"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="9"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="9"></td>
+                        </tr>
+                        <tr>
+                            <td class="period-header-cell">10限<br><span class="period-time">18:00-19:00</span></td>
+                            <td class="time-slot" data-day="月曜日" data-period="10"></td>
+                            <td class="time-slot" data-day="火曜日" data-period="10"></td>
+                            <td class="time-slot" data-day="水曜日" data-period="10"></td>
+                            <td class="time-slot" data-day="木曜日" data-period="10"></td>
+                            <td class="time-slot" data-day="金曜日" data-period="10"></td>
+                            <td class="time-slot" data-day="土曜日" data-period="10"></td>
+                        </tr>
+                    </tbody>
 
                 </table>
                 <div style="text-align: center; margin-top: 20px;">
