@@ -1,16 +1,22 @@
 <?php
-session_start();
-require_once 'db.php'; // データ베이스接続およびh()関数使用のため包含
+session_start(); // セッション開始
+require_once 'db.php'; // データベース接続およびh()関数使用のため包含
 
 $loggedIn = isset($_SESSION['user_id']);
 $student_number = $_SESSION['student_number'] ?? 'ゲスト';
 $department = $_SESSION['department'] ?? '';
 
+// PHPでh()関数が定義されていなければ下記関数を追加します。
+// 通常db.phpまたはcommon.phpのようなファイルに含まれています。
 if (!function_exists('h')) {
     function h($str) {
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
 }
+
+// ディバッグ用セッション値出力 (ページ上部に表示)
+echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -71,7 +77,8 @@ if (!function_exists('h')) {
             <tbody id="confirmed-timetable-body">
                 <?php
                 $periods = range(1, 10); // 1교시부터 10교시까지
-                $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // 영어 요일로 변경
+                $days_ja = ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']; // 일본어 요일
+                $days_en = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; // 영어 요일 (JavaScript에서 사용할 예정)
 
                 foreach ($periods as $period) {
                     echo "<tr>";
@@ -90,9 +97,8 @@ if (!function_exists('h')) {
                         case 10: echo "18:00-19:00"; break;
                     }
                     echo "</span></td>";
-                    foreach ($days as $day) {
-                        // data-day 속성을 영어 요일로 설정
-                        echo "<td class='time-slot' data-day='{$day}' data-period='{$period}'></td>";
+                    foreach ($days_en as $index => $day_en) { // data-day 속성을 영어 요일로 설정
+                        echo "<td class='time-slot' data-day='{$day_en}' data-period='{$period}'></td>";
                     }
                     echo "</tr>";
                 }
@@ -106,6 +112,7 @@ if (!function_exists('h')) {
 
         <div style="text-align: center; margin-top: 20px;">
             <a href="index.php" class="view-confirmed-button">時間割作成に戻る</a>
+            <a href="credits_status.php" class="view-confirmed-button">単位取得状況を確認</a>
         </div>
     </div>
 
