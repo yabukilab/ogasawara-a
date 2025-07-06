@@ -191,14 +191,14 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    alert('保存しました');
+                    alert('時間割を保存しました');
                     loadTimetable();
                 } else {
-                    alert('保存に失敗しました: ' + data.message);
+                    alert('時間割の保存に失敗しました: ' + data.message);
                 }
             })
             .catch(() => {
-                alert('保存中にエラーが発生しました。');
+                alert('時間割の保存中にエラーが発生しました。');
             });
     }
 
