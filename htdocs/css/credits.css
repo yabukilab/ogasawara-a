@@ -1,0 +1,84 @@
+body {
+font-family: 'Noto Sans JP', sans-serif;
+background: #e9f2f9;
+}
+
+.container {
+max-width: 1000px;
+margin: 40px auto;
+background: white;
+padding: 30px;
+border-radius: 10px;
+box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+text-align: center;
+margin-bottom: 25px;
+color: #333;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 25px;
+}
+
+thead {
+background-color: #007bff;
+color: white;
+}
+
+th, td {
+border: 1px solid #ccc;
+padding: 10px;
+text-align: center;
+}
+
+.buttons {
+text-align: center;
+}
+
+.btn {
+display: inline-block;
+padding: 12px 20px;
+background-color: #28a745;
+color: white;
+text-decoration: none;
+border-radius: 6px;
+font-weight: bold;
+}
+
+.btn:hover {
+background-color: #218838;
+}
+
+.bottom-nav {
+  position: fixed; /* 画面下部に固定 */
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 20px;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+  font-size: 14px;
+}
+
+.bottom-nav .nav-button {
+  text-decoration: none;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.bottom-nav .nav-button:hover {
+  background-color: #0056b3;
+}
