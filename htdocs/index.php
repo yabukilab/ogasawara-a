@@ -1,215 +1,369 @@
 <?php
-session_start(); // セッション開始
-require_once 'db.php'; // データベース接続および h() 関数使用のために含む
+session_start(); // セッションを開始
 
-// 現在ログイン中のユーザー情報を設定
-$loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // ゲスト
-$department = $_SESSION['department'] ?? '';
+// データベース接続ファイルを含める
+require_once 'db.php';
 
-// PHPで h() 関数が定義されていない場合は追加
-if (!function_exists('h')) {
-    function h($str) {
-        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-    }
+// ログインしていない場合はログインページにリダイレクト
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
 }
 
-// デバッグのためのセッション値出力 (ページ上部に表示)
-echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
+// ログインユーザーの情報を取得 (必要に応じて利用)
+$loggedInStudentNumber = h($_SESSION['student_number'] ?? '');
+$loggedInDepartment = h($_SESSION['department'] ?? '');
+$loggedInUserId = h($_SESSION['user_id'] ?? '');
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>時間割作成 (Timetable Creation)</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>授業登録と時間割</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+        }
+        /* Custom scrollbar for course list */
+        .overflow-y-auto::-webkit-scrollbar {
+            width: 8px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+            background: #e2e8f0; /* Light gray track */
+            border-radius: 10px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* Gray thumb */
+            border-radius: 10px;
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* Darker gray on hover */
+        }
+    </style>
 </head>
-<body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>" data-test-id="<?php echo $_SESSION['user_id'] ?? 'NO_SESSION_ID'; ?>">
-    <div class="container">
-        <div class="user-info">
-            <?php if ($loggedIn): ?>
-                <p>ようこそ、<?php echo h($student_number); ?> (<?php echo h($department); ?>) さん！
-                    <a href="logout.php">ログアウト</a>
-                </p>
-            <?php else: ?>
-                <p>ログインしていません。
-                    <a href="login.php">ログイン</a> |
-                    <a href="register_user.php">新規ユーザー登録</a>
-                </p>
-            <?php endif; ?>
+<body class="p-4 md:p-8 min-h-screen flex flex-col items-center">
+    <div class="container mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10 w-full max-w-6xl">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800">授業登録システム</h1>
+            <div class="text-right">
+                <p class="text-gray-700">ようこそ、<span class="font-semibold text-indigo-600"><?php echo $loggedInStudentNumber; ?></span>さん</p>
+                <p class="text-sm text-gray-500">(<?php echo $loggedInDepartment; ?>)</p>
+                <a href="logout.php" class="text-red-500 hover:text-red-700 text-sm mt-1 inline-block">ログアウト</a>
+            </div>
         </div>
 
-        <h1>時間割作成</h1>
-
-        <div class="main-container">
-            <div class="class-list-section">
-                <h2>授業リスト</h2>
-                <form id="classFilterForm" class="filter-form">
-                    <label for="gradeFilter">学年:</label>
-                    <!-- ここが修正点: idを 'gradeFilter' に変更 -->
-                    <select id="gradeFilter" name="grade">
-                        <option value="">全て</option>
-                        <option value="1" selected>1年生</option> <!-- デフォルト値 -->
-                        <option value="2">2年生</option>
-                        <option value="3">3年生</option>
-                        <option value="4">4年生</option>
-                    </select>
-
-                    <label for="termFilter">学期:</label>
-                    <!-- ここが修正点: idを 'termFilter' に変更 (元々termFilterでしたが、念のため) -->
-                    <select id="termFilter" name="term">
-                        <option value="">全て</option>
-                        <option value="前期">前期</option>
-                        <option value="後期">後期</option>
-                    </select>
-                    
-                    <button type="submit">フィルター</button>
-                </form>
-                <div id="lesson-list-container" class="class-list-container">
-                    <p>授業を読み込み中...</p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 授業選択セクション -->
+            <div class="lg:col-span-1 bg-gray-50 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-5">利用可能な授業</h2>
+                <div id="course-list" class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                    <!-- 授業カードがここに動的に追加されます -->
+                    <p id="loading-courses" class="text-gray-500 text-center">授業データを読み込み中...</p>
                 </div>
             </div>
 
-            <div class="timetable-section">
-                <h2>私の時間割</h2>
-                <div id="total-credit-display" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
-                    登録合計単位数: <span id="current-total-credit">0</span>単位
-                </div>
-                <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
-                    <h3>表示する時間割を選択:</h3>
-                    <label for="timetableGradeSelect">学年:</label>
-                    <!-- このIDはそのまま維持 (timetableGradeSelect) -->
-                    <select id="timetableGradeSelect">
-                        <option value="1" selected>1年生</option>
-                        <option value="2">2年生</option>
-                        <option value="3">3年生</option>
-                        <option value="4">4年生</option>
-                    </select>
-                    <label for="timetableTermSelect" style="margin-left: 10px;">学期:</label>
-                    <!-- このIDはそのまま維持 (timetableTermSelect) -->
-                    <select id="timetableTermSelect">
-                        <option value="前期" selected>前期</option>
-                        <option value="後期">後期</option>
-                    </select>
+            <!-- 時間割と登録済み授業セクション -->
+            <div class="lg:col-span-2">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-5">登録済み授業</h2>
+                    <div id="registered-courses" class="space-y-3 max-h-64 overflow-y-auto pr-2">
+                        <!-- 登録済み授業カードがここに動的に追加されます -->
+                        <p id="no-registered-courses" class="text-gray-500 text-center">まだ授業が登録されていません。</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-200 text-right">
+                        <p class="text-xl font-bold text-gray-800">合計取得単位: <span id="total-credits" class="text-indigo-600">0</span></p>
+                    </div>
                 </div>
 
-                <table id="timetable-table" class="timetable-table">
-                    <thead>
-                        <tr>
-                            <th>時間/曜日</th>
-                            <th>月曜日</th>
-                            <th>火曜日</th>
-                            <th>水曜日</th>
-                            <th>木曜日</th>
-                            <th>金曜日</th>
-                            <th>土曜日</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="period-header-cell">1限<br><span class="period-time">9:00-10:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="1"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">2限<br><span class="period-time">10:00-11:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="2"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">3限<br><span class="period-time">11:00-12:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="3"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">4限<br><span class="period-time">12:00-13:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="4"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">5限<br><span class="period-time">13:00-14:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="5"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">6限<br><span class="period-time">14:00-15:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="6"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">7限<br><span class="period-time">15:00-16:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="7"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">8限<br><span class="period-time">16:00-17:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="8"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">9限<br><span class="period-time">17:00-18:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="9"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">10限<br><span class="period-time">18:00-19:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="10"></td>
-                        </tr>
-                    </tbody>
-
-                </table>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button id="saveTimetableBtn">時間割を保存</button>
-                    <a href="confirmed_timetable.php" class="view-confirmed-button">確定済み時間割を見る</a>
-                    <a href="credits_status.php" class="view-confirmed-button">単位取得状況を確認</a>
+                <!-- 時間割セクション -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-5">時間割</h2>
+                    <div id="timetable-message" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <strong class="font-bold">時間割の重複!</strong>
+                        <span class="block sm:inline" id="timetable-conflict-message"></span>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200 bg-white">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">時限</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">月</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">火</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">水</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">木</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">金</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetable-body" class="divide-y divide-gray-200">
+                                <!-- 時間割の行がJavaScriptで生成されます -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="main_script.js" defer></script>
+    <script>
+        // ページロード時に実行される関数
+        window.onload = function() {
+            // 利用可能な授業のデータ (外部から取得されるためletで宣言)
+            let courses = [];
+
+            // DOM要素の取得
+            const courseListDiv = document.getElementById('course-list');
+            const registeredCoursesDiv = document.getElementById('registered-courses');
+            const noRegisteredCoursesMessage = document.getElementById('no-registered-courses');
+            const totalCreditsSpan = document.getElementById('total-credits');
+            const timetableBody = document.getElementById('timetable-body');
+            const timetableMessage = document.getElementById('timetable-message');
+            const timetableConflictMessage = document.getElementById('timetable-conflict-message');
+            const loadingCoursesMessage = document.getElementById('loading-courses');
+
+            // 登録済み授業を追跡する配列と時間割のマップ
+            let registeredCourseIds = new Set(); // 登録済みの授業IDを保持
+            let timetable = {}; // 例: { '月-1': 'プログラミング基礎', '火-2': 'データ構造とアルゴリズム' }
+
+            // 時間割の初期化
+            const days = ['月', '火', '水', '木', '金'];
+            const periods = ['1', '2', '3', '4', '5']; // 時限の数
+
+            // 時間割テーブルの行を生成
+            function initializeTimetable() {
+                timetableBody.innerHTML = ''; // 既存の行をクリア
+                periods.forEach(period => {
+                    const row = document.createElement('tr');
+                    row.classList.add('hover:bg-gray-50');
+                    // 時限セル
+                    const periodCell = document.createElement('td');
+                    periodCell.classList.add('px-4', 'py-3', 'whitespace-nowrap', 'text-sm', 'font-medium', 'text-gray-900', 'bg-gray-50');
+                    periodCell.textContent = period;
+                    row.appendChild(periodCell);
+
+                    days.forEach(day => {
+                        const cell = document.createElement('td');
+                        cell.id = `cell-${day}-${period}`; // セルにIDを設定
+                        cell.classList.add('px-4', 'py-3', 'whitespace-nowrap', 'text-sm', 'text-gray-700', 'border-l', 'border-gray-100');
+                        row.appendChild(cell);
+                        // 時間割マップを初期化
+                        timetable[`${day}-${period}`] = null; // 各セルをnullで初期化
+                    });
+                    timetableBody.appendChild(row);
+                });
+            }
+
+            // 利用可能な授業カードをレンダリングする関数
+            function renderAvailableCourses() {
+                courseListDiv.innerHTML = ''; // リストをクリア
+                if (courses.length === 0) {
+                    courseListDiv.innerHTML = '<p class="text-gray-500 text-center">利用可能な授業がありません。</p>';
+                    return;
+                }
+
+                courses.forEach(course => {
+                    // 授業が既に登録されている場合はスキップ
+                    if (registeredCourseIds.has(course.id)) {
+                        return;
+                    }
+
+                    const courseCard = document.createElement('div');
+                    courseCard.id = `available-${course.id}`;
+                    courseCard.classList.add(
+                        'bg-white', 'rounded-lg', 'shadow-sm', 'p-4', 'flex', 'flex-col', 'md:flex-row', 'items-center', 'justify-between',
+                        'border', 'border-gray-200', 'hover:border-indigo-400', 'transition-all', 'duration-200'
+                    );
+
+                    const courseInfo = document.createElement('div');
+                    courseInfo.classList.add('flex-grow', 'mb-2', 'md:mb-0');
+                    courseInfo.innerHTML = `
+                        <h3 class="text-lg font-semibold text-gray-800">${course.name}</h3>
+                        <p class="text-sm text-gray-600">単位: ${course.credits} | ${course.day}曜 ${course.time}時限</p>
+                    `;
+                    courseCard.appendChild(courseInfo);
+
+                    const addButton = document.createElement('button');
+                    addButton.textContent = '登録';
+                    addButton.classList.add(
+                        'bg-indigo-500', 'hover:bg-indigo-600', 'text-white', 'font-bold', 'py-2', 'px-4',
+                        'rounded-lg', 'transition-colors', 'duration-200', 'shadow-md', 'hover:shadow-lg',
+                        'focus:outline-none', 'focus:ring-2', 'focus:ring-indigo-500', 'focus:ring-opacity-75'
+                    );
+                    addButton.onclick = () => addCourse(course);
+                    courseCard.appendChild(addButton);
+
+                    courseListDiv.appendChild(courseCard);
+                });
+            }
+
+            // 登録済み授業をレンダリングする関数
+            function renderRegisteredCourses() {
+                registeredCoursesDiv.innerHTML = ''; // リストをクリア
+                let totalCredits = 0;
+                let hasRegisteredCourses = false;
+
+                // courses配列が空の場合に備える
+                if (courses.length === 0) {
+                    noRegisteredCoursesMessage.classList.remove('hidden');
+                    totalCreditsSpan.textContent = 0;
+                    return;
+                }
+
+                courses.forEach(course => {
+                    if (registeredCourseIds.has(course.id)) {
+                        hasRegisteredCourses = true;
+                        totalCredits += course.credits;
+
+                        const registeredCard = document.createElement('div');
+                        registeredCard.id = `registered-${course.id}`;
+                        registeredCard.classList.add(
+                            'bg-white', 'rounded-lg', 'shadow-sm', 'p-4', 'flex', 'flex-col', 'md:flex-row', 'items-center', 'justify-between',
+                            'border', 'border-green-300', 'transition-all', 'duration-200'
+                        );
+
+                        const courseInfo = document.createElement('div');
+                        courseInfo.classList.add('flex-grow', 'mb-2', 'md:mb-0');
+                        courseInfo.innerHTML = `
+                            <h3 class="text-lg font-semibold text-gray-800">${course.name}</h3>
+                            <p class="text-sm text-gray-600">単位: ${course.credits} | ${course.day}曜 ${course.time}時限</p>
+                        `;
+                        registeredCard.appendChild(courseInfo);
+
+                        const removeButton = document.createElement('button');
+                        removeButton.textContent = '削除';
+                        removeButton.classList.add(
+                            'bg-red-500', 'hover:bg-red-600', 'text-white', 'font-bold', 'py-2', 'px-4',
+                            'rounded-lg', 'transition-colors', 'duration-200', 'shadow-md', 'hover:shadow-lg',
+                            'focus:outline-none', 'focus:ring-2', 'focus:ring-red-500', 'focus:ring-opacity-75'
+                        );
+                        removeButton.onclick = () => removeCourse(course);
+                        registeredCard.appendChild(removeButton);
+
+                        registeredCoursesDiv.appendChild(registeredCard);
+                    }
+                });
+
+                // 「まだ授業が登録されていません」メッセージの表示/非表示
+                if (!hasRegisteredCourses) {
+                    noRegisteredCoursesMessage.classList.remove('hidden');
+                } else {
+                    noRegisteredCoursesMessage.classList.add('hidden');
+                }
+
+                totalCreditsSpan.textContent = totalCredits;
+            }
+
+            // 時間割を更新する関数
+            function updateTimetableDisplay() {
+                // すべての時間割セルをクリア
+                days.forEach(day => {
+                    periods.forEach(period => {
+                        const cell = document.getElementById(`cell-${day}-${period}`);
+                        if (cell) {
+                            cell.textContent = '';
+                            cell.classList.remove('bg-indigo-100', 'font-semibold', 'text-indigo-800'); // スタイルをリセット
+                        }
+                    });
+                });
+
+                // 登録された授業を時間割に配置
+                registeredCourseIds.forEach(courseId => {
+                    const course = courses.find(c => c.id === courseId);
+                    if (course) {
+                        const cellId = `cell-${course.day}-${course.time}`;
+                        const cell = document.getElementById(cellId);
+                        if (cell) {
+                            cell.textContent = course.name;
+                            cell.classList.add('bg-indigo-100', 'font-semibold', 'text-indigo-800'); // スタイルを追加
+                        }
+                    }
+                });
+            }
+
+            // 授業を追加する関数
+            function addCourse(course) {
+                const timeSlotKey = `${course.day}-${course.time}`;
+
+                // 時間割の重複チェック
+                // timetable[timeSlotKey] が存在し、かつそれが現在の授業IDと異なる場合
+                if (timetable[timeSlotKey] && timetable[timeSlotKey] !== course.name) { // 比較をIDから名前に変更
+                    timetableConflictMessage.textContent = `${course.day}曜 ${course.time}時限は既に「${timetable[timeSlotKey]}」が登録されています。`;
+                    timetableMessage.classList.remove('hidden');
+                    // メッセージを3秒後に非表示にする
+                    setTimeout(() => {
+                        timetableMessage.classList.add('hidden');
+                    }, 3000);
+                    return; // 登録を中止
+                }
+
+                // 既に登録されている場合は何もしない
+                if (registeredCourseIds.has(course.id)) {
+                    return;
+                }
+
+                registeredCourseIds.add(course.id);
+                timetable[timeSlotKey] = course.name; // 時間割に授業名を登録
+
+                // UIを更新
+                renderAvailableCourses();
+                renderRegisteredCourses();
+                updateTimetableDisplay();
+                timetableMessage.classList.add('hidden'); // 競合メッセージを非表示にする
+            }
+
+            // 授業を削除する関数
+            function removeCourse(course) {
+                if (!registeredCourseIds.has(course.id)) {
+                    return;
+                }
+
+                registeredCourseIds.delete(course.id);
+                const timeSlotKey = `${course.day}-${course.time}`;
+                if (timetable[timeSlotKey] === course.name) { // 比較をIDから名前に変更
+                    timetable[timeSlotKey] = null; // 時間割から授業を削除
+                }
+
+                // UIを更新
+                renderAvailableCourses();
+                renderRegisteredCourses();
+                updateTimetableDisplay();
+            }
+
+            // 授業データをロードする関数
+            async function loadCourses() {
+                loadingCoursesMessage.classList.remove('hidden'); // ローディングメッセージを表示
+                try {
+                    // PHPスクリプトのパスを適切に設定してください (例: 'get_courses.php')
+                    const response = await fetch('get_courses.php');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    courses = await response.json();
+                    loadingCoursesMessage.classList.add('hidden'); // ローディングメッセージを非表示
+                    // データロード後に初期レンダリングを実行
+                    initializeTimetable();
+                    renderAvailableCourses();
+                    renderRegisteredCourses();
+                    updateTimetableDisplay();
+                } catch (error) {
+                    console.error('授業データの取得に失敗しました:', error);
+                    loadingCoursesMessage.textContent = '授業データの読み込みに失敗しました。';
+                    loadingCoursesMessage.classList.remove('hidden');
+                    // エラー時も初期レンダリングを試みる（空のリストで表示される）
+                    initializeTimetable();
+                    renderAvailableCourses();
+                    renderRegisteredCourses();
+                    updateTimetableDisplay();
+                }
+            }
+
+            // ページロード時に授業データをロード
+            loadCourses();
+        };
+    </script>
 </body>
 </html>
