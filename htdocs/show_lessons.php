@@ -15,6 +15,9 @@ require_once 'db.php';
 header('Content-Type: application/json; charset=UTF-8');
 
 try {
+    // 입력 파라미터 로그 (디버깅용)
+    error_log("DEBUG: gradeFilter=" . ($_GET['grade'] ?? '') . ", termFilter=" . ($_GET['term'] ?? ''));
+
     // GET リクエストからフィルター値を取得します。
     // '?? '' ' 構文を使用して値がなければ空文字列で初期化します。
     $gradeFilter = $_GET['grade'] ?? '';
@@ -23,7 +26,7 @@ try {
 
     $conditions = []; // SQL WHERE 節の条件を保存する配列
     $params = [];     // PDO バインドするパラメーター値を保存する配列
-    $param_types = []; // 각パラメーターの PDO::PARAM_* タイプを保存する配列
+    $param_types = []; // 各パラメーターの PDO::PARAM_* タイプを保存する配列
 
     // SQL クエリの基本開始
     $sql = "SELECT id, name, credit, category1, category2, category3, grade, term FROM class";
@@ -71,7 +74,8 @@ try {
     // パラメーターがある場合、動的にタイプに合わせてバインドします。
     if (!empty($params)) {
         for ($i = 0; $i < count($params); $i++) {
-            $stmt->bindParam($i + 1, $params[$i], $param_types[$i]);
+            // bindParam から bindValue に変更
+            $stmt->bindValue($i + 1, $params[$i], $param_types[$i]);
         }
     }
 
