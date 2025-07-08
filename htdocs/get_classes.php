@@ -1,28 +1,36 @@
 <?php
-session_start();
-require_once 'db.php'; // $db 객체 사용
+session_start(); // 세션 시작
+require_once 'db.php'; // 데이터베이스 연결
 
 header('Content-Type: application/json');
 
 $response = ['success' => false, 'message' => '', 'classes' => []];
 
-// $db 객체가 유효한지 확인
-if (!isset($db) || !($db instanceof PDO)) {
-    $response['message'] = 'データベース接続オブジェクト ($db) が無効です。';
-    error_log("データベース接続オブジェクト (\$db) が無効です。get_classes.php");
-    echo json_encode($response);
-    exit();
-}
+$gradeFilter = $_GET['grade'] ?? '';
+$termFilter = $_GET['term'] ?? '';
 
 try {
-    $stmt = $db->query("SELECT id, name, grade, term, category1, category2, category3, credit FROM class ORDER BY name ASC");
+    $sql = "SELECT id, name, grade, term, credit, category1, category2, category3 FROM class WHERE 1";
+    $params = [];
+
+    if (!empty($gradeFilter)) {
+        $sql .= " AND grade = :grade";
+        $params[':grade'] = $gradeFilter;
+    }
+    if (!empty($termFilter)) {
+        $sql .= " AND term = :term";
+        $params[':term'] = $termFilter;
+    }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $response['success'] = true;
     $response['classes'] = $classes;
 
 } catch (PDOException $e) {
-    $response['message'] = '授業リストのロード中にデータベースエラーが発生しました: ' . $e->getMessage();
+    $response['message'] = '授業リストの取得中にエラーが発生しました: ' . $e->getMessage();
     error_log("Get Classes Error: " . $e->getMessage());
 }
 
