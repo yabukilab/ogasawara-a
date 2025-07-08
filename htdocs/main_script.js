@@ -18,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // =========================================================
     // 2. DOM 要素選択
     // =========================================================
-    // 여기서 ID를 수정함
     const classFilterForm = document.getElementById('classFilterForm');
     const gradeSelect = document.getElementById('gradeFilterSelect');
     const termSelect = document.getElementById('termFilterSelect');
-    
+
     const classListContainer = document.getElementById('lesson-list-container');
 
     const timetableTable = document.getElementById('timetable-table');
@@ -31,13 +30,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const timetableGradeSelect = document.getElementById('timetableGradeSelect');
     const timetableTermSelect = document.getElementById('timetableTermSelect');
 
-    if (timetableGradeSelect && !timetableGradeSelect.value) {
+    // ★ 여기서 기본값 강제 설정 추가 ★
+    if (timetableGradeSelect && (timetableGradeSelect.value === "" || timetableGradeSelect.value == null)) {
         timetableGradeSelect.value = '1';
-        console.warn("警告: timetableGradeSelectの初期値が空だったため、'1'に設定しました。");
+        console.warn("timetableGradeSelectの初期値が空だったため、'1'に設定しました。");
     }
-    if (timetableTermSelect && !timetableTermSelect.value) {
+    if (timetableTermSelect && (timetableTermSelect.value === "" || timetableTermSelect.value == null)) {
         timetableTermSelect.value = '前期';
-        console.warn("警告: timetableTermSelectの初期値が空だったため、'前期'に設定しました。");
+        console.warn("timetableTermSelectの初期値が空だったため、'前期'に設定しました。");
     }
 
     let draggedClass = null;
@@ -194,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 총 단위 재계산 함수
     function recalculateTotalCredits() {
         totalCredit = 0;
         if (!timetableTable) return;
@@ -279,6 +278,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.warn("時間割のロードに失敗: 時間割表示用の学年または学期セレクタが見つかりません。");
             return;
         }
+
+        // ★ ここにデバッグログ追加 ★
+        console.log("loadTimetable() 呼び出し:", {
+            timetableGradeValue: timetableGradeSelect.value,
+            timetableTermValue: timetableTermSelect.value
+        });
 
         const targetGrade = timetableGradeSelect.value.trim();
         const targetTerm = timetableTermSelect.value.trim();
