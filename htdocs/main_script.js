@@ -53,10 +53,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const term = termSelect.value;
         // const category1 = category1Filter?.value || ''; // category1 필터 제거
 
-        fetch(show_lessons.php?grade=${grade}&term=${term}) // category1 파라미터 제거
+        fetch(`show_lessons.php?grade=${grade}&term=${term}`) // category1 파라미터 제거
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(HTTP error! status: ${response.status});
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
@@ -84,18 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         classItem.dataset.category2 = cls.category2;
                         classItem.dataset.category3 = cls.category3;
 
-                        classItem.innerHTML = 
+                        classItem.innerHTML = `
                             <div class="lesson-name">${cls.name}</div>
                             <div class="lesson-details">
                                 <span class="lesson-credit">${cls.credit}単位</span>
                             </div>
-                        ;
+                        `;
                         classListContainer.appendChild(classItem);
                     });
                     addDragListeners();
                 } else {
                     console.error('授業データの読み込みに失敗しました:', data.message);
-                    classListContainer.innerHTML = <p class="message error">${data.message}</p>;
+                    classListContainer.innerHTML = `<p class="message error">${data.message}</p>`;
                 }
             })
             .catch(error => {
@@ -164,12 +164,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 classItemInCell.dataset.day = this.dataset.day;    // <-- 셀의 data-day 값을 가져옴
                 classItemInCell.dataset.period = this.dataset.period; // <-- 셀의 data-period 값을 가져옴
 
-                classItemInCell.innerHTML = 
+                classItemInCell.innerHTML = `
                     <span class="class-name-in-cell">${className}</span>
                     <span class="class-credit-in-cell">${classCredit}単位</span>
                     <span class="category-display-in-cell">${classGrade}年</span>
                     <button class="remove-button">&times;</button>
-                ;
+                `;
                 
                 // 기존 innerHTML = ... 대신 appendChild 사용
                 this.appendChild(classItemInCell);
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(HTTP error! status: ${response.status});
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
         })
@@ -277,7 +277,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const targetGrade = timetableGradeSelect.value;
         const targetTerm = timetableTermSelect.value; // 현재 선택된 학기 사용
-
+        
+        if (!targetGrade || !targetTerm) {
+        console.warn("時間割のロードに失敗: 学年と学期を選択してください");
+        return;
+    }
         // --- 수정: 시간표 로드 전에 총 학점 초기화 ---
         totalCredit = 0; // 로드 전에 초기화
         updateAndDisplayTotalCredit(); // 초기화된 값 바로 반영
@@ -291,10 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.classList.remove('filled-primary');
         });
 
-        fetch(get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}) // <-- 학년 및 학기 정보 추가
+        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`) // <-- 학년 및 학기 정보 추가
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(HTTP error! status: ${response.status});
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
             })
@@ -302,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.status === 'success') {
                     data.timetable.forEach(entry => {
                         // DB에서 가져온 entry.day (일본어 요일)와 HTML 셀의 data-day (일본어 요일) 매칭
-                        const cellSelector = .time-slot[data-day="${entry.day}"][data-period="${entry.period}"];
+                        const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
                         const targetCell = timetableTable.querySelector(cellSelector);
 
                         if (targetCell) {
@@ -318,12 +322,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             classItemInCell.dataset.day = entry.day;    // DB에서 가져온 요일 저장
                             classItemInCell.dataset.period = entry.period; // DB에서 가져온 교시 저장
 
-                            classItemInCell.innerHTML = 
+                            classItemInCell.innerHTML = `
                                 <span class="class-name-in-cell">${className}</span>
                                 <span class="class-credit-in-cell">${classCredit}単位</span>
                                 <span class="category-display-in-cell">${classOriginalGrade}年</span>
                                 <button class="remove-button">&times;</button>
-                            ;
+                            `;
                             targetCell.appendChild(classItemInCell);
                             targetCell.classList.add('filled-primary');
 
@@ -333,13 +337,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             totalCredit += classCredit;
                             // --- 추가 끝 ---
                         } else {
-                            console.warn(時間割セルが見つかりませんでした: Day ${entry.day}, Period ${entry.period});
+                            console.warn(`時間割セルが見つかりませんでした: Day ${entry.day}, Period ${entry.period}`);
                         }
                     });
                     // --- 추가: 모든 수업 로드 후 총 학점 최종 업데이트 ---
                     updateAndDisplayTotalCredit();
                     // --- 추가 끝 ---
-                    console.log(時間割 (学年: ${targetGrade}, 学期: ${targetTerm}) が正常にロードされました。);
+                    console.log(`時間割 (学年: ${targetGrade}, 学期: ${targetTerm}) が正常にロードされました。`);
                 } else {
                     console.error('時間割のロードに失敗しました:', data.message);
                 }
