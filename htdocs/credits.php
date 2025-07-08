@@ -43,9 +43,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <table>
             <thead>
                 <tr>
-                    <th>大分類 (category1)</th>
-                    <th>中分類 (category2)</th>
-                    <th>小分類 (category3)</th>
+                    <th>科目群</th>
+                    <th>分野</th>
+                    <th>分類</th>
                     <th>取得単位数</th>
                 </tr>
             </thead>
