@@ -100,25 +100,56 @@ foreach ($cat1Results as $row) {
     </ul>
 
     <h2>進級判定</h2>
-    <div class="message-container">
-        <ul>
-            <?php
-            $gradeStatus = [];
-            if ($totalCredits >= 30) $gradeStatus[] = "2年進級可能";
-            if ($totalCredits >= 60) $gradeStatus[] = "3年進級可能";
-            if ($totalCredits >= 90) $gradeStatus[] = "4年進級可能";
-            if ($totalCredits >= 120) $gradeStatus[] = "卒業要件達成";
+<div class="message-container">
+    <ul>
+        <?php
+        $gradeStatus = [];
 
-            if (count($gradeStatus) > 0) {
-                foreach ($gradeStatus as $status) {
-                    echo "<li class='success-message' style='margin-bottom: 10px;'>" . htmlspecialchars($status) . "</li>";
-                }
-            } else {
-                echo "<li class='error-message'>まだ進級・卒業要件を満たしていません。</li>";
+        // カテゴリ2（中分類）から必要値取得
+        $core = $earnedMap['基幹科目'] ?? 0;
+        $liberal = $earnedMap['教養基礎科目'] ?? 0;
+        $specialized = $earnedMap['学部共通専門科目'] ?? 0;
+
+        // カテゴリ1（大分類）から専門科目数取得
+        $cat1Specialized = $earnedByCat1['専門科目'] ?? 0;
+
+        // 2年進級
+        if ($totalCredits >= 30 && $core >= 15) {
+            $gradeStatus[] = "2年進級可能（基幹科目15単位以上，合計30単位以上）";
+        }
+
+        // 3年進級
+        if ($totalCredits >= 64 && $liberal >= 10 && $cat1Specialized >= 44) {
+            $gradeStatus[] = "3年進級可能（教養基礎科目10単位以上，専門科目44単位以上，合計64単位以上）";
+        }
+
+        // 4年進級
+        if ($totalCredits >= 90 && $specialized >= 10) {
+            $gradeStatus[] = "4年進級可能（学部共通専門科目10単位以上，合計90単位以上）";
+        }
+
+        // 卒業
+        if (
+            $totalCredits >= 120 &&
+            $core >= $requiredCreditsByCategory2['基幹科目'] &&
+            $liberal >= $requiredCreditsByCategory2['教養基礎科目'] &&
+            $specialized >= $requiredCreditsByCategory2['学部共通専門科目'] &&
+            $cat1Specialized >= 60
+        ) {
+            $gradeStatus[] = "卒業要件達成（専門科目60単位以上，すべてのカテゴリ2要件達成）";
+        }
+
+        if (count($gradeStatus) > 0) {
+            foreach ($gradeStatus as $status) {
+                echo "<li class='success-message' style='margin-bottom: 10px;'>" . htmlspecialchars($status) . "</li>";
             }
-            ?>
-        </ul>
-    </div>
+        } else {
+            echo "<li class='error-message'>まだ進級・卒業要件を満たしていません。</li>";
+        }
+        ?>
+    </ul>
+</div>
+
 
     <a href="index.php" class="back-button">時間割に戻る</a>
 </div>
