@@ -277,7 +277,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const targetGrade = timetableGradeSelect.value;
         const targetTerm = timetableTermSelect.value; // 현재 선택된 학기 사용
-
+        
+        if (!targetGrade || !targetTerm) {
+        console.warn("時間割のロードに失敗: 学年と学期を選択してください");
+        return;
+    }
         // --- 수정: 시간표 로드 전에 총 학점 초기화 ---
         totalCredit = 0; // 로드 전에 초기화
         updateAndDisplayTotalCredit(); // 초기화된 값 바로 반영
