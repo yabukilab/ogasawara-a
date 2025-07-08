@@ -14,14 +14,14 @@ if (!isset($_SESSION['user_id'])) {
 $userId = $_SESSION['user_id'];
 
 $requiredCreditsByCategory2 = [
-    '教養基礎科目' => 10,
-    '教養共通科目' => 5,
-    '教養特別科目' => 5,
+    '教養基礎科目' => 15,
+    '教養共通科目' => 20,
+    '教養特別科目' => 1,
     '学部共通専門科目' => 20,
-    '基礎科目' => 10,
-    '基幹科目' => 15,
-    '展開科目' => 10,
-    '発展科目' => 5,
+    '基礎科目' => 8,
+    '基幹科目' => 22,
+    '展開科目' => 17,
+    '発展科目' => 11,
 ];
 
 
@@ -136,7 +136,7 @@ foreach ($cat1Results as $row) {
 
         // 卒業
         if (
-            $totalCredits >= 120 &&
+            $totalCredits >= 124 &&
             $core >= $requiredCreditsByCategory2['基幹科目'] &&
             $liberal >= $requiredCreditsByCategory2['教養基礎科目'] &&
             $specialized >= $requiredCreditsByCategory2['学部共通専門科目'] &&
