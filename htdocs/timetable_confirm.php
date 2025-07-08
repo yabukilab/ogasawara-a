@@ -86,7 +86,7 @@ foreach ($timetableData as $entry) {
     </div>
 </div>
 <div class="bottom-nav">
-    <a href="menu.php" class="nav-button">メニュー</a>
+    <a href="index.php" class="nav-button">メニュー</a>
     <a href="timetable_register.php" class="nav-button">時間割登録</a>
     <a href="credits.php" class="nav-button">取得単位確認</a>
     <a href="shortage.php" class="nav-button">不足単位確認</a>
