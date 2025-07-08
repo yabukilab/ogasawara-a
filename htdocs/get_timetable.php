@@ -13,8 +13,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$grade = $_GET['grade'] ?? null;
-$term = $_GET['term'] ?? null;
+$grade = $_GET['timetable_grade'] ?? null;
+$term = $_GET['timetable_term'] ?? null;
 
 if (empty($grade) || empty($term)) {
     $response['message'] = '学年と学期を指定してください。';
@@ -48,4 +48,3 @@ try {
 }
 
 echo json_encode($response);
-?>
