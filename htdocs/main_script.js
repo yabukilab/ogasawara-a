@@ -1,331 +1,366 @@
-document.addEventListener('DOMContentLoaded', function () {
-    let currentUserId = null;
-    const bodyElement = document.body;
-    const userIdFromDataAttribute = bodyElement.dataset.userId;
+document.addEventListener('DOMContentLoaded', () => {
+    const classListDiv = document.getElementById('classList');
+    const myTimetable = document.getElementById('myTimetable');
+    const totalCreditsSpan = document.getElementById('totalCredits');
+    const saveTimetableBtn = document.getElementById('saveTimetableBtn');
+    const viewConfirmedTimetableBtn = document.getElementById('viewConfirmedTimetableBtn');
+    const checkCreditsBtn = document.getElementById('checkCreditsBtn');
 
-    if (userIdFromDataAttribute !== 'null' && userIdFromDataAttribute !== undefined) {
-        currentUserId = parseInt(userIdFromDataAttribute, 10);
-    } else {
-        console.warn("警告: currentUserIdが定義されていません。ゲストモードで動作します。");
-    }
+    const filterGradeSelect = document.getElementById('filterGrade');
+    const filterTermSelect = document.getElementById('filterTerm');
+    const filterCategorySelect = document.getElementById('filterCategory');
 
-    // --- 여기부터 추가된 console.log 부분입니다 ---
-    console.log("main_script.js - userId from data attribute:", userIdFromDataAttribute);
-    console.log("main_script.js - parsed currentUserId:", currentUserId);
-    // --- 추가된 console.log 부분 끝 ---
-
-    const classFilterForm = document.getElementById('classFilterForm');
-    const gradeSelect = document.getElementById('gradeFilter');
-    const termSelect = document.getElementById('termFilter');
-    const classListContainer = document.getElementById('lesson-list-container');
-    const timetableTable = document.getElementById('timetable-table'); // 이 요소가 HTML에 있는지 확인 필요
-    const saveTimetableButton = document.getElementById('saveTimetableBtn'); // 이 요소가 HTML에 있는지 확인 필요
     const timetableGradeSelect = document.getElementById('timetableGradeSelect');
     const timetableTermSelect = document.getElementById('timetableTermSelect');
 
-    let draggedClass = null;
-    let totalCredit = 0;
-    const countedClassIds = new Set(); // 重複防止用セット
-    const currentTotalCreditSpan = document.getElementById('current-total-credit');
+    let allClasses = []; // 모든 수업 데이터를 저장할 배열
 
-    function fetchAndDisplayClasses() {
-        const grade = gradeSelect.value;
-        const term = termSelect.value;
+    // 드래그 중인 요소를 저장할 변수
+    let draggedClassItem = null;
 
-        fetch(`show_lessons.php?grade=${grade}&term=${term}`)
-            .then(response => response.json())
+    // 초기 로드: 모든 수업 데이터와 시간표를 불러옵니다.
+    loadClasses();
+    // 페이지 로드 시, PHP에서 설정한 초기 학년/학기로 시간표 로드
+    const initialGrade = timetableGradeSelect.value;
+    const initialTerm = timetableTermSelect.value;
+    loadTimetable(initialGrade, initialTerm);
+
+
+    // 이벤트 리스너 설정
+    filterGradeSelect.addEventListener('change', filterClasses);
+    filterTermSelect.addEventListener('change', filterClasses);
+    filterCategorySelect.addEventListener('change', filterClasses);
+
+    timetableGradeSelect.addEventListener('change', () => {
+        loadTimetable(timetableGradeSelect.value, timetableTermSelect.value);
+    });
+    timetableTermSelect.addEventListener('change', () => {
+        loadTimetable(timetableGradeSelect.value, timetableTermSelect.value);
+    });
+
+    saveTimetableBtn.addEventListener('click', saveTimetable);
+    viewConfirmedTimetableBtn.addEventListener('click', () => {
+        window.location.href = 'confirmed_timetable.php';
+    });
+    checkCreditsBtn.addEventListener('click', () => {
+        alert('単位取得状況を確認する機能はまだ実装されていません。');
+    });
+
+    // 수업 목록 로드 함수
+    function loadClasses() {
+        fetch('get_classes.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                classListContainer.innerHTML = '';
-                if (data.status === 'success') {
-                    const classes = data.lessons;
-                    if (classes.length === 0) {
-                        classListContainer.innerHTML = '<p>該当する授業が見つかりません。</p>';
-                        return;
-                    }
-                    classes.forEach(cls => {
-                        const classItem = document.createElement('div');
-                        classItem.classList.add('class-item', 'draggable');
-                        classItem.setAttribute('draggable', true);
-
-                        classItem.dataset.id = cls.id;
-                        classItem.dataset.name = cls.name;
-                        classItem.dataset.credit = cls.credit;
-                        classItem.dataset.grade = cls.grade; // grade -> class_original_grade로 변경해야 할 수도 있습니다. 데이터베이스 필드명 확인 필요.
-
-                        classItem.innerHTML = `
-                            <div class="lesson-name">${cls.name}</div>
-                            <div class="lesson-details">
-                                <span class="lesson-credit">${cls.credit}単位</span>
-                            </div>
-                        `;
-                        classListContainer.appendChild(classItem);
-                    });
-                    addDragListeners();
+                if (data.success) {
+                    allClasses = data.classes;
+                    populateCategoryFilter(allClasses);
+                    filterClasses(); // 필터링하여 표시
                 } else {
-                    classListContainer.innerHTML = `<p class="message error">${data.message}</p>`;
+                    classListDiv.innerHTML = `<p style="color: red;">授業リストの読み込みに失敗しました: ${data.message}</p>`;
                 }
             })
-            .catch(() => {
-                classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。</p>';
+            .catch(error => {
+                console.error('授業リスト取得エラー:', error);
+                classListDiv.innerHTML = `<p style="color: red;">授業リストの取得中にエラーが発生しました。</p>`;
             });
     }
 
-    function addDragListeners() {
-        const classItems = document.querySelectorAll('.class-item');
-        classItems.forEach(item => {
-            item.addEventListener('dragstart', function (e) {
-                draggedClass = this;
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', this.dataset.id);
-                this.classList.add('dragging');
-            });
-            item.addEventListener('dragend', function () {
-                this.classList.remove('dragging');
-            });
+    // 카테고리 필터 드롭다운 채우기
+    function populateCategoryFilter(classes) {
+        const categories = new Set();
+        classes.forEach(cls => {
+            if (cls.category1) categories.add(cls.category1);
+            if (cls.category2) categories.add(cls.category2);
+            if (cls.category3) categories.add(cls.category3);
+        });
+
+        filterCategorySelect.innerHTML = '<option value="">全て</option>';
+        Array.from(categories).sort().forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            filterCategorySelect.appendChild(option);
         });
     }
 
-    function addDropListeners() {
-        const timeSlots = timetableTable.querySelectorAll('.time-slot');
-        timeSlots.forEach(slot => {
-            slot.addEventListener('dragover', function (e) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                this.classList.add('drag-over');
-            });
+    // 수업 필터링 및 표시 함수
+    function filterClasses() {
+        const selectedGrade = filterGradeSelect.value;
+        const selectedTerm = filterTermSelect.value;
+        const selectedCategory = filterCategorySelect.value;
 
-            slot.addEventListener('dragleave', function () {
-                this.classList.remove('drag-over');
-            });
+        classListDiv.innerHTML = ''; // 기존 목록 비우기
 
-            slot.addEventListener('drop', function (e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-                if (!draggedClass) return;
-
-                // 드래그앤드롭 시 중복 방지 (기존 로직)
-                if (this.querySelector('.class-item-in-cell')) {
-                    alert('この時間枠にはすでに授業があります。');
-                    return;
-                }
-
-                // 아래 `createClassItemInCellElement` 함수를 재활용합니다.
-                const classData = {
-                    class_id: draggedClass.dataset.id,
-                    class_name: draggedClass.dataset.name,
-                    class_credit: parseInt(draggedClass.dataset.credit, 10),
-                    class_original_grade: draggedClass.dataset.grade, // classGrade 사용
-                    day: this.dataset.day,
-                    period: this.dataset.period
-                };
-                
-                const classItemInCell = createClassItemInCellElement(classData);
-                this.appendChild(classItemInCell);
-                this.classList.add('filled-primary');
-
-                // 학점 계산 로직은 그대로 유지
-                if (!countedClassIds.has(classData.class_id)) {
-                    totalCredit += classData.class_credit;
-                    countedClassIds.add(classData.class_id);
-                }
-                updateAndDisplayTotalCredit();
-            });
+        const filteredClasses = allClasses.filter(cls => {
+            const matchGrade = selectedGrade === '' || String(cls.grade) === selectedGrade;
+            const matchTerm = selectedTerm === '' || cls.term === selectedTerm;
+            const matchCategory = selectedCategory === '' ||
+                                  (cls.category1 === selectedCategory || cls.category2 === selectedCategory || cls.category3 === selectedCategory);
+            return matchGrade && matchTerm && matchCategory;
         });
-    }
 
-    // 수업 아이템 DOM 요소를 생성하는 헬퍼 함수
-    function createClassItemInCellElement(entry) {
-        const classItemInCell = document.createElement('div');
-        classItemInCell.classList.add('class-item-in-cell');
-        classItemInCell.setAttribute('draggable', true); // 셀 안에서도 드래그 가능하게
-        classItemInCell.dataset.classId = entry.class_id;
-        classItemInCell.dataset.day = entry.day;
-        classItemInCell.dataset.period = entry.period;
+        if (filteredClasses.length === 0) {
+            classListDiv.innerHTML = '<p style="text-align: center; color: #777; padding: 20px;">該当する授業がありません。</p>';
+        } else {
+            filteredClasses.forEach(cls => {
+                const classItem = document.createElement('div');
+                classItem.classList.add('class-item');
+                classItem.setAttribute('draggable', true);
+                classItem.dataset.classId = cls.id;
+                classItem.dataset.className = cls.name;
+                classItem.dataset.classCredit = cls.credit;
+                classItem.dataset.classCategory = cls.category1; // 편의상 첫 번째 카테고리만 저장
 
-        const className = entry.class_name || '不明な授業';
-        const classCredit = parseInt(entry.class_credit, 10) || 0;
-        const classOriginalGrade = entry.class_original_grade || ''; // 데이터베이스 필드명 확인 필요
+                classItem.innerHTML = `
+                    <h3>${h(cls.name)}</h3>
+                    <p>${h(cls.credit)}単位</p>
+                    <p class="class-meta">学年: ${h(cls.grade)} / 学期: ${h(cls.term)} / 区分: ${h(cls.category1)}</p>
+                `;
+                classListDiv.appendChild(classItem);
+            });
 
-        classItemInCell.innerHTML = `
-            <span class="class-name-in-cell">${className}</span>
-            <span class="class-credit-in-cell">${classCredit}単位</span>
-            <span class="category-display-in-cell">${classOriginalGrade}年</span>
-            <button class="remove-button">&times;</button>
-        `;
-        classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
-        return classItemInCell;
-    }
-
-
-    function removeClassFromTimetable(event) {
-        const classItemInCell = event.target.closest('.class-item-in-cell');
-        const cell = event.target.closest('.time-slot');
-
-        if (classItemInCell && cell) {
-            const removedCreditSpan = classItemInCell.querySelector('.class-credit-in-cell');
-            const classId = classItemInCell.dataset.classId;
-            const removedCredit = parseInt(removedCreditSpan.textContent.replace('単位', ''), 10);
-
-            // 중요: 이 셀에 있던 수업 아이템이 제거되는 것이므로,
-            // 다른 셀에 동일한 classId를 가진 수업이 있을 수 있더라도,
-            // 이 셀에서는 해당 수업 아이템을 제거하는 것이 맞습니다.
-            // 총 학점 계산 로직은 'countedClassIds'를 사용하여
-            // 전체 시간표에서 해당 classId가 더 이상 존재하지 않을 때만 학점을 감산해야 합니다.
-            classItemInCell.remove(); // 이 줄이 먼저 와야 정확히 남은 요소 수를 셀 수 있습니다.
-
-            const remainingInstances = document.querySelectorAll(`.class-item-in-cell[data-class-id="${classId}"]`);
-            if (remainingInstances.length === 0) { // 해당 classId를 가진 수업이 시간표에 하나도 남아있지 않다면
-                totalCredit -= removedCredit;
-                countedClassIds.delete(classId);
-            }
-            updateAndDisplayTotalCredit();
-            
-            // 셀에 더 이상 수업이 없으면 filled-primary 클래스 제거
-            if (!cell.querySelector('.class-item-in-cell')) {
-                cell.classList.remove('filled-primary');
-            }
+            // 드래그 이벤트 리스너 다시 등록
+            document.querySelectorAll('.class-item').forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+            });
         }
     }
 
+
+    // 드래그 시작 이벤트 핸들러
+    function handleDragStart(e) {
+        draggedClassItem = this;
+        // 드래그 데이터 설정 (옵션: 실제 데이터는 draggedClassItem 변수를 통해 접근)
+        e.dataTransfer.setData('text/plain', this.dataset.classId);
+        e.dataTransfer.effectAllowed = 'move';
+        this.classList.add('dragging'); // 드래그 중인 요소에 스타일 추가
+    }
+
+    // 드래그 오버/엔터 이벤트 핸들러
+    myTimetable.querySelectorAll('.time-slot').forEach(slot => {
+        slot.addEventListener('dragover', handleDragOver);
+        slot.addEventListener('dragenter', handleDragEnter);
+        slot.addEventListener('dragleave', handleDragLeave);
+        slot.addEventListener('drop', handleDrop);
+    });
+
+    function handleDragOver(e) {
+        e.preventDefault(); // 드롭을 허용하기 위해 기본 동작 방지
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDragEnter(e) {
+        e.preventDefault();
+        this.classList.add('drag-over'); // 드래그 오버 시 스타일 추가
+    }
+
+    function handleDragLeave() {
+        this.classList.remove('drag-over'); // 드래그 벗어날 때 스타일 제거
+    }
+
+    // 드롭 이벤트 핸들러
+    function handleDrop(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (draggedClassItem) {
+            const classId = draggedClassItem.dataset.classId;
+            const className = draggedClassItem.dataset.className;
+            const classCredit = draggedClassItem.dataset.classCredit;
+            const classCategory = draggedClassItem.dataset.classCategory;
+
+            // 이미 수업이 있는 칸이면 드롭 방지 (또는 교체 로직)
+            if (this.classList.contains('filled-primary')) {
+                // 기존 수업 제거
+                const existingClassId = this.dataset.classId;
+                const existingClassCredit = parseFloat(this.dataset.classCredit);
+                removeCourseFromCell(this); // 기존 수업 제거 함수 호출
+                updateTotalCredits(-existingClassCredit); // 기존 학점 차감
+            }
+
+            // 수업을 칸에 추가
+            this.innerHTML = `
+                <div class="class-item-in-cell">
+                    <div class="class-name-in-cell">${h(className)}</div>
+                    <div class="class-credit-in-cell">${h(classCredit)}単位</div>
+                    <div class="category-display-in-cell">${h(classCategory)}</div>
+                    <button class="remove-button" data-class-id="${classId}">×</button>
+                </div>
+            `;
+            this.classList.add('filled-primary');
+            this.dataset.classId = classId; // 셀에 classId 저장
+            this.dataset.classCredit = classCredit; // 셀에 학점 저장 (학점 계산용)
+
+            updateTotalCredits(parseFloat(classCredit));
+
+            // 제거 버튼 이벤트 리스너 등록
+            const removeBtn = this.querySelector('.remove-button');
+            if (removeBtn) {
+                removeBtn.addEventListener('click', handleRemoveClass);
+            }
+        }
+        draggedClassItem.classList.remove('dragging'); // 드래그 끝났으니 스타일 제거
+        draggedClassItem = null; // 드래그 요소 초기화
+    }
+
+    // 수업 제거 핸들러
+    function handleRemoveClass(e) {
+        const cell = this.closest('.time-slot');
+        const creditToRemove = parseFloat(cell.dataset.classCredit);
+        if (cell) {
+            removeCourseFromCell(cell);
+            updateTotalCredits(-creditToRemove);
+        }
+    }
+
+    // 셀에서 수업 제거 및 데이터 초기화
+    function removeCourseFromCell(cell) {
+        cell.innerHTML = '';
+        cell.classList.remove('filled-primary');
+        delete cell.dataset.classId;
+        delete cell.dataset.classCredit;
+    }
+
+
+    // 총 학점 업데이트 함수
+    function updateTotalCredits(creditChange) {
+        let currentTotal = parseFloat(totalCreditsSpan.textContent);
+        currentTotal += creditChange;
+        totalCreditsSpan.textContent = currentTotal.toFixed(1); // 소수점 한 자리까지 표시
+    }
+
+    // 시간표 저장 함수
     function saveTimetable() {
-        if (currentUserId === null) {
-            alert('ログインしていません。');
-            window.location.href = 'login.php';
+        const userId = document.body.dataset.userId;
+        if (userId === 'null' || !userId) {
+            alert("ログインしていません。時間割を保存できません。");
             return;
         }
 
-        const selectedTimetableGrade = timetableGradeSelect.value;
-        const selectedTimetableTerm = timetableTermSelect.value;
-
+        const currentTimetableGrade = timetableGradeSelect.value;
+        const currentTimetableTerm = timetableTermSelect.value;
         const timetableData = [];
-        timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => {
-            timetableData.push({
-                class_id: itemInCell.dataset.classId,
-                day_of_week: itemInCell.dataset.day,
-                period: itemInCell.dataset.period
-            });
+
+        document.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
+            const classId = cell.dataset.classId;
+            const day = cell.dataset.day;
+            const period = cell.dataset.period;
+            if (classId) {
+                timetableData.push({
+                    class_id: classId,
+                    day: day,
+                    period: period
+                });
+            }
+        });
+
+        console.log("Saving data:", {
+            grade: currentTimetableGrade,
+            term: currentTimetableTerm,
+            timetable: timetableData
         });
 
         fetch('save_timetable.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                user_id: currentUserId,
-                timetable_grade: selectedTimetableGrade,
-                timetable_term: selectedTimetableTerm,
+                grade: currentTimetableGrade,
+                term: currentTimetableTerm,
                 timetable: timetableData
             })
         })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('時間割を保存しました');
-                    loadTimetable(); // 저장 후 시간표 다시 로드
-                } else {
-                    alert('時間割の保存に失敗しました: ' + data.message);
-                }
-            })
-            .catch(() => {
-                alert('時間割の保存中にエラーが発生しました。');
-            });
-    }
-
-    function loadTimetable() {
-        if (currentUserId === null) return;
-
-        const targetGrade = timetableGradeSelect.value;
-        const targetTerm = timetableTermSelect.value;
-
-        totalCredit = 0;
-        countedClassIds.clear();
-        updateAndDisplayTotalCredit();
-
-        // 모든 기존 수업 아이템 및 filled-primary 클래스 제거
-        timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => itemInCell.remove());
-        timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => cell.classList.remove('filled-primary'));
-
-        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // 여기에 각 시간 슬롯에 대한 수업 데이터를 저장할 맵을 추가합니다.
-                    // { '月曜日_1': { class_id: '...', class_name: '...' }, ... }
-                    const timetableMap = new Map(); 
-
-                    data.timetable.forEach(entry => {
-                        const key = `${entry.day}_${entry.period}`;
-                        // 이미 해당 시간 슬롯에 수업이 존재하면 추가하지 않습니다.
-                        // 이 부분이 중요합니다. 서버에서 한 시간대에 여러 수업을 반환하는 경우를 클라이언트에서 처리합니다.
-                        if (timetableMap.has(key)) {
-                            console.warn(`警告: ${entry.day} ${entry.period}時間目に複数の授業が割り当てられています。最初の授業のみ表示されます。`);
-                            return; // 이미 수업이 있으므로 다음 entry로 넘어갑니다.
-                        }
-                        timetableMap.set(key, entry); // 첫 번째 수업만 맵에 저장
-                    });
-
-                    // 맵에 저장된 각 시간 슬롯의 수업만 순회하여 테이블에 추가합니다.
-                    timetableMap.forEach(entry => {
-                        const selector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
-                        const targetCell = timetableTable.querySelector(selector);
-                        
-                        if (!targetCell) {
-                            console.warn(`警告: 時間割セルが見つかりません: ${entry.day} ${entry.period}時間目`);
-                            return;
-                        }
-                        
-                        // 셀에 수업 아이템 추가
-                        const classItemInCell = createClassItemInCellElement(entry); // 헬퍼 함수 사용
-                        targetCell.appendChild(classItemInCell);
-                        targetCell.classList.add('filled-primary');
-
-                        // 학점 계산
-                        if (!countedClassIds.has(entry.class_id)) {
-                            totalCredit += parseInt(entry.class_credit, 10) || 0;
-                            countedClassIds.add(entry.class_id);
-                        }
-                    });
-                    updateAndDisplayTotalCredit();
-                } else {
-                    console.error('時間割の読み込みに失敗しました:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('時間割データの読み込み中にエラーが発生しました。', error);
-            });
-    }
-
-    function updateAndDisplayTotalCredit() {
-        if (currentTotalCreditSpan) {
-            currentTotalCreditSpan.textContent = totalCredit;
-        }
-    }
-
-    if (classFilterForm) {
-        classFilterForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            fetchAndDisplayClasses();
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, Response: ${text}`); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('時間割が正常に保存されました。');
+                // 저장 성공 후, 현재 선택된 학년/학기로 시간표를 다시 로드하여 최신 상태 반영
+                loadTimetable(currentTimetableGrade, currentTimetableTerm);
+            } else {
+                alert('時間割の保存に失敗しました: ' + data.message);
+                console.error('保存失敗メッセージ:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('時間割保存中にエラーが発生しました:', error);
+            alert('時間割保存中にエラーが発生しました。詳細: ' + error.message);
         });
     }
 
-    fetchAndDisplayClasses(); // 초기 수업 목록 로드
-    addDropListeners(); // 드롭 리스너 추가
+    // 시간표 로드 함수
+    function loadTimetable(grade, term) {
+        const userId = document.body.dataset.userId;
+        if (userId === 'null' || !userId) {
+             console.warn("ログインしていないため、時間割をロードできません。");
+             return;
+        }
 
-    if (saveTimetableButton) {
-        saveTimetableButton.addEventListener('click', saveTimetable);
+        // 기존 시간표 초기화
+        document.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
+            removeCourseFromCell(cell);
+        });
+        updateTotalCredits(-parseFloat(totalCreditsSpan.textContent)); // 총 학점 0으로 초기화
+
+        fetch(`get_timetable.php?grade=${encodeURIComponent(grade)}&term=${encodeURIComponent(term)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // 시간표 데이터를 기반으로 칸 채우기
+                data.timetable.forEach(item => {
+                    const cell = myTimetable.querySelector(`.time-slot[data-day="${item.day}"][data-period="${item.period}"]`);
+                    if (cell) {
+                        cell.innerHTML = `
+                            <div class="class-item-in-cell">
+                                <div class="class-name-in-cell">${h(item.class_name)}</div>
+                                <div class="class-credit-in-cell">${h(item.credit)}単位</div>
+                                <div class="category-display-in-cell">${h(item.category_name)}</div>
+                                <button class="remove-button" data-class-id="${item.class_id}">×</button>
+                            </div>
+                        `;
+                        cell.classList.add('filled-primary');
+                        cell.dataset.classId = item.class_id;
+                        cell.dataset.classCredit = item.credit;
+                        cell.querySelector('.remove-button').addEventListener('click', handleRemoveClass);
+                        updateTotalCredits(parseFloat(item.credit));
+                    }
+                });
+            } else {
+                console.error('時間割のロードに失敗しました:', data.message);
+                // alert('時間割のロードに失敗しました: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('時間割ロード中にエラーが発生しました:', error);
+            // alert('時間割ロード中にエラーが発生しました。詳細: ' + error.message);
+        });
     }
 
-    if (timetableGradeSelect) {
-        timetableGradeSelect.addEventListener('change', loadTimetable);
+    // HTML 특수문자 이스케이프 함수 (PHP의 h()와 유사)
+    // 이 함수는 PHP의 h()와 다르게 클라이언트 사이드에서만 사용됨
+    function h(str) {
+        const div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
     }
-
-    if (timetableTermSelect) {
-        timetableTermSelect.addEventListener('change', loadTimetable);
-    }
-
-    // 페이지 로드 시, user_id가 있는 경우 시간표 로드 시도
-    if (currentUserId !== null) {
-        loadTimetable();
-    }
-
-    updateAndDisplayTotalCredit(); // 초기 학점 표시 (아마 0으로 시작)
 });
