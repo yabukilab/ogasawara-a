@@ -35,9 +35,6 @@ $subjects = $earn_stmt->fetchAll(PDO::FETCH_ASSOC);
 // 集計処理
 $earned_map = [];
 $total_earned = 0;
-$earned_category1 = [];
-$earned_category2 = [];
-$earned_category3 = [];
 $earned_subject_names = [];
 
 foreach ($subjects as $row) {
@@ -49,15 +46,6 @@ foreach ($subjects as $row) {
 
     if (!isset($earned_map[$key])) $earned_map[$key] = 0;
     $earned_map[$key] += $credit;
-
-    if (!isset($earned_category1[$row['category1']])) $earned_category1[$row['category1']] = 0;
-    $earned_category1[$row['category1']] += $credit;
-
-    if (!isset($earned_category2[$row['category2']])) $earned_category2[$row['category2']] = 0;
-    $earned_category2[$row['category2']] += $credit;
-
-    if (!isset($earned_category3[$row['category3']])) $earned_category3[$row['category3']] = 0;
-    $earned_category3[$row['category3']] += $credit;
 }
 
 // 必修科目一覧
@@ -130,16 +118,11 @@ foreach ($requirements as $row) {
                             $category3 = $row['category3'];
                             $required = (int)$row['required_credits'];
 
+                            // 単位取得状況の判定
                             if ($category3 === '総単位') {
                                 $earned = $total_earned;
                             } elseif (in_array($category3, $required_subjects)) {
                                 $earned = in_array($category3, $earned_subject_names) ? 1 : 0;
-                            } elseif (isset($earned_category3[$category3])) {
-                                $earned = $earned_category3[$category3];
-                            } elseif (isset($earned_category2[$category3])) {
-                                $earned = $earned_category2[$category3];
-                            } elseif (isset($earned_category1[$category3])) {
-                                $earned = $earned_category1[$category3];
                             } else {
                                 $key = "{$category1}|{$category2}|{$category3}";
                                 $earned = $earned_map[$key] ?? 0;
@@ -181,11 +164,7 @@ foreach ($requirements as $row) {
                 header.classList.toggle('collapsed');
                 const table = header.nextElementSibling;
                 if (table) {
-                    if (table.style.display === 'none') {
-                        table.style.display = '';
-                    } else {
-                        table.style.display = 'none';
-                    }
+                    table.style.display = (table.style.display === 'none') ? '' : 'none';
                 }
             });
         });
