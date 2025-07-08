@@ -15,8 +15,10 @@ if (!function_exists('h')) {
     }
 }
 
+// 이전의 $user_id_for_js 변수 선언은 제거합니다.
+
 // 디버깅을 위한 세션 값 출력 (페이지 상단에 나타남)
-echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
+echo "<p style='color: red; font-weight: bold;'>디버그: 세션 user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
 ?>
 <!DOCTYPE html>
 <html lang="ja">
