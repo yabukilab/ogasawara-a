@@ -48,19 +48,20 @@ try {
 
     // 2. 새로운 시간표 데이터 삽입
     if (!empty($timetable)) {
-        // 여기서 'grade' 대신 'timetable_grade'를 사용합니다.
-        $stmt = $db->prepare("INSERT INTO user_timetables (user_id, timetable_grade, timetable_term, class_id, day, period) VALUES (:user_id, :timetable_grade, :timetable_term, :class_id, :day, :period)");
+        // SQL 쿼리에 'grade' 컬럼을 추가하고, 여기에 :grade 매개변수를 바인딩합니다.
+        $stmt = $db->prepare("INSERT INTO user_timetables (user_id, timetable_grade, timetable_term, class_id, day, period, grade) VALUES (:user_id, :timetable_grade, :timetable_term, :class_id, :day, :period, :grade_col)");
 
         foreach ($timetable as $item) {
             if (!isset($item['class_id']) || !isset($item['day']) || !isset($item['period'])) {
                 throw new Exception("時間割項目に不足しているキーがあります: " . print_r($item, true));
             }
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':timetable_grade', $timetable_grade, PDO::PARAM_INT); // 변수 이름은 동일하게 바인딩
-            $stmt->bindParam(':timetable_term', $timetable_term, PDO::PARAM_STR);    // 변수 이름은 동일하게 바인딩
+            $stmt->bindParam(':timetable_grade', $timetable_grade, PDO::PARAM_INT); // timetable_grade 컬럼에 바인딩
+            $stmt->bindParam(':timetable_term', $timetable_term, PDO::PARAM_STR);    // timetable_term 컬럼에 바인딩
             $stmt->bindParam(':class_id', $item['class_id'], PDO::PARAM_INT);
             $stmt->bindParam(':day', $item['day'], PDO::PARAM_STR);
             $stmt->bindParam(':period', $item['period'], PDO::PARAM_INT);
+            $stmt->bindParam(':grade_col', $timetable_grade, PDO::PARAM_INT); // 추가된 'grade' 컬럼에 바인딩 (값을 동일하게 사용)
             $stmt->execute();
         }
     }
