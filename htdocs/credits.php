@@ -67,7 +67,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="buttons">
             <a href="shortage.php" class="btn blue">不足単位を確認する</a>
-            <a href="menu.php" class="btn green">メニューに戻る</a>
+            <a href="index.php" class="btn green">メニューに戻る</a>
         </div>
     </div>
     <div class="bottom-nav">
