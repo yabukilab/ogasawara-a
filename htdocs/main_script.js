@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('授業データの取得中にネットワークエラーが発生しました:', error);
                 if (classListContainer) {
-                    classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。ネットワーク接続を確認してください。</p>';
+                    classListContainer.innerHTML = '<p class="message error">授業データの読み込み中にエラーが発生しました。</p>';
                 }
             });
     }
@@ -343,11 +343,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // --- 追加デバッグ: targetGradeとtargetTermの真偽値評価を確認 ---
         console.log("DEBUG: loadTimetable - targetGrade is falsy?", !targetGrade, "targetTerm is falsy?", !targetTerm);
+        console.log("DEBUG: loadTimetable - Condition (targetGrade === '' || targetTerm === '') is:", (targetGrade === "" || targetTerm === "")); // 新しいデバッグログ
         // --- 追加デバッグ終わり ---
 
         // 厳密な空文字列チェックに変更
         if (targetGrade === "" || targetTerm === "") {
-            console.warn("時間割のロードに失敗: 学年と学期を選択してください (空文字列検出)"); // このメッセージが表示されます
+            console.warn("時間割のロードに失敗: 学年と学期を選択してください (空文字列検出 - 警告ID: LT-101)"); // 警告IDを追加
             return;
         }
         // --- 修正: 時間割ロード前に総単位を初期化 ---
