@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 로드: 모든 수업 데이터와 시간표를 불러옵니다.
     loadClasses();
     // 페이지 로드 시, PHP에서 설정한 초기 학년/학기로 시간표 로드
+    // 스크린샷 125805.png를 보면 1학년/前期가 기본으로 설정되어 있음
     const initialGrade = timetableGradeSelect.value;
     const initialTerm = timetableTermSelect.value;
     loadTimetable(initialGrade, initialTerm);
@@ -51,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('get_classes.php')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    // 404 에러 등 HTTP 에러 발생 시
+                    return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, Response: ${text}`); });
                 }
                 return response.json();
             })
@@ -65,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(error => {
-                console.error('授業リスト取得エラー:', error);
+                console.error('授業リスト取得エラー:', error); // console.error로 출력
                 classListDiv.innerHTML = `<p style="color: red;">授業リストの取得中にエラーが発生しました。</p>`;
             });
     }
@@ -242,8 +244,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const currentTimetableGrade = timetableGradeSelect.value;
-        const currentTimetableTerm = timetableTermSelect.value;
+        // timetableGradeSelect와 timetableTermSelect에서 값을 가져옵니다.
+        // 만약 선택된 값이 없다면 (예: 옵션이 비어있는 경우), 기본값을 설정합니다.
+        const currentTimetableGrade = document.getElementById('timetableGradeSelect').value || '1'; // 기본값 '1' 설정
+        const currentTimetableTerm = document.getElementById('timetableTermSelect').value || '前期'; // 기본값 '前期' 설정
+
         const timetableData = [];
 
         document.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
@@ -285,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.success) {
                 alert('時間割が正常に保存されました。');
-                // 저장 성공 후, 현재 선택된 학년/학기로 시간표를 다시 로드하여 최신 상태 반영
                 loadTimetable(currentTimetableGrade, currentTimetableTerm);
             } else {
                 alert('時間割の保存に失敗しました: ' + data.message);
