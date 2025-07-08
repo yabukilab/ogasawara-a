@@ -1,21 +1,20 @@
 <?php
-session_start(); // 세션 시작
-require_once 'db.php'; // 데이터베이스 연결 및 h() 함수 사용을 위해 포함
+session_start(); // セッション開始
+require_once 'db.php'; // データベース接続および h() 関数使用のために含む
 
-// 현재 로그인된 사용자의 정보 설정
+// 現在ログイン中のユーザー情報を設定
 $loggedIn = isset($_SESSION['user_id']);
-$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Guest)
+$student_number = $_SESSION['student_number'] ?? 'ゲスト'; // ゲスト
 $department = $_SESSION['department'] ?? '';
 
-// PHP에서 h() 함수가 정의되어 있지 않다면 아래 함수를 추가합니다.
-// 보통 db.php 또는 common.php 같은 파일에 포함되어 있습니다.
+// PHPで h() 関数が定義されていない場合は追加
 if (!function_exists('h')) {
     function h($str) {
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
 }
 
-// 디버깅을 위한 세션 값 출력 (페이지 상단에 나타남)
+// デバッグのためのセッション値出力 (ページ上部に表示)
 echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
 ?>
 <!DOCTYPE html>
@@ -49,19 +48,23 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
                 <h2>授業リスト</h2>
                 <form id="classFilterForm" class="filter-form">
                     <label for="gradeFilter">学年:</label>
-                    <select id="gradeFilter" name="grade"> <option value="">全て</option> <option value="1" selected>1年生</option>
+                    <!-- ここが修正点: idを 'gradeFilter' に変更 -->
+                    <select id="gradeFilter" name="grade">
+                        <option value="">全て</option>
+                        <option value="1" selected>1年生</option> <!-- デフォルト値 -->
                         <option value="2">2年生</option>
                         <option value="3">3年生</option>
                         <option value="4">4年生</option>
                     </select>
 
                     <label for="termFilter">学期:</label>
+                    <!-- ここが修正点: idを 'termFilter' に変更 (元々termFilterでしたが、念のため) -->
                     <select id="termFilter" name="term">
                         <option value="">全て</option>
                         <option value="前期">前期</option>
                         <option value="後期">後期</option>
                     </select>
-
+                    
                     <button type="submit">フィルター</button>
                 </form>
                 <div id="lesson-list-container" class="class-list-container">
@@ -77,15 +80,17 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
                     <h3>表示する時間割を選択:</h3>
                     <label for="timetableGradeSelect">学年:</label>
+                    <!-- このIDはそのまま維持 (timetableGradeSelect) -->
                     <select id="timetableGradeSelect">
-                        <option value="1">1年生</option>
+                        <option value="1" selected>1年生</option>
                         <option value="2">2年生</option>
                         <option value="3">3年生</option>
                         <option value="4">4年生</option>
                     </select>
                     <label for="timetableTermSelect" style="margin-left: 10px;">学期:</label>
+                    <!-- このIDはそのまま維持 (timetableTermSelect) -->
                     <select id="timetableTermSelect">
-                        <option value="前期">前期</option>
+                        <option value="前期" selected>前期</option>
                         <option value="後期">後期</option>
                     </select>
                 </div>
