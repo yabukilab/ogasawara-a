@@ -8,34 +8,35 @@ $student_number = $_SESSION['student_number'] ?? 'ゲスト'; // 게스트 (Gues
 $department = $_SESSION['department'] ?? '';
 
 // PHP에서 h() 함수가 정의되어 있지 않다면 아래 함수를 추가합니다.
-// 보통 db.php 또는 common.php 같은 파일에 포함되어 있습니다.
 if (!function_exists('h')) {
     function h($str) {
         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
 }
 
-// 디버깅을 위한 세션 값 출력 (페이지 상단에 나타남)
-echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($_SESSION['user_id'] ?? 'NULL') . "</p>";
+// デバッグ用セッション表示
+echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション user_id = " . ($loggedIn ? h($_SESSION['user_id']) : 'NULL') . "</p>";
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>時間割作成 (Timetable Creation)</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body data-user-id="<?php echo $loggedIn ? h($_SESSION['user_id']) : 'null'; ?>" data-test-id="<?php echo $_SESSION['user_id'] ?? 'NO_SESSION_ID'; ?>">
     <div class="container">
         <div class="user-info">
             <?php if ($loggedIn): ?>
-                <p>ようこそ、<?php echo h($student_number); ?> (<?php echo h($department); ?>) さん！
+                <p>
+                    ようこそ、<?php echo h($student_number); ?> (<?php echo h($department); ?>) さん！
                     <a href="logout.php">ログアウト</a>
                 </p>
             <?php else: ?>
-                <p>ログインしていません。
+                <p>
+                    ログインしていません。
                     <a href="login.php">ログイン</a> |
                     <a href="register_user.php">新規ユーザー登録</a>
                 </p>
@@ -48,25 +49,19 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
             <div class="class-list-section">
                 <h2>授業リスト</h2>
                 <form id="classFilterForm" class="filter-form">
-                    <label for="gradeFilter">学年:</label>
-                    <select id="timetableGradeSelect">
-    <option value="">選択してください</option>
-    <option value="1" selected>1年生</option> <!-- デフォルト値 -->
-    <option value="2">2年生</option>
-    ...
-</select>
+                    <label for="gradeFilterSelect">学年:</label>
+                    <select id="gradeFilterSelect" name="grade">
+                        <option value="">選択してください</option>
+                        <option value="1" selected>1年生</option>
+                        <option value="2">2年生</option>
+                        <option value="3">3年生</option>
+                        <option value="4">4年生</option>
+                    </select>
 
-<select id="timetableTermSelect">
-    <option value="">選択してください</option>
-    <option value="前期" selected>前期</option>
-    <option value="後期">後期</option>
-</select>
-
-
-                    <label for="termFilter">学期:</label>
-                    <select id="termFilter" name="term">
+                    <label for="termFilterSelect" style="margin-left: 10px;">学期:</label>
+                    <select id="termFilterSelect" name="term">
                         <option value="">全て</option>
-                        <option value="前期">前期</option>
+                        <option value="前期" selected>前期</option>
                         <option value="後期">後期</option>
                     </select>
 
@@ -82,18 +77,20 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
                 <div id="total-credit-display" style="margin-top: 20px; font-size: 1.2em; font-weight: bold;">
                     登録合計単位数: <span id="current-total-credit">0</span>単位
                 </div>
+
                 <div class="timetable-selection" style="margin-bottom: 15px; text-align: center;">
                     <h3>表示する時間割を選択:</h3>
                     <label for="timetableGradeSelect">学年:</label>
-                    <select id="timetableGradeSelect">
-                        <option value="1">1年生</option>
+                    <select id="timetableGradeSelect" name="timetableGrade">
+                        <option value="1" selected>1年生</option>
                         <option value="2">2年生</option>
                         <option value="3">3年生</option>
                         <option value="4">4年生</option>
                     </select>
+
                     <label for="timetableTermSelect" style="margin-left: 10px;">学期:</label>
-                    <select id="timetableTermSelect">
-                        <option value="前期">前期</option>
+                    <select id="timetableTermSelect" name="timetableTerm">
+                        <option value="前期" selected>前期</option>
                         <option value="後期">後期</option>
                     </select>
                 </div>
@@ -111,99 +108,42 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="period-header-cell">1限<br><span class="period-time">9:00-10:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="1"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="1"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">2限<br><span class="period-time">10:00-11:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="2"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="2"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">3限<br><span class="period-time">11:00-12:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="3"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="3"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">4限<br><span class="period-time">12:00-13:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="4"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="4"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">5限<br><span class="period-time">13:00-14:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="5"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="5"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">6限<br><span class="period-time">14:00-15:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="6"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="6"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">7限<br><span class="period-time">15:00-16:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="7"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="7"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">8限<br><span class="period-time">16:00-17:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="8"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="8"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">9限<br><span class="period-time">17:00-18:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="9"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="9"></td>
-                        </tr>
-                        <tr>
-                            <td class="period-header-cell">10限<br><span class="period-time">18:00-19:00</span></td>
-                            <td class="time-slot" data-day="月曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="火曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="水曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="木曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="金曜日" data-period="10"></td>
-                            <td class="time-slot" data-day="土曜日" data-period="10"></td>
-                        </tr>
-                    </tbody>
+                        <?php
+                        // 1限～10限まで時間と 시간표 행 생성 (예시)
+                        $periods = [
+                            '1限' => '9:00-10:00',
+                            '2限' => '10:00-11:00',
+                            '3限' => '11:00-12:00',
+                            '4限' => '12:00-13:00',
+                            '5限' => '13:00-14:00',
+                            '6限' => '14:00-15:00',
+                            '7限' => '15:00-16:00',
+                            '8限' => '16:00-17:00',
+                            '9限' => '17:00-18:00',
+                            '10限' => '18:00-19:00'
+                        ];
 
+                        foreach ($periods as $period => $timeRange) {
+                            echo '<tr>';
+                            echo '<td class="period-header-cell">' . h($period) . '<br><span class="period-time">' . h($timeRange) . '</span></td>';
+                            for ($day = 1; $day <= 6; $day++) {
+                                $dayName = '';
+                                switch ($day) {
+                                    case 1: $dayName = '月曜日'; break;
+                                    case 2: $dayName = '火曜日'; break;
+                                    case 3: $dayName = '水曜日'; break;
+                                    case 4: $dayName = '木曜日'; break;
+                                    case 5: $dayName = '金曜日'; break;
+                                    case 6: $dayName = '土曜日'; break;
+                                }
+                                echo '<td class="time-slot" data-day="' . h($dayName) . '" data-period="' . h(substr($period, 0, -1)) . '"></td>';
+                            }
+                            echo '</tr>';
+                        }
+                        ?>
+                    </tbody>
                 </table>
+
                 <div style="text-align: center; margin-top: 20px;">
                     <button id="saveTimetableBtn">時間割を保存</button>
                     <a href="confirmed_timetable.php" class="view-confirmed-button">確定済み時間割を見る</a>
