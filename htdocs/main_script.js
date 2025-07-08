@@ -346,9 +346,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("DEBUG: loadTimetable - Condition (targetGrade === '' || targetTerm === '') is:", (targetGrade === "" || targetTerm === "")); // 新しいデバッグログ
         // --- 追加デバッグ終わり ---
 
-        // 厳密な空文字列チェックに変更
-        if (targetGrade === "" || targetTerm === "") {
-            console.warn("時間割のロードに失敗: 学年と学期を選択してください (空文字列検出 - 警告ID: LT-101)"); // 警告IDを追加
+        // 厳密な空文字列チェックに変更 (trim() を追加して見えない空白文字を排除)
+        if (targetGrade.trim() === "" || targetTerm.trim() === "") {
+            console.warn("時間割のロードに失敗: 学年と学期を選択してください (空文字列検出 - 警告ID: LT-101-V2)"); // 警告IDを更新
             return;
         }
         // --- 修正: 時間割ロード前に総単位を初期化 ---
