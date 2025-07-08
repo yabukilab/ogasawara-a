@@ -395,4 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (timetableGradeSelect && timetableTermSelect) {
             loadTimetable();
         } else {
-            console.warn("警告: ログインユーザーの時間割自動ロードに必要な時間割選択要素が見つかりません。
+            console.warn("警告: ログインユーザーの時間割自動ロードに必要な時間割選択要素が見つかりません。");
+        }
+    }
+});
