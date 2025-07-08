@@ -201,61 +201,68 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 時間割の読み込み
-    function loadTimetable() {
-        if (currentUserId === null) {
-            console.log("ユーザーがログインしていません。");
-            return;
-        }
-
-        const targetGrade = timetableGradeSelect.value;
-        const targetTerm = timetableTermSelect.value;
-
-        if (!targetGrade || !targetTerm) {
-            console.warn("時間割のロードに失敗: 学年と学期を選択してください");
-            return;
-        }
-
-        totalCredit = 0;
-        updateAndDisplayTotalCredit();
-
-        timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => {
-            itemInCell.remove();
-        });
-        timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
-            cell.classList.remove('filled-primary');
-        });
-
-        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    data.timetable.forEach(entry => {
-                        const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
-                        const targetCell = timetableTable.querySelector(cellSelector);
-                        if (targetCell) {
-                            const classItemInCell = document.createElement('div');
-                            classItemInCell.classList.add('class-item-in-cell');
-                            classItemInCell.dataset.classId = entry.class_id;
-                            classItemInCell.dataset.day = entry.day;
-                            classItemInCell.dataset.period = entry.period;
-                            classItemInCell.innerHTML = `
-                                <span class="class-name-in-cell">${entry.class_name}</span>
-                                <span class="class-credit-in-cell">${entry.class_credit}単位</span>
-                                <span class="category-display-in-cell">${entry.class_original_grade}年</span>
-                                <button class="remove-button">&times;</button>
-                            `;
-                            targetCell.appendChild(classItemInCell);
-                            targetCell.classList.add('filled-primary');
-                            classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
-                            totalCredit += entry.class_credit;
-                            updateAndDisplayTotalCredit();
-                        }
-                    });
-                }
-            })
-            .catch(error => console.error('時間割のロード中にエラーが発生しました:', error));
+    // 時間割の読み込みfunction loadTimetable() {
+    if (currentUserId === null) {
+        console.log("ユーザーがログインしていません。");
+        return;
     }
+
+    const targetGrade = timetableGradeSelect.value;
+    const targetTerm = timetableTermSelect.value;
+
+    if (!targetGrade || !targetTerm) {
+        console.warn("時間割のロードに失敗: 学年と学期を選択してください");
+        return;
+    }
+
+    // --- 修正: timetableTable が null かどうか確認 ---
+    if (!timetableTable) {
+        console.error("時間割テーブルが見つかりません。DOMの読み込みに失敗しました。");
+        return; // timetableTable が null の場合は処理を終了
+    }
+    // --- 修正ここまで ---
+
+    totalCredit = 0;
+    updateAndDisplayTotalCredit();
+
+    timetableTable.querySelectorAll('.class-item-in-cell').forEach(itemInCell => {
+        itemInCell.remove();
+    });
+    timetableTable.querySelectorAll('.time-slot.filled-primary').forEach(cell => {
+        cell.classList.remove('filled-primary');
+    });
+
+    fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                data.timetable.forEach(entry => {
+                    const cellSelector = `.time-slot[data-day="${entry.day}"][data-period="${entry.period}"]`;
+                    const targetCell = timetableTable.querySelector(cellSelector);
+                    if (targetCell) {
+                        const classItemInCell = document.createElement('div');
+                        classItemInCell.classList.add('class-item-in-cell');
+                        classItemInCell.dataset.classId = entry.class_id;
+                        classItemInCell.dataset.day = entry.day;
+                        classItemInCell.dataset.period = entry.period;
+                        classItemInCell.innerHTML = `
+                            <span class="class-name-in-cell">${entry.class_name}</span>
+                            <span class="class-credit-in-cell">${entry.class_credit}単位</span>
+                            <span class="category-display-in-cell">${entry.class_original_grade}年</span>
+                            <button class="remove-button">&times;</button>
+                        `;
+                        targetCell.appendChild(classItemInCell);
+                        targetCell.classList.add('filled-primary');
+                        classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
+                        totalCredit += entry.class_credit;
+                        updateAndDisplayTotalCredit();
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('時間割のロード中にエラーが発生しました:', error));
+}
+
 
     // 総学点の更新と表示
     function updateAndDisplayTotalCredit() {
