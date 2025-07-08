@@ -36,6 +36,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // 時間割表示用の学期選択ドロップダウン
     const timetableTermSelect = document.getElementById('timetableTermSelect');
 
+    // --- デバッグ: timetableGradeSelectとtimetableTermSelectの初期値をログ出力 ---
+    console.log("DEBUG: DOM elements - timetableGradeSelect:", timetableGradeSelect, "timetableTermSelect:", timetableTermSelect);
+    if (timetableGradeSelect) {
+        console.log("DEBUG: timetableGradeSelect.value on load:", timetableGradeSelect.value);
+    }
+    if (timetableTermSelect) {
+        console.log("DEBUG: timetableTermSelect.value on load:", timetableTermSelect.value);
+    }
+    // --- デバッグ終わり ---
+
+    // --- 修正: 明示的にデフォルト値を設定 ---
+    // HTMLのselected属性が正しく機能しない場合に備え、JavaScriptでデフォルト値を保証
+    if (timetableGradeSelect && !timetableGradeSelect.value) {
+        timetableGradeSelect.value = '1'; // デフォルトで1年生に設定
+        console.warn("警告: timetableGradeSelectの初期値が空だったため、'1'に設定しました。");
+    }
+    if (timetableTermSelect && !timetableTermSelect.value) {
+        timetableTermSelect.value = '前期'; // デフォルトで前期に設定
+        console.warn("警告: timetableTermSelectの初期値が空だったため、'前期'に設定しました。");
+    }
+    // --- 修正終わり ---
+
     let draggedClass = null; // ドラッグ中の授業データを保存する変数
 
     // --- 追加: 総単位管理変数および表示DOM要素 ---
@@ -315,6 +337,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetGrade = timetableGradeSelect.value;
         const targetTerm = timetableTermSelect.value; // 現在選択されている学期を使用
         
+        // --- デバッグ: loadTimetable内の値をログ出力 ---
+        console.log("DEBUG: loadTimetable - targetGrade:", targetGrade, "targetTerm:", targetTerm); // この行が387行目になるはずです
+        // --- デバッグ終わり ---
+
         if (!targetGrade || !targetTerm) {
             console.warn("時間割のロードに失敗: 学年と学期を選択してください"); // このメッセージが表示されます
             return;
