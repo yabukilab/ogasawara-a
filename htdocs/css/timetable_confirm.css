@@ -1,0 +1,93 @@
+body {
+font-family: 'Tahoma', sans-serif;
+background: #f2f2f2;
+}
+
+.container {
+max-width: 1000px;
+margin: 30px auto;
+background: white;
+padding: 25px;
+border-radius: 12px;
+box-shadow: 0 5px 12px rgba(0,0,0,0.08);
+}
+
+h1 {
+text-align: center;
+margin-bottom: 25px;
+color: #444;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+}
+
+th, td {
+border: 1px solid #ccc;
+padding: 12px;
+text-align: center;
+}
+
+thead {
+background-color: #6c757d;
+color: white;
+}
+
+.buttons {
+margin-top: 30px;
+display: flex;
+justify-content: center;
+gap: 20px;
+}
+
+.btn {
+display: inline-block;
+padding: 12px 18px;
+color: white;
+text-decoration: none;
+border-radius: 6px;
+font-weight: bold;
+}
+
+.btn.blue {
+background-color: #007bff;
+}
+
+.btn.green {
+background-color: #28a745;
+}
+
+.btn:hover {
+opacity: 0.9;
+}
+
+.bottom-nav {
+  position: fixed; /* 画面下部に固定 */
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 20px;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+  font-size: 14px;
+}
+
+.bottom-nav .nav-button {
+  text-decoration: none;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.bottom-nav .nav-button:hover {
+  background-color: #0056b3;
+}

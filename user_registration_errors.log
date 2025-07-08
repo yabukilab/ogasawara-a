@@ -1,5 +1,0 @@
-ログファイル書き込みテスト 
-
-ログファイル書き込みテスト 
-
-2025-06-24 09:12:58 - User registration DB error: SQLSTATE[HY000] [1044] Access denied for user 'testuser'@'localhost' to database 'mydb'
