@@ -171,7 +171,8 @@ h1 {
     padding: 5px; /* 패딩을 약간 줄여서 공간 확보 */
     text-align: center;
     vertical-align: middle;
-    height: 80px; /* Fixed height for time slots */
+    min-height: 80px; /* Fixed height for time slots -> min-height로 변경 */
+    height: auto; /* 내용에 따라 높이 조절 */
     font-size: 0.9em;
     position: relative; /* For positioning remove button */
 }
@@ -202,12 +203,19 @@ h1 {
 .time-slot {
     background-color: #f9f9f9;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    /* 핵심: 수업이 있든 없든 항상 flexbox를 사용 */
-    display: flex; /* 추가 */
-    flex-direction: column; /* 추가 */
-    justify-content: center; /* 가운데 정렬 */
-    align-items: center; /* 가운데 정렬 */
+    
+    /* 핵심: 셀 내부에서 flex 컨테이너로 동작하고, 내용이 없을 때도 높이를 유지하며 중앙 정렬 */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; /* 세로 중앙 정렬 */
+    align-items: center; /* 가로 중앙 정렬 */
+    
     overflow: hidden; /* 셀을 넘어서는 내용 숨기기 */
+    
+    /* 이 time-slot이 td의 전체 영역을 차지하도록 */
+    width: 100%; 
+    height: 100%; /* 부모 td의 높이를 채우도록 */
+    box-sizing: border-box; /* 패딩과 보더가 너비/높이에 포함되도록 */
 }
 
 .time-slot.drag-over {
@@ -221,7 +229,6 @@ h1 {
     font-weight: bold;
     border-color: #28a745;
     box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
-    /* display, flex-direction은 이미 .time-slot에 있으므로 제거 */
     gap: 5px; /* 수업 요소들 사이의 간격 (flexbox에 의해 적용) */
 }
 
@@ -234,8 +241,10 @@ h1 {
     border-radius: 3px;
     text-align: center;
     box-sizing: border-box; /* 패딩과 보더가 너비에 포함되도록 */
-    width: 100%; /* 부모 셀에 꽉 차게 */
-    height: 100%; /* 부모 셀에 꽉 차게 */
+    
+    /* 핵심: 부모 time-slot의 전체 공간을 꽉 채우고 내부 요소를 중앙 정렬 */
+    width: 100%; /* 부모 time-slot에 꽉 차게 */
+    height: 100%; /* 부모 time-slot에 꽉 차게 */
     display: flex; /* flex 컨테이너로 설정 */
     flex-direction: column; /* 세로 방향으로 아이템 정렬 */
     justify-content: center; /* 세로 중앙 정렬 */
@@ -259,6 +268,7 @@ h1 {
     line-height: 1.2em; /* 줄 높이 */
     max-height: 2.4em; /* 최대 높이 (2줄 * 1.2em) */
     flex-grow: 1; /* 남은 공간을 채우도록 성장 */
+    margin: 0; /* 마진 제거 */
 }
 
 .class-credit-in-cell,
@@ -268,14 +278,15 @@ h1 {
     white-space: nowrap; /* 학점/학년은 한 줄에 표시 */
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0; /* 마진 제거 */
 }
 
 
 /* Remove Button for Classes in Timetable */
 .remove-button {
     position: absolute;
-    top: -5px; /* 기존 위치 유지 */
-    right: -5px; /* 기존 위치 유지 */
+    top: -8px; /* 이 값들을 조절해보세요 */
+    right: -8px; /* 이 값들을 조절해보세요 */
     background-color: #e74c3c;
     color: white;
     border: none;
