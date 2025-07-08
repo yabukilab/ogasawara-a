@@ -341,6 +341,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("DEBUG: loadTimetable - targetGrade:", targetGrade, "targetTerm:", targetTerm); // この行が387行目になるはずです
         // --- デバッグ終わり ---
 
+        // --- 追加デバッグ: targetGradeとtargetTermの真偽値評価を確認 ---
+        console.log("DEBUG: loadTimetable - targetGrade is falsy?", !targetGrade, "targetTerm is falsy?", !targetTerm);
+        // --- 追加デバッグ終わり ---
+
         if (!targetGrade || !targetTerm) {
             console.warn("時間割のロードに失敗: 学年と学期を選択してください"); // このメッセージが表示されます
             return;
