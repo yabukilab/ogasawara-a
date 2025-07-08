@@ -74,7 +74,9 @@ try {
 
 } catch (PDOException $e) {
     // DB 관련 오류 발생 시 롤백
-    $db->rollBack();
+    if ($db->inTransaction()) { // 트랜잭션이 활성화된 경우에만 롤백 시도
+        $db->rollBack();
+    }
     $response['message'] = '時間割の保存中にデータベースエラーが発生しました: ' . $e->getMessage();
     error_log("Save Timetable DB Error for user {$user_id}: " . $e->getMessage());
 } catch (Exception $e) {

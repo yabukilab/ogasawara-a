@@ -2,13 +2,6 @@
 session_start(); // 세션 시작
 require_once 'db.php'; // 데이터베이스 연결 (여기서 $db 객체가 생성됨)
 
-// h() 함수는 db.php에 정의되어 있으므로 여기서는 제거합니다.
-// if (!function_exists('h')) {
-//     function h($str) {
-//         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-//     }
-// }
-
 // 로그인 여부 확인
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php'); // 로그인 페이지로 리다이렉트

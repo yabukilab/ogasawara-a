@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 초기 로드: 모든 수업 데이터와 시간표를 불러옵니다.
     loadClasses();
     // 페이지 로드 시, PHP에서 설정한 초기 학년/학기로 시간표 로드
-    // 스크린샷 125805.png를 보면 1학년/前期가 기본으로 설정되어 있음
     const initialGrade = timetableGradeSelect.value;
     const initialTerm = timetableTermSelect.value;
     loadTimetable(initialGrade, initialTerm);
