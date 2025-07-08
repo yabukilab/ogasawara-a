@@ -2,15 +2,6 @@
 session_start(); // 세션 시작
 require_once 'db.php'; // 데이터베이스 연결 (여기서 $db 객체가 생성됨)
 
-// h() 함수는 db.php에 정의되어 있으므로 여기서는 제거하거나,
-// db.php에 h() 함수 정의가 없다면 이곳에 추가해야 합니다.
-// 제공해주신 db.php에는 h() 함수가 이미 정의되어 있으므로 여기서는 중복 정의를 피하기 위해 제거합니다.
-// if (!function_exists('h')) {
-//     function h($str) {
-//         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-//     }
-// }
-
 // 로그인 여부 확인
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php'); // 로그인 페이지로 리다이렉트
@@ -27,12 +18,10 @@ $terms = []; // 사용자가 저장한 시간표의 모든 학기 목록
 
 // $db 객체가 유효한지 확인
 if (!isset($db) || !($db instanceof PDO)) {
-    // db.php에서 연결 실패 시 $db가 생성되지 않거나 PDO 객체가 아닐 수 있음
     echo '<p style="color: red;">データベース接続エラーが発生しました。管理者に連絡してください。</p>';
     error_log("データベース接続オブジェクト (\$db) が無効です。confirmed_timetable.php");
     exit(); // 스크립트 종료
 }
-
 
 // 사용자가 저장한 시간표의 모든 고유 학년과 학기를 가져옵니다.
 try {
@@ -42,22 +31,19 @@ try {
     $stmt_grades->execute();
     $grades = $stmt_grades->fetchAll(PDO::FETCH_COLUMN);
 
-    // 모든 학기 가져오기 (이 부분은 보통 '前期', '後期' 등으로 고정되어 있지만, DB에서 가져오는 것이 유연)
+    // 모든 학기 가져오기
     $stmt_terms = $db->prepare("SELECT DISTINCT timetable_term FROM user_timetables WHERE user_id = :user_id ORDER BY timetable_term ASC");
     $stmt_terms->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt_terms->execute();
     $terms = $stmt_terms->fetchAll(PDO::FETCH_COLUMN);
 
 } catch (PDOException $e) {
-    // 오류 처리
     error_log("Failed to fetch distinct grades/terms for user {$user_id}: " . $e->getMessage());
-    // 사용자에게는 일반적인 오류 메시지 표시
     $grades = [];
     $terms = [];
 }
 
 // 선택된 학년과 학기 (기본값 설정)
-// 사용자가 선택한 값이 있다면 그것을 사용하고, 없다면 첫 번째 저장된 학년/학기를 기본값으로 설정합니다.
 $selected_grade = $_GET['grade'] ?? ($grades[0] ?? null);
 $selected_term = $_GET['term'] ?? ($terms[0] ?? null);
 
@@ -101,9 +87,8 @@ if ($selected_grade && $selected_term) {
     <title>確定済み時間割 (Confirmed Timetable)</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* confirmed_timetable.php 전용 스타일 (필요하다면 추가) */
         .container {
-            max-width: 1000px; /* 時間표만 보여주므로 너비를 조정할 수 있습니다. */
+            max-width: 1000px;
         }
         .timetable-section h2 {
             margin-bottom: 20px;
@@ -128,10 +113,8 @@ if ($selected_grade && $selected_term) {
         .back-to-creation a:hover {
             background-color: #0056b3;
         }
-        /* index.php의 .class-item-in-cell 스타일이 confirmed_timetable.php에서도 동일하게 적용되도록 */
-        .confirmed-class-item {
-            /* .class-item-in-cell과 동일한 스타일을 적용하거나, .class-item-in-cell을 직접 사용 */
-            background-color: #d4edda; /* filled-primary와 유사한 색상 */
+        .class-item-in-cell { /* index.php와 동일한 스타일 사용 */
+            background-color: #d4edda;
             border: 1px solid #28a745;
             padding: 5px;
             font-size: 0.8em;
@@ -147,9 +130,9 @@ if ($selected_grade && $selected_term) {
             position: relative;
             overflow: hidden;
         }
-        .confirmed-class-item .class-name-in-cell,
-        .confirmed-class-item .class-credit-in-cell,
-        .confirmed-class-item .category-display-in-cell {
+        .class-item-in-cell .class-name-in-cell,
+        .class-item-in-cell .class-credit-in-cell,
+        .class-item-in-cell .category-display-in-cell {
             margin: 0;
             word-break: break-word;
             white-space: normal;
@@ -161,14 +144,14 @@ if ($selected_grade && $selected_term) {
             line-height: 1.2em;
             max-height: 2.4em;
         }
-        .confirmed-class-item .class-credit-in-cell,
-        .confirmed-class-item .category-display-in-cell {
+        .class-item-in-cell .class-credit-in-cell,
+        .class-item-in-cell .category-display-in-cell {
             font-size: 0.8em;
             color: #555;
-            white-space: nowrap; /* 学点/学년은 한 줄에 표시 */
+            white-space: nowrap;
         }
         /* confirmed_timetable.php에서는 삭제 버튼이 필요 없으므로 숨김 */
-        .confirmed-class-item .remove-button {
+        .class-item-in-cell .remove-button {
             display: none;
         }
     </style>
@@ -204,7 +187,7 @@ if ($selected_grade && $selected_term) {
                     <select id="termSelect" name="term" onchange="this.form.submit()">
                         <?php if (empty($terms)): ?>
                             <option value="">保存された時間割がありません</option>
-                        <?php else: ?>
+                        <? else: ?>
                             <?php foreach ($terms as $term_option): ?>
                                 <option value="<?php echo h($term_option); ?>"
                                     <?php echo ($term_option == $selected_term) ? 'selected' : ''; ?>>
@@ -236,17 +219,18 @@ if ($selected_grade && $selected_term) {
                     <tbody>
                         <?php
                         $days = ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
-                        $periods = range(1, 10); // 1교시부터 10교시까지
+                        $periods = range(1, 10);
 
                         foreach ($periods as $period) {
                             echo '<tr>';
                             echo '<td class="period-header-cell">' . h($period) . '限<br><span class="period-time">' . ($period + 8) . ':00-' . ($period + 9) . ':00</span></td>';
                             foreach ($days as $day) {
                                 $key = $day . '_' . $period;
-                                $class = $timetableData[$key] ?? null; // 해당 요일/교시에 수업이 있는지 확인
+                                $class = $timetableData[$key] ?? null;
                                 echo '<td class="time-slot">';
                                 if ($class) {
-                                    echo '<div class="class-item-in-cell">'; // index.php와 동일한 CSS 클래스 사용
+                                    // class-item-in-cell 클래스명을 사용합니다.
+                                    echo '<div class="class-item-in-cell">';
                                     echo '<div class="class-name-in-cell">' . h($class['class_name']) . '</div>';
                                     echo '<div class="class-credit-in-cell">' . h($class['credit']) . '単位</div>';
                                     echo '<div class="category-display-in-cell">' . h($class['category_name']) . '</div>';
