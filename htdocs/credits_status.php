@@ -38,6 +38,25 @@ try {
 
     $totalCredits = array_sum($earnedMap);
 
+
+    // カテゴリ1（教養科目・専門科目）別単位数集計
+$sqlCat1 = "
+    SELECT c.category1, SUM(c.credit) AS earned_credits
+    FROM user_timetables ut
+    JOIN class c ON ut.class_id = c.id
+    WHERE ut.user_id = :user_id
+    GROUP BY c.category1
+";
+$stmt1 = $db->prepare($sqlCat1);
+$stmt1->execute([':user_id' => $userId]);
+$cat1Results = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+$earnedByCat1 = [];
+foreach ($cat1Results as $row) {
+    $earnedByCat1[$row['category1']] = (int)$row['earned_credits'];
+}
+
+
 } catch (PDOException $e) {
     echo "<p style='color:red;'>データベースエラーが発生しました。</p>";
     exit();
