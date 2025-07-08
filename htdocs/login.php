@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (login($db, $student_number, $password)) {
-        header('Location: menu.php');
+        header('Location: index.php');
         exit;
     } else {
         $error = '学籍番号またはパスワードが間違っています。';
