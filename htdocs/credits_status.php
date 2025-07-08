@@ -109,71 +109,88 @@ foreach ($cat1Results as $row) {
 <div class="message-container">
     <ul>
         <?php
-        // 中分類（category2）と大分類（category1）の取得済み単位
         $core = $earnedMap['基幹科目'] ?? 0;
         $liberal = $earnedMap['教養基礎科目'] ?? 0;
-        $specialized = $earnedMap['学部共通専門科目'] ?? 0;
+        $common = $earnedMap['教養共通科目'] ?? 0;
+        $special = $earnedMap['教養特別科目'] ?? 0;
+
+        $gakubuCommon = $earnedMap['学部共通専門科目'] ?? 0;
+        $foundation = $earnedMap['基礎科目'] ?? 0;
+        $develop = $earnedMap['展開科目'] ?? 0;
+        $advanced = $earnedMap['発展科目'] ?? 0;
+
         $cat1Specialized = $earnedByCat1['専門科目'] ?? 0;
 
-        // 2年進級条件
-        if ($totalCredits >= 30 && $core >= 15) {
-            echo "<li class='success-message'>2年進級可能（基幹科目15単位以上，合計30単位以上）</li>";
+        // 2年進級
+        if ($totalCredits >= 24) {
+            echo "<li class='success-message'>2年進級可能（合計24単位以上）</li>";
         } else {
-            echo "<li class='error-message'>2年進級不可：";
-            $msgs = [];
-            if ($totalCredits < 30) $msgs[] = "合計あと " . (30 - $totalCredits) . " 単位";
-            if ($core < 15) $msgs[] = "基幹科目あと " . (15 - $core) . " 単位";
-            echo implode("，", $msgs) . "</li>";
+            echo "<li class='error-message'>2年進級不可：あと " . (24 - $totalCredits) . " 単位必要</li>";
         }
 
-        // 3年進級条件
-        if ($totalCredits >= 64 && $liberal >= 10 && $cat1Specialized >= 44) {
-            echo "<li class='success-message'>3年進級可能（教養基礎科目10単位以上，専門科目44単位以上，合計64単位以上）</li>";
+        // 3年進級
+        if ($totalCredits >= 64 && $cat1Specialized >= 44) {
+            echo "<li class='success-message'>3年進級可能（合計64単位以上，専門科目44単位以上）</li>";
         } else {
-            echo "<li class='error-message'>3年進級不可：";
-            $msgs = [];
-            if ($totalCredits < 64) $msgs[] = "合計あと " . (64 - $totalCredits) . " 単位";
-            if ($liberal < 10) $msgs[] = "教養基礎科目あと " . (10 - $liberal) . " 単位";
-            if ($cat1Specialized < 44) $msgs[] = "専門科目あと " . (44 - $cat1Specialized) . " 単位";
-            echo implode("，", $msgs) . "</li>";
+            $msg = [];
+            if ($totalCredits < 64) $msg[] = "合計あと " . (64 - $totalCredits) . " 単位";
+            if ($cat1Specialized < 44) $msg[] = "専門科目あと " . (44 - $cat1Specialized) . " 単位";
+            echo "<li class='error-message'>3年進級不可：" . implode("，", $msg) . "</li>";
         }
 
-        // 4年進級条件
-        if ($totalCredits >= 90 && $specialized >= 10) {
-            echo "<li class='success-message'>4年進級可能（学部共通専門科目10単位以上，合計90単位以上）</li>";
+        // 4年進級
+        $fourthOk = (
+            $totalCredits >= 102 &&
+            $gakubuCommon >= 18 &&
+            $foundation >= 8 &&
+            $core >= 20 &&
+            $develop >= 16 &&
+            $advanced >= 6
+        );
+        if ($fourthOk) {
+            echo "<li class='success-message'>4年進級可能（専門5分類クリア，合計102単位以上）</li>";
         } else {
-            echo "<li class='error-message'>4年進級不可：";
-            $msgs = [];
-            if ($totalCredits < 90) $msgs[] = "合計あと " . (90 - $totalCredits) . " 単位";
-            if ($specialized < 10) $msgs[] = "学部共通専門科目あと " . (10 - $specialized) . " 単位";
-            echo implode("，", $msgs) . "</li>";
-        }
-
-        // 卒業条件チェック：中分類すべてOKか
-        $category2Ok = true;
-        $category2Messages = [];
-        foreach ($requiredCreditsByCategory2 as $cat => $required) {
-            $earned = $earnedMap[$cat] ?? 0;
-            if ($earned < $required) {
-                $category2Ok = false;
-                $category2Messages[] = "{$cat}あと " . ($required - $earned) . " 単位";
-            }
+            $msg = [];
+            if ($totalCredits < 102) $msg[] = "合計あと " . (102 - $totalCredits) . " 単位";
+            if ($gakubuCommon < 18) $msg[] = "学部共通専門科目あと " . (18 - $gakubuCommon) . " 単位";
+            if ($foundation < 8) $msg[] = "基礎科目あと " . (8 - $foundation) . " 単位";
+            if ($core < 20) $msg[] = "基幹科目あと " . (20 - $core) . " 単位";
+            if ($develop < 16) $msg[] = "展開科目あと " . (16 - $develop) . " 単位";
+            if ($advanced < 6) $msg[] = "発展科目あと " . (6 - $advanced) . " 単位";
+            echo "<li class='error-message'>4年進級不可：" . implode("，", $msg) . "</li>";
         }
 
         // 卒業判定
-        if ($totalCredits >= 124 && $category2Ok && $cat1Specialized >= 60) {
-            echo "<li class='success-message'>卒業要件達成（専門科目60単位以上，すべてのカテゴリ2要件達成）</li>";
+        $gradOk = (
+            $totalCredits >= 124 &&
+            $liberal >= 15 &&
+            $common >= 20 &&
+            $special >= 1 &&
+            $gakubuCommon >= 20 &&
+            $foundation >= 8 &&
+            $core >= 22 &&
+            $develop >= 17 &&
+            $advanced >= 11
+        );
+        if ($gradOk) {
+            echo "<li class='success-message'>卒業要件達成（教養・専門すべての条件をクリア）</li>";
         } else {
-            echo "<li class='error-message'>卒業要件未達：";
-            $msgs = [];
-            if ($totalCredits < 124) $msgs[] = "合計あと " . (124 - $totalCredits) . " 単位";
-            if ($cat1Specialized < 60) $msgs[] = "専門科目あと " . (60 - $cat1Specialized) . " 単位";
-            if (!$category2Ok) $msgs = array_merge($msgs, $category2Messages);
-            echo implode("，", $msgs) . "</li>";
+            $msg = [];
+            if ($totalCredits < 124) $msg[] = "合計あと " . (124 - $totalCredits) . " 単位";
+            if ($liberal < 15) $msg[] = "教養基礎科目あと " . (15 - $liberal) . " 単位";
+            if ($common < 20) $msg[] = "教養共通科目あと " . (20 - $common) . " 単位";
+            if ($special < 1) $msg[] = "教養特別科目あと " . (1 - $special) . " 単位";
+            if ($gakubuCommon < 20) $msg[] = "学部共通専門科目あと " . (20 - $gakubuCommon) . " 単位";
+            if ($foundation < 8) $msg[] = "基礎科目あと " . (8 - $foundation) . " 単位";
+            if ($core < 22) $msg[] = "基幹科目あと " . (22 - $core) . " 単位";
+            if ($develop < 17) $msg[] = "展開科目あと " . (17 - $develop) . " 単位";
+            if ($advanced < 11) $msg[] = "発展科目あと " . (11 - $advanced) . " 単位";
+            echo "<li class='error-message'>卒業要件未達：" . implode("，", $msg) . "</li>";
         }
         ?>
     </ul>
 </div>
+
 
 
 
