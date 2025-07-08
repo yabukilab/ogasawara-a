@@ -121,70 +121,66 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- 3.3. ドロップゾーン (時間割セル) イベントリスナー追加 ---
-    function addDropListeners() {
-        const timeSlots = timetableTable.querySelectorAll('.time-slot');
-        timeSlots.forEach(slot => {
-            slot.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                this.classList.add('drag-over');
-            });
-            slot.addEventListener('dragleave', function() {
-                this.classList.remove('drag-over');
-            });
-            slot.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-
-                if (!draggedClass) return;
-
-                // =====================================================================
-                // ***** 하나의 셀에 하나의 수업만 드롭되도록 강제하는 로직 추가/수정 *****
-                // 이 셀에 이미 .class-item-in-cell 클래스를 가진 자식 요소가 있는지 확인
-                if (this.querySelector('.class-item-in-cell')) {
-                    alert('この時間枠にはすでに授業があります。新しい授業を追加する前に、既存の授業を削除してください。');
-                    return; // 이미 수업이 있으면 추가하지 않고 함수 종료
-                }
-                // =====================================================================
-
-                const classId = draggedClass.dataset.id;
-                const className = draggedClass.dataset.name;
-                const classCredit = parseInt(draggedClass.dataset.credit, 10); // 학점을 숫자로 변환
-                const classGrade = draggedClass.dataset.grade;
-                // const classCategory2 = draggedClass.dataset.category2; // 필요하면 사용
-
-                // 새로운 수업 아이템 요소 생성
-                const classItemInCell = document.createElement('div');
-                classItemInCell.classList.add('class-item-in-cell');
-                classItemInCell.setAttribute('draggable', true); // 셀 안의 아이템도 드래그 가능하게 할 경우
-
-                // 중요: 셀의 data-day와 data-period를 직접 읽어와서 classItemInCell에 저장
-                // 이렇게 하면 나중에 saveTimetable 함수에서 이 값을 정확하게 읽을 수 있습니다.
-                classItemInCell.dataset.classId = classId;
-                classItemInCell.dataset.day = this.dataset.day;    // <-- 셀의 data-day 값을 가져옴
-                classItemInCell.dataset.period = this.dataset.period; // <-- 셀의 data-period 값을 가져옴
-
-                classItemInCell.innerHTML = `
-                    <span class="class-name-in-cell">${className}</span>
-                    <span class="class-credit-in-cell">${classCredit}単位</span>
-                    <span class="category-display-in-cell">${classGrade}年</span>
-                    <button class="remove-button">&times;</button>
-                `;
-                
-                // 기존 innerHTML = ... 대신 appendChild 사용
-                this.appendChild(classItemInCell);
-                this.classList.add('filled-primary');
-
-                // 삭제 버튼에 이벤트 리스너 추가 (새롭게 생성된 버튼에 연결)
-                classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
-
-                // --- 총 학점에 현재 수업의 학점을 더하고 표시 ---
-                totalCredit += classCredit;
-                updateAndDisplayTotalCredit();
-                // --- 추가 끝 ---
-            });
-        });
+function addDropListeners() {
+    const timetableTable = document.getElementById('timetable-table');  // timetableTableを取得
+    if (!timetableTable) {  // timetableTableが存在しない場合のチェック
+        console.error('時間割テーブルが見つかりません');
+        return;  // 早期リターンして処理を終了
     }
+
+    const timeSlots = timetableTable.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+        slot.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            this.classList.add('drag-over');
+        });
+        slot.addEventListener('dragleave', function() {
+            this.classList.remove('drag-over');
+        });
+        slot.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+
+            if (!draggedClass) return;
+
+            // すでにクラスがドロップされているか確認
+            if (this.querySelector('.class-item-in-cell')) {
+                alert('この時間枠にはすでに授業があります。新しい授業を追加する前に、既存の授業を削除してください。');
+                return;
+            }
+
+            const classId = draggedClass.dataset.id;
+            const className = draggedClass.dataset.name;
+            const classCredit = parseInt(draggedClass.dataset.credit, 10);
+
+            // 新しい授業アイテムを作成
+            const classItemInCell = document.createElement('div');
+            classItemInCell.classList.add('class-item-in-cell');
+            classItemInCell.setAttribute('draggable', true);
+
+            classItemInCell.dataset.classId = classId;
+            classItemInCell.dataset.day = this.dataset.day;
+            classItemInCell.dataset.period = this.dataset.period;
+
+            classItemInCell.innerHTML = `
+                <span class="class-name-in-cell">${className}</span>
+                <span class="class-credit-in-cell">${classCredit}単位</span>
+                <span class="category-display-in-cell">${draggedClass.dataset.grade}年</span>
+                <button class="remove-button">&times;</button>
+            `;
+
+            this.appendChild(classItemInCell);
+            this.classList.add('filled-primary');
+
+            classItemInCell.querySelector('.remove-button').addEventListener('click', removeClassFromTimetable);
+
+            totalCredit += classCredit;
+            updateAndDisplayTotalCredit();
+        });
+    });
+}
+
 
     // --- 3.4. 時間割から授業削除 ---
     function removeClassFromTimetable(event) {
