@@ -134,16 +134,21 @@ foreach ($cat1Results as $row) {
             $gradeStatus[] = "4年進級可能（学部共通専門科目10単位以上，合計90単位以上）";
         }
 
-        // 卒業
-        if (
-            $totalCredits >= 124 &&
-            $core >= $requiredCreditsByCategory2['基幹科目'] &&
-            $liberal >= $requiredCreditsByCategory2['教養基礎科目'] &&
-            $specialized >= $requiredCreditsByCategory2['学部共通専門科目'] &&
-            $cat1Specialized >= 60
-        ) {
-            $gradeStatus[] = "卒業要件達成（専門科目60単位以上，すべてのカテゴリ2要件達成）";
-        }
+        // 中分類（category2）すべての要件を満たしているか
+$category2Ok = true;
+foreach ($requiredCreditsByCategory2 as $cat => $required) {
+    $earned = $earnedMap[$cat] ?? 0;
+    if ($earned < $required) {
+        $category2Ok = false;
+        break;
+    }
+}
+
+// 卒業判定（124単位以上，カテゴリ2すべてOK，専門科目60単位以上）
+if ($totalCredits >= 124 && $category2Ok && $cat1Specialized >= 60) {
+    $gradeStatus[] = "卒業要件達成（専門科目60単位以上，すべてのカテゴリ2要件達成）";
+}
+
 
         if (count($gradeStatus) > 0) {
             foreach ($gradeStatus as $status) {
