@@ -48,13 +48,26 @@ echo "<p style='color: red; font-weight: bold;'>デバッグ: セッション us
             <div class="class-list-section">
                 <h2>授業リスト</h2>
                 <form id="classFilterForm" class="filter-form">
-                    <label for="gradeFilter">学年:</label>
-                    <select id="timetableGradeSelect">
-    <option value="">選択してください</option>
-    <option value="1" selected>1年生</option> <!-- デフォルト値 -->
-    <option value="2">2年生</option>
-    ...
-</select>
+                    <form id="classFilterForm" class="filter-form">
+    <label for="gradeFilter">学年:</label>
+    <select id="gradeFilter" name="grade">
+        <option value="">全て</option>
+        <option value="1">1年</option>
+        <option value="2">2年</option>
+        <option value="3">3年</option>
+        <option value="4">4年</option>
+    </select>
+
+    <label for="termFilter">学期:</label>
+    <select id="termFilter" name="term">
+        <option value="">全て</option>
+        <option value="前期">前期</option>
+        <option value="後期">後期</option>
+    </select>
+
+    <button type="submit">フィルター</button>
+</form>
+
 
 <select id="timetableTermSelect">
     <option value="">選択してください</option>
