@@ -164,7 +164,7 @@ foreach ($requirements as $row) {
         <?php endforeach; ?>
 
         <div class="buttons">
-            <a href="menu.php" class="btn green">メニューに戻る</a>
+            <a href="index.php" class="btn green">メニューに戻る</a>
         </div>
     </div>
 
