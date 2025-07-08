@@ -18,9 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // =========================================================
     // 2. DOM 要素選択
     // =========================================================
+    // 여기서 ID를 수정함
     const classFilterForm = document.getElementById('classFilterForm');
-    const gradeSelect = document.getElementById('gradeFilter');
-    const termSelect = document.getElementById('termFilter');
+    const gradeSelect = document.getElementById('gradeFilterSelect');
+    const termSelect = document.getElementById('termFilterSelect');
     
     const classListContainer = document.getElementById('lesson-list-container');
 
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fetchAndDisplayClasses() {
         if (!gradeSelect || !termSelect) {
-            console.error("エラー: 'gradeFilter' または 'termFilter' の要素が見つかりません。HTMLを確認してください。");
+            console.error("エラー: 'gradeFilterSelect' または 'termFilterSelect' の要素が見つかりません。HTMLを確認してください。");
             if (classListContainer) {
                 classListContainer.innerHTML = '<p class="message error">授業のフィルターに必要な要素が見つかりません。</p>';
             }
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const grade = gradeSelect.value;
         const term = termSelect.value;
 
-        fetch(`show_lessons.php?grade=${grade}&term=${term}`)
+        fetch(`show_lessons.php?grade=${encodeURIComponent(grade)}&term=${encodeURIComponent(term)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -299,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${targetGrade}&timetable_term=${targetTerm}`)
+        fetch(`get_timetable.php?user_id=${currentUserId}&timetable_grade=${encodeURIComponent(targetGrade)}&timetable_term=${encodeURIComponent(targetTerm)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
