@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- デバッグ: timetableGradeSelectとtimetableTermSelectの初期値をログ出力 ---
     console.log("DEBUG: DOM elements - timetableGradeSelect:", timetableGradeSelect, "timetableTermSelect:", timetableTermSelect);
     if (timetableGradeSelect) {
-        console.log("DEBUG: timetableGradeSelect.value on load:", timetableGradeSelect.value);
+        console.log("DEBUG: timetableGradeSelect.value on load:", JSON.stringify(timetableGradeSelect.value)); // JSON.stringifyで厳密な値を確認
     }
     if (timetableTermSelect) {
-        console.log("DEBUG: timetableTermSelect.value on load:", timetableTermSelect.value);
+        console.log("DEBUG: timetableTermSelect.value on load:", JSON.stringify(timetableTermSelect.value)); // JSON.stringifyで厳密な値を確認
     }
     // --- デバッグ終わり ---
 
@@ -338,15 +338,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const targetTerm = timetableTermSelect.value; // 現在選択されている学期を使用
         
         // --- デバッグ: loadTimetable内の値をログ出力 ---
-        console.log("DEBUG: loadTimetable - targetGrade:", targetGrade, "targetTerm:", targetTerm); // この行が387行目になるはずです
+        console.log("DEBUG: loadTimetable - targetGrade:", JSON.stringify(targetGrade), "targetTerm:", JSON.stringify(targetTerm));
         // --- デバッグ終わり ---
 
         // --- 追加デバッグ: targetGradeとtargetTermの真偽値評価を確認 ---
         console.log("DEBUG: loadTimetable - targetGrade is falsy?", !targetGrade, "targetTerm is falsy?", !targetTerm);
         // --- 追加デバッグ終わり ---
 
-        if (!targetGrade || !targetTerm) {
-            console.warn("時間割のロードに失敗: 学年と学期を選択してください"); // このメッセージが表示されます
+        // 厳密な空文字列チェックに変更
+        if (targetGrade === "" || targetTerm === "") {
+            console.warn("時間割のロードに失敗: 学年と学期を選択してください (空文字列検出)"); // このメッセージが表示されます
             return;
         }
         // --- 修正: 時間割ロード前に総単位を初期化 ---
