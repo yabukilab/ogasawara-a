@@ -1,13 +1,15 @@
 <?php
 session_start(); // 세션 시작
-require_once 'db.php'; // 데이터베이스 연결
+require_once 'db.php'; // 데이터베이스 연결 (여기서 $db 객체가 생성됨)
 
-// PHP에서 h() 함수가 정의되어 있지 않다면 아래 함수를 추가합니다.
-if (!function_exists('h')) {
-    function h($str) {
-        return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
-    }
-}
+// h() 함수는 db.php에 정의되어 있으므로 여기서는 제거하거나,
+// db.php에 h() 함수 정의가 없다면 이곳에 추가해야 합니다.
+// 제공해주신 db.php에는 h() 함수가 이미 정의되어 있으므로 여기서는 중복 정의를 피하기 위해 제거합니다.
+// if (!function_exists('h')) {
+//     function h($str) {
+//         return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+//     }
+// }
 
 // 로그인 여부 확인
 if (!isset($_SESSION['user_id'])) {
@@ -23,16 +25,25 @@ $timetableData = []; // 시간표 데이터를 저장할 배열
 $grades = []; // 사용자가 저장한 시간표의 모든 학년 목록
 $terms = []; // 사용자가 저장한 시간표의 모든 학기 목록
 
+// $db 객체가 유효한지 확인
+if (!isset($db) || !($db instanceof PDO)) {
+    // db.php에서 연결 실패 시 $db가 생성되지 않거나 PDO 객체가 아닐 수 있음
+    echo '<p style="color: red;">データベース接続エラーが発生しました。管理者に連絡してください。</p>';
+    error_log("データベース接続オブジェクト (\$db) が無効です。confirmed_timetable.php");
+    exit(); // 스크립트 종료
+}
+
+
 // 사용자가 저장한 시간표의 모든 고유 학년과 학기를 가져옵니다.
 try {
     // 모든 학년 가져오기
-    $stmt_grades = $pdo->prepare("SELECT DISTINCT timetable_grade FROM user_timetables WHERE user_id = :user_id ORDER BY timetable_grade ASC");
+    $stmt_grades = $db->prepare("SELECT DISTINCT timetable_grade FROM user_timetables WHERE user_id = :user_id ORDER BY timetable_grade ASC");
     $stmt_grades->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt_grades->execute();
     $grades = $stmt_grades->fetchAll(PDO::FETCH_COLUMN);
 
     // 모든 학기 가져오기 (이 부분은 보통 '前期', '後期' 등으로 고정되어 있지만, DB에서 가져오는 것이 유연)
-    $stmt_terms = $pdo->prepare("SELECT DISTINCT timetable_term FROM user_timetables WHERE user_id = :user_id ORDER BY timetable_term ASC");
+    $stmt_terms = $db->prepare("SELECT DISTINCT timetable_term FROM user_timetables WHERE user_id = :user_id ORDER BY timetable_term ASC");
     $stmt_terms->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt_terms->execute();
     $terms = $stmt_terms->fetchAll(PDO::FETCH_COLUMN);
@@ -53,7 +64,7 @@ $selected_term = $_GET['term'] ?? ($terms[0] ?? null);
 // 선택된 학년과 학기에 해당하는 시간표 데이터 불러오기
 if ($selected_grade && $selected_term) {
     try {
-        $stmt = $pdo->prepare("
+        $stmt = $db->prepare("
             SELECT ut.class_id, ut.day, ut.period,
                    c.name AS class_name, c.credit, c.category1 AS category_name
             FROM user_timetables ut
@@ -88,10 +99,11 @@ if ($selected_grade && $selected_term) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>確定済み時間割 (Confirmed Timetable)</title>
-    <link rel="stylesheet" href="style.css"> <style>
+    <link rel="stylesheet" href="style.css">
+    <style>
         /* confirmed_timetable.php 전용 스타일 (필요하다면 추가) */
         .container {
-            max-width: 1000px; /* 시간표만 보여주므로 너비를 조정할 수 있습니다. */
+            max-width: 1000px; /* 時間표만 보여주므로 너비를 조정할 수 있습니다. */
         }
         .timetable-section h2 {
             margin-bottom: 20px;
@@ -153,7 +165,7 @@ if ($selected_grade && $selected_term) {
         .confirmed-class-item .category-display-in-cell {
             font-size: 0.8em;
             color: #555;
-            white-space: nowrap; /* 학점/학년은 한 줄에 표시 */
+            white-space: nowrap; /* 学点/学년은 한 줄에 표시 */
         }
         /* confirmed_timetable.php에서는 삭제 버튼이 필요 없으므로 숨김 */
         .confirmed-class-item .remove-button {
