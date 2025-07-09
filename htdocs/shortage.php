@@ -131,64 +131,64 @@ foreach ($requirements as $row) {
                             $required = (int)$row['required_credits'];
                             $earned = 0;
 
-                            // display_order で特別処理（卒業要件）
-                            switch ((int)$row['display_order']) {
-                                case 42:
-                                    $earned = $total_earned;
-                                    break;
-                                case 43:
-                                    $earned = $earned_category1['教養科目'] ?? 0;
-                                    break;
-                                case 44:
-                                    $earned = in_array('日本語表現法', $earned_subject_names) ? 1 : 0;
-                                    break;
-                                case 45:
-                                    foreach ($subjects as $s) {
-                                        if ($s['category3'] === 'コミュニケーションスキル' && $s['name'] !== '日本語表現法') {
-                                            $earned += (int)$s['credit'];
+                            // 総単位系は共通で total_earned 使用
+                            if ($category3 === '総単位' && in_array($row['display_order'], [1, 2, 4, 42])) {
+                                $earned = $total_earned;
+                            } else {
+                                switch ((int)$row['display_order']) {
+                                    case 43:
+                                        $earned = $earned_category1['教養科目'] ?? 0;
+                                        break;
+                                    case 44:
+                                        $earned = in_array('日本語表現法', $earned_subject_names) ? 1 : 0;
+                                        break;
+                                    case 45:
+                                        foreach ($subjects as $s) {
+                                            if ($s['category3'] === 'コミュニケーションスキル' && $s['name'] !== '日本語表現法') {
+                                                $earned += (int)$s['credit'];
+                                            }
                                         }
-                                    }
-                                    break;
-                                case 46:
-                                    $earned = $earned_category3['国際理解'] ?? 0;
-                                    break;
-                                case 47:
-                                    foreach ($subjects as $s) {
-                                        if ($s['name'] === '学部指定科目群１') {
-                                            $earned += (int)$s['credit'];
+                                        break;
+                                    case 46:
+                                        $earned = $earned_category3['国際理解'] ?? 0;
+                                        break;
+                                    case 47:
+                                        foreach ($subjects as $s) {
+                                            if ($s['name'] === '学部指定科目群１') {
+                                                $earned += (int)$s['credit'];
+                                            }
                                         }
-                                    }
-                                    break;
-                                case 48:
-                                    foreach ($subjects as $s) {
-                                        if ($s['name'] === '学部指定科目群２') {
-                                            $earned += (int)$s['credit'];
+                                        break;
+                                    case 48:
+                                        foreach ($subjects as $s) {
+                                            if ($s['name'] === '学部指定科目群２') {
+                                                $earned += (int)$s['credit'];
+                                            }
                                         }
-                                    }
-                                    break;
-                                case 49:
-                                    $earned = $earned_category3['総合'] ?? 0;
-                                    break;
-                                case 51:
-                                    $earned = $earned_category2['教養特別科目'] ?? 0;
-                                    break;
-                                case 52:
-                                    $earned = $earned_category1['専門科目'] ?? 0;
-                                    break;
-                                default:
-                                    if (in_array($category3, $required_subjects)) {
-                                        $earned = in_array($category3, $earned_subject_names) ? 1 : 0;
-                                    } elseif (isset($earned_category3[$category3])) {
-                                        $earned = $earned_category3[$category3];
-                                    } elseif (isset($earned_category2[$category3])) {
-                                        $earned = $earned_category2[$category3];
-                                    } elseif (isset($earned_category1[$category3])) {
-                                        $earned = $earned_category1[$category3];
-                                    } else {
-                                        $key = "{$category1}|{$category2}|{$category3}";
-                                        $earned = $earned_map[$key] ?? 0;
-                                    }
-                                    break;
+                                        break;
+                                    case 49:
+                                        $earned = $earned_category3['総合'] ?? 0;
+                                        break;
+                                    case 51:
+                                        $earned = $earned_category2['教養特別科目'] ?? 0;
+                                        break;
+                                    case 52:
+                                        $earned = $earned_category1['専門科目'] ?? 0;
+                                        break;
+                                    default:
+                                        if (in_array($category3, $required_subjects)) {
+                                            $earned = in_array($category3, $earned_subject_names) ? 1 : 0;
+                                        } elseif (isset($earned_category3[$category3])) {
+                                            $earned = $earned_category3[$category3];
+                                        } elseif (isset($earned_category2[$category3])) {
+                                            $earned = $earned_category2[$category3];
+                                        } elseif (isset($earned_category1[$category3])) {
+                                            $earned = $earned_category1[$category3];
+                                        } else {
+                                            $key = "{$category1}|{$category2}|{$category3}";
+                                            $earned = $earned_map[$key] ?? 0;
+                                        }
+                                }
                             }
 
                             $shortage = max(0, $required - $earned);
