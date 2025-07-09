@@ -18,7 +18,7 @@ $sql = "
 $req_stmt = $db->query($sql);
 $requirements = $req_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// ユーザーの履修済み科目取得
+// 履修済み科目取得
 $sql2 = "
     SELECT s.name, s.category1, s.category2, s.category3, s.credit
     FROM (
@@ -32,7 +32,7 @@ $earn_stmt = $db->prepare($sql2);
 $earn_stmt->execute([$user_id]);
 $subjects = $earn_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 集計処理
+// 集計
 $earned_map = [];
 $total_earned = 0;
 $earned_category1 = [];
@@ -63,7 +63,7 @@ foreach ($subjects as $row) {
 // 必修科目
 $required_subjects = ['ゼミナール1', 'ゼミナール2', '課題研究', '日本語表現法', '課題探究セミナー'];
 
-// グループ分け
+// グループ化
 $grouped = [];
 foreach ($requirements as $row) {
     if ($row['category1'] === '卒業') {
@@ -130,7 +130,6 @@ foreach ($requirements as $row) {
                             $required = (int)$row['required_credits'];
                             $earned = 0;
 
-                            // 「総単位」なら進級・卒業問わず合計単位を使う
                             if (
                                 $category3 === '総単位' &&
                                 (
@@ -140,6 +139,9 @@ foreach ($requirements as $row) {
                                 $earned = $total_earned;
                             } else {
                                 switch ((int)$row['display_order']) {
+                                    case 21: // 教養合計
+                                        $earned = $earned_category1['教養科目'] ?? 0;
+                                        break;
                                     case 43:
                                         $earned = $earned_category1['教養科目'] ?? 0;
                                         break;
@@ -238,3 +240,4 @@ foreach ($requirements as $row) {
     </script>
 </body>
 </html>
+
