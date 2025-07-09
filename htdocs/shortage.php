@@ -142,6 +142,13 @@ foreach ($requirements as $row) {
                         case 21:
                             $earned = $earned_category1['教養科目'] ?? 0;
                             break;
+                        case 24:
+                            foreach ($subjects as $s) {
+                                if (in_array($s['name'], ['グローバル時代の法', '国際社会論'])) {
+                                    $earned += (int)$s['credit'];
+                                }
+                            }
+                            break;
                         case 25:
                         case 47:
                             foreach ($subjects as $s) {
@@ -164,6 +171,9 @@ foreach ($requirements as $row) {
                         case 30:
                         case 52:
                             $earned = $earned_category1['専門科目'] ?? 0;
+                            break;
+                        case 31:
+                            $earned = $earned_category2['学部共通専門科目'] ?? 0;
                             break;
                         case 34:
                             $earned = ($earned_category2['展開科目'] ?? 0) + ($earned_category2['発展科目'] ?? 0);
