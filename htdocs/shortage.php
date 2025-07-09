@@ -158,16 +158,16 @@ foreach ($requirements as $row) {
                                     case 46:
                                         $earned = $earned_category3['国際理解'] ?? 0;
                                         break;
-                                    case 47:
+                                    case 47: // 学部指定科目群1 → name = 学部指定科目1
                                         foreach ($subjects as $s) {
-                                            if ($s['name'] === '学部指定科目群１') {
+                                            if ($s['name'] === '学部指定科目1') {
                                                 $earned += (int)$s['credit'];
                                             }
                                         }
                                         break;
-                                    case 48:
+                                    case 48: // 学部指定科目群2
                                         foreach ($subjects as $s) {
-                                            if ($s['name'] === '学部指定科目群２') {
+                                            if ($s['name'] === '学部指定科目群2') {
                                                 $earned += (int)$s['credit'];
                                             }
                                         }
@@ -179,6 +179,9 @@ foreach ($requirements as $row) {
                                         $earned = $earned_category2['教養特別科目'] ?? 0;
                                         break;
                                     case 52:
+                                        $earned = $earned_category1['専門科目'] ?? 0;
+                                        break;
+                                    case 999: // 専門合計（追加）
                                         $earned = $earned_category1['専門科目'] ?? 0;
                                         break;
                                     default:
