@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// 必要単位数取得（display_order順でソート）
+// 必要単位数取得
 $sql = "
     SELECT category1, category2, category3, required_credits, display_order
     FROM requirements
@@ -18,7 +18,7 @@ $sql = "
 $req_stmt = $db->query($sql);
 $requirements = $req_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 重複なしの subject_id を取得し、分類ごとに集計＋科目名も取得
+// ユーザーの履修済み科目取得
 $sql2 = "
     SELECT s.name, s.category1, s.category2, s.category3, s.credit
     FROM (
@@ -60,10 +60,10 @@ foreach ($subjects as $row) {
     $earned_category3[$row['category3']] += $credit;
 }
 
-// 必修科目一覧
+// 必修科目
 $required_subjects = ['ゼミナール1', 'ゼミナール2', '課題研究', '日本語表現法', '課題探究セミナー'];
 
-// category2（進級段階など）ごとにグループ化（ただし卒業はまとめる）
+// グループ分け
 $grouped = [];
 foreach ($requirements as $row) {
     if ($row['category1'] === '卒業') {
@@ -95,7 +95,6 @@ foreach ($requirements as $row) {
         }
         h2::before {
             content: "▼ ";
-            display: inline-block;
             transition: transform 0.3s ease;
         }
         .collapsed::before {
@@ -131,8 +130,13 @@ foreach ($requirements as $row) {
                             $required = (int)$row['required_credits'];
                             $earned = 0;
 
-                            // 総単位系は共通で total_earned 使用
-                            if ($category3 === '総単位' && in_array($row['display_order'], [1, 2, 4, 42])) {
+                            // 「総単位」なら進級・卒業問わず合計単位を使う
+                            if (
+                                $category3 === '総単位' &&
+                                (
+                                    $category1 === '卒業' || in_array($row['display_order'], [1, 2, 4])
+                                )
+                            ) {
                                 $earned = $total_earned;
                             } else {
                                 switch ((int)$row['display_order']) {
