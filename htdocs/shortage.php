@@ -103,144 +103,143 @@ foreach ($requirements as $row) {
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>不足単位の確認</h1>
+<div class="container">
+    <h1>不足単位の確認</h1>
 
-        <?php foreach ($grouped as $stage => $rows): ?>
-            <h2 class="toggle-header collapsed">
-                <?= htmlspecialchars($stage === '卒業要件まとめ' ? '卒業要件（教養科目・専門科目含む）' : $stage) ?>
-            </h2>
-            <table style="display:none">
-                <thead>
-                    <tr>
-                        <th>科目群</th>
-                        <th>分野</th>
-                        <th>分類</th>
-                        <th>必要単位数</th>
-                        <th>取得済</th>
-                        <th>不足単位</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($rows as $row): ?>
-                        <?php
-                            $category1 = $row['category1'];
-                            $category2 = $row['category2'];
-                            $category3 = $row['category3'];
-                            $required = (int)$row['required_credits'];
-                            $earned = 0;
+    <?php foreach ($grouped as $stage => $rows): ?>
+        <h2 class="toggle-header collapsed">
+            <?= htmlspecialchars($stage === '卒業要件まとめ' ? '卒業要件（教養科目・専門科目含む）' : $stage) ?>
+        </h2>
+        <table style="display:none">
+            <thead>
+            <tr>
+                <th>科目群</th>
+                <th>分野</th>
+                <th>分類</th>
+                <th>必要単位数</th>
+                <th>取得済</th>
+                <th>不足単位</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($rows as $row): ?>
+                <?php
+                $category1 = $row['category1'];
+                $category2 = $row['category2'];
+                $category3 = $row['category3'];
+                $required = (int)$row['required_credits'];
+                $earned = 0;
 
-                            if (
-                                $category3 === '総単位' &&
-                                (
-                                    $category1 === '卒業' || in_array($row['display_order'], [1, 2, 4])
-                                )
-                            ) {
-                                $earned = $total_earned;
-                            } else {
-                                switch ((int)$row['display_order']) {
-                                    case 21: // 教養合計
-                                        $earned = $earned_category1['教養科目'] ?? 0;
-                                        break;
-                                    case 43:
-                                        $earned = $earned_category1['教養科目'] ?? 0;
-                                        break;
-                                    case 44:
-                                        $earned = in_array('日本語表現法', $earned_subject_names) ? 1 : 0;
-                                        break;
-                                    case 45:
-                                        foreach ($subjects as $s) {
-                                            if ($s['category3'] === 'コミュニケーションスキル' && $s['name'] !== '日本語表現法') {
-                                                $earned += (int)$s['credit'];
-                                            }
-                                        }
-                                        break;
-                                    case 46:
-                                        $earned = $earned_category3['国際理解'] ?? 0;
-                                        break;
-                                    case 47: // 学部指定科目群1 → name = 学部指定科目1
-                                        foreach ($subjects as $s) {
-                                            if ($s['name'] === '学部指定科目1') {
-                                                $earned += (int)$s['credit'];
-                                            }
-                                        }
-                                        break;
-                                    case 48: // 学部指定科目群2
-                                        foreach ($subjects as $s) {
-                                            if ($s['name'] === '学部指定科目群2') {
-                                                $earned += (int)$s['credit'];
-                                            }
-                                        }
-                                        break;
-                                    case 49:
-                                        $earned = $earned_category3['総合'] ?? 0;
-                                        break;
-                                    case 51:
-                                        $earned = $earned_category2['教養特別科目'] ?? 0;
-                                        break;
-                                    case 52:
-                                        $earned = $earned_category1['専門科目'] ?? 0;
-                                        break;
-                                    case 999: // 専門合計（追加）
-                                        $earned = $earned_category1['専門科目'] ?? 0;
-                                        break;
-                                    default:
-                                        if (in_array($category3, $required_subjects)) {
-                                            $earned = in_array($category3, $earned_subject_names) ? 1 : 0;
-                                        } elseif (isset($earned_category3[$category3])) {
-                                            $earned = $earned_category3[$category3];
-                                        } elseif (isset($earned_category2[$category3])) {
-                                            $earned = $earned_category2[$category3];
-                                        } elseif (isset($earned_category1[$category3])) {
-                                            $earned = $earned_category1[$category3];
-                                        } else {
-                                            $key = "{$category1}|{$category2}|{$category3}";
-                                            $earned = $earned_map[$key] ?? 0;
-                                        }
+                if (
+                    $category3 === '総単位' &&
+                    (
+                        $category1 === '卒業' || in_array($row['display_order'], [1, 2, 4])
+                    )
+                ) {
+                    $earned = $total_earned;
+                } else {
+                    switch ((int)$row['display_order']) {
+                        case 21: // 教養合計
+                            $earned = $earned_category1['教養科目'] ?? 0;
+                            break;
+                        case 30: // 専門合計
+                            $earned = $earned_category1['専門科目'] ?? 0;
+                            break;
+                        case 43:
+                            $earned = $earned_category1['教養科目'] ?? 0;
+                            break;
+                        case 44:
+                            $earned = in_array('日本語表現法', $earned_subject_names) ? 1 : 0;
+                            break;
+                        case 45:
+                            foreach ($subjects as $s) {
+                                if ($s['category3'] === 'コミュニケーションスキル' && $s['name'] !== '日本語表現法') {
+                                    $earned += (int)$s['credit'];
                                 }
                             }
-
-                            $shortage = max(0, $required - $earned);
-                        ?>
-                        <tr>
-                            <td><?= htmlspecialchars($category1) ?></td>
-                            <td><?= htmlspecialchars($category2) ?></td>
-                            <td>
-                                <?= htmlspecialchars($category3) ?>
-                                <?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?>
-                            </td>
-                            <td><?= $required ?></td>
-                            <td><?= $earned ?></td>
-                            <td><?= $shortage > 0 ? "<strong style='color:red'>{$shortage}</strong>" : "0" ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endforeach; ?>
-
-        <div class="buttons">
-            <a href="index.php" class="btn green">メニューに戻る</a>
-        </div>
-    </div>
-
-    <div class="bottom-nav">
-        <a href="index.php" class="nav-button">メニュー</a>
-        <a href="timetable_register.php" class="nav-button">時間割登録</a>
-        <a href="timetable_confirm.php" class="nav-button">時間割確認</a>
-        <a href="credits.php" class="nav-button">取得単位確認</a>
-    </div>
-
-    <script>
-        document.querySelectorAll('.toggle-header').forEach(header => {
-            header.addEventListener('click', () => {
-                header.classList.toggle('collapsed');
-                const table = header.nextElementSibling;
-                if (table) {
-                    table.style.display = table.style.display === 'none' ? '' : 'none';
+                            break;
+                        case 46:
+                            $earned = $earned_category3['国際理解'] ?? 0;
+                            break;
+                        case 47:
+                            foreach ($subjects as $s) {
+                                if ($s['name'] === '学部指定科目群１') {
+                                    $earned += (int)$s['credit'];
+                                }
+                            }
+                            break;
+                        case 48:
+                            foreach ($subjects as $s) {
+                                if ($s['name'] === '学部指定科目群２') {
+                                    $earned += (int)$s['credit'];
+                                }
+                            }
+                            break;
+                        case 49:
+                            $earned = $earned_category3['総合'] ?? 0;
+                            break;
+                        case 51:
+                            $earned = $earned_category2['教養特別科目'] ?? 0;
+                            break;
+                        case 52:
+                            $earned = $earned_category1['専門科目'] ?? 0;
+                            break;
+                        default:
+                            if (in_array($category3, $required_subjects)) {
+                                $earned = in_array($category3, $earned_subject_names) ? 1 : 0;
+                            } elseif (isset($earned_category3[$category3])) {
+                                $earned = $earned_category3[$category3];
+                            } elseif (isset($earned_category2[$category3])) {
+                                $earned = $earned_category2[$category3];
+                            } elseif (isset($earned_category1[$category3])) {
+                                $earned = $earned_category1[$category3];
+                            } else {
+                                $key = "{$category1}|{$category2}|{$category3}";
+                                $earned = $earned_map[$key] ?? 0;
+                            }
+                    }
                 }
-            });
+
+                $shortage = max(0, $required - $earned);
+                ?>
+                <tr>
+                    <td><?= htmlspecialchars($category1) ?></td>
+                    <td><?= htmlspecialchars($category2) ?></td>
+                    <td>
+                        <?= htmlspecialchars($category3) ?>
+                        <?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?>
+                    </td>
+                    <td><?= $required ?></td>
+                    <td><?= $earned ?></td>
+                    <td><?= $shortage > 0 ? "<strong style='color:red'>{$shortage}</strong>" : "0" ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endforeach; ?>
+
+    <div class="buttons">
+        <a href="index.php" class="btn green">メニューに戻る</a>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <a href="index.php" class="nav-button">メニュー</a>
+    <a href="timetable_register.php" class="nav-button">時間割登録</a>
+    <a href="timetable_confirm.php" class="nav-button">時間割確認</a>
+    <a href="credits.php" class="nav-button">取得単位確認</a>
+</div>
+
+<script>
+    document.querySelectorAll('.toggle-header').forEach(header => {
+        header.addEventListener('click', () => {
+            header.classList.toggle('collapsed');
+            const table = header.nextElementSibling;
+            if (table) {
+                table.style.display = table.style.display === 'none' ? '' : 'none';
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
-
