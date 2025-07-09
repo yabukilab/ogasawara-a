@@ -142,6 +142,13 @@ foreach ($requirements as $row) {
                         case 21: // 教養合計
                             $earned = $earned_category1['教養科目'] ?? 0;
                             break;
+                        case 25: // 学部指定科目群１の合計
+                            foreach ($subjects as $s) {
+                                if ($s['name'] === '学部指定科目群１') {
+                                    $earned += (int)$s['credit'];
+                                }
+                            }
+                            break;
                         case 30: // 専門合計
                             $earned = $earned_category1['専門科目'] ?? 0;
                             break;
