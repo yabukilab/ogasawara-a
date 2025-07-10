@@ -34,16 +34,21 @@ th, td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-    word-break: break-word;
+    word-wrap: break-word;
 }
-
-th:nth-child(1), td:nth-child(1) { width: 40%; }
-th:nth-child(2), td:nth-child(2) { width: 20%; }
-th:nth-child(3), td:nth-child(3) { width: 20%; }
-th:nth-child(4), td:nth-child(4) { width: 20%; }
 
 td strong {
     color: red;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    width: 40%;
+}
+
+th:nth-child(2), td:nth-child(2),
+th:nth-child(3), td:nth-child(3),
+th:nth-child(4), td:nth-child(4) {
+    width: 20%;
 }
 
 .buttons {

@@ -122,8 +122,6 @@ foreach ($requirements as $row) {
             <tbody>
             <?php foreach ($rows as $row): ?>
                 <?php
-                $category1 = $row['category1'];
-                $category2 = $row['category2'];
                 $category3 = $row['category3'];
                 $required = (int)$row['required_credits'];
                 $earned = 0;
@@ -131,7 +129,7 @@ foreach ($requirements as $row) {
                 if (
                     $category3 === '総単位' &&
                     (
-                        $category1 === '卒業' || in_array($row['display_order'], [1, 2, 4])
+                        $row['category1'] === '卒業' || in_array($row['display_order'], [1, 2, 4])
                     )
                 ) {
                     $earned = $total_earned;
@@ -208,7 +206,7 @@ foreach ($requirements as $row) {
                             } elseif (isset($earned_category1[$category3])) {
                                 $earned = $earned_category1[$category3];
                             } else {
-                                $key = "{$category1}|{$category2}|{$category3}";
+                                $key = "{$row['category1']}|{$row['category2']}|{$category3}";
                                 $earned = $earned_map[$key] ?? 0;
                             }
                     }
@@ -217,10 +215,7 @@ foreach ($requirements as $row) {
                 $shortage = max(0, $required - $earned);
                 ?>
                 <tr>
-                    <td>
-                        <?= htmlspecialchars("{$category3}") ?>
-                        <?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?>
-                    </td>
+                    <td><?= htmlspecialchars($category3) ?><?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?></td>
                     <td><?= $required ?></td>
                     <td><?= $earned ?></td>
                     <td><?= $shortage > 0 ? "<strong style='color:red'>{$shortage}</strong>" : "0" ?></td>
