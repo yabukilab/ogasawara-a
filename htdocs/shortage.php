@@ -113,8 +113,6 @@ foreach ($requirements as $row) {
         <table style="display:none">
             <thead>
             <tr>
-                <th>科目群</th>
-                <th>分野</th>
                 <th>分類</th>
                 <th>必要単位数</th>
                 <th>取得済</th>
@@ -219,10 +217,7 @@ foreach ($requirements as $row) {
                 $shortage = max(0, $required - $earned);
                 ?>
                 <tr>
-                    <td><?= htmlspecialchars($category1) ?></td>
-                    <td><?= htmlspecialchars($category2) ?></td>
-                    <td>
-                        <?= htmlspecialchars($category3) ?>
+                    <td><?= htmlspecialchars($category3) ?>
                         <?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?>
                     </td>
                     <td><?= $required ?></td>
