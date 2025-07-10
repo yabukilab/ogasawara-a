@@ -22,6 +22,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 25px;
+    table-layout: fixed;
 }
 
 thead {
@@ -33,7 +34,14 @@ th, td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
+    word-wrap: break-word;
 }
+
+/* 列ごとに幅を明示的に指定 */
+th:nth-child(1), td:nth-child(1) { width: 40%; }  /* 分類 */
+th:nth-child(2), td:nth-child(2) { width: 20%; }  /* 必要単位数 */
+th:nth-child(3), td:nth-child(3) { width: 20%; }  /* 取得済 */
+th:nth-child(4), td:nth-child(4) { width: 20%; }  /* 不足単位 */
 
 td strong {
     color: red;
