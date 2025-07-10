@@ -217,7 +217,8 @@ foreach ($requirements as $row) {
                 $shortage = max(0, $required - $earned);
                 ?>
                 <tr>
-                    <td><?= htmlspecialchars($category3) ?>
+                    <td>
+                        <?= htmlspecialchars("{$category3}") ?>
                         <?= in_array($category3, $required_subjects) ? "<span style='color:blue'>(必修)</span>" : "" ?>
                     </td>
                     <td><?= $required ?></td>
