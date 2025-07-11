@@ -19,7 +19,6 @@
 -- Table structure for table `requirements`
 --
 
-DROP TABLE IF EXISTS `requirements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `requirements` (
@@ -49,7 +48,6 @@ UNLOCK TABLES;
 -- Table structure for table `subjects`
 --
 
-DROP TABLE IF EXISTS `subjects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `subjects` (
@@ -79,7 +77,6 @@ UNLOCK TABLES;
 -- Table structure for table `timetables`
 --
 
-DROP TABLE IF EXISTS `timetables`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `timetables` (
@@ -112,7 +109,6 @@ UNLOCK TABLES;
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
