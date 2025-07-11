@@ -22,7 +22,7 @@ h1 {
 
 .timetable-section {
   display: flex;
-  flex-wrap: nowrop;
+  flex-wrap: nowrap;
   gap: 20px;
   justify-content: space-between;
   align-items: flex-start;
@@ -34,6 +34,18 @@ h1 {
   width: 100%;
   max-width: 300px;
   flex-shrink: 0;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subject-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 440px; /* 固定高さ：必要に応じて調整 */
+  margin-top: 10px;
 }
 
 .subject-list ul {
@@ -156,6 +168,12 @@ td.selected {
   .subject-list,
   .timetable {
     width: 100%;
+    height: auto;
+  }
+
+  .subject-scroll {
+    height: auto;
+    max-height: 300px;
   }
 
   .timetable-wrapper table {

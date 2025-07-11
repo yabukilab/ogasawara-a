@@ -55,11 +55,13 @@ $registeredTimetable = $stmt2->fetchAll(PDO::FETCH_ASSOC);
     <div class="timetable-section">
         <div class="subject-list">
             <h2>科目一覧</h2>
-            <ul id="subjectList">
-                <?php foreach ($subjects as $subject): ?>
-                    <li data-id="<?= $subject['id'] ?>"><?= htmlspecialchars($subject['name']) ?></li>
-                <?php endforeach; ?>
-            </ul>
+            <div class="subject-scroll">
+                <ul id="subjectList">
+                    <?php foreach ($subjects as $subject): ?>
+                        <li data-id="<?= $subject['id'] ?>"><?= htmlspecialchars($subject['name']) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
 
         <div class="timetable">
@@ -90,7 +92,7 @@ $registeredTimetable = $stmt2->fetchAll(PDO::FETCH_ASSOC);
                 <input type="hidden" name="data" id="timetableData">
                 <input type="hidden" name="grade" value="<?= htmlspecialchars($grade) ?>">
                 <input type="hidden" name="term" value="<?= htmlspecialchars($term) ?>">
-                <button type="submit">保存する</button>
+                <button type="submit" class="save-button">保存する</button>
             </form>
         </div>
     </div>
