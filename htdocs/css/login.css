@@ -1,62 +1,97 @@
 body {
-font-family: 'Helvetica Neue', sans-serif;
-background: #f0f4f8;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background: #f0f4f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 10px;
 }
 
-.container {
-width: 360px;
-padding: 30px;
-background: #ffffff;
-border-radius: 10px;
-box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+.login-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 h1 {
-text-align: center;
-color: #333;
-margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+  margin-bottom: 24px;
+  font-size: 1.6rem;
 }
 
 label {
-display: block;
-margin-top: 10px;
-color: #555;
+  display: block;
+  margin-top: 16px;
+  color: #555;
+  font-size: 1rem;
 }
 
 input[type="text"],
 input[type="password"] {
-width: 100%;
-padding: 10px;
-margin-top: 5px;
-border-radius: 6px;
-border: 1px solid #ccc;
-box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 button {
-width: 100%;
-margin-top: 20px;
-background-color: #007bff;
-border: none;
-color: #fff;
-padding: 12px;
-border-radius: 6px;
-font-size: 16px;
-cursor: pointer;
-transition: background 0.2s;
+  width: 100%;
+  margin-top: 24px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 button:hover {
-background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .error {
-color: red;
-text-align: center;
-margin-top: 10px;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* スマホ対応 */
+@media screen and (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  button {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  label {
+    font-size: 0.95rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
 }

@@ -1,61 +1,108 @@
 body {
-font-family: 'Segoe UI', sans-serif;
-background: #eef3f9;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #eef3f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 10px;
 }
 
-.container {
-width: 400px;
-padding: 30px;
-background: white;
-border-radius: 10px;
-box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+.register-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
 
 h1 {
-text-align: center;
-color: #333;
+  text-align: center;
+  color: #333;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
 }
 
 label {
-display: block;
-margin-top: 12px;
-color: #444;
+  display: block;
+  margin-top: 16px;
+  color: #444;
+  font-size: 1rem;
 }
 
 input[type="text"],
 input[type="password"] {
-width: 100%;
-padding: 10px;
-margin-top: 6px;
-border: 1px solid #ccc;
-border-radius: 6px;
-box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 button {
-width: 100%;
-margin-top: 20px;
-padding: 12px;
-background-color: #28a745;
-color: white;
-font-weight: bold;
-border: none;
-border-radius: 6px;
-cursor: pointer;
-transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 button:hover {
-background-color: #218838;
+  background-color: #218838;
 }
 
 .note {
-margin-top: 10px;
-font-size: 13px;
-color: #666;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+.success {
+  color: green;
+  text-align: center;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* スマホ対応 */
+@media screen and (max-width: 480px) {
+  .register-container {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  button {
+    padding: 16px;
+    font-size: 1.05rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  label {
+    font-size: 0.95rem;
+  }
 }
